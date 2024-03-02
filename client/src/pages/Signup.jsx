@@ -12,6 +12,7 @@ import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Radio from "@mui/joy/Radio";
 import FormHelperText from "@mui/joy/FormHelperText";
+import RadioGroup from "@mui/joy/RadioGroup";
 
 const Signup = () => {
     return (
@@ -79,12 +80,24 @@ const Signup = () => {
                                 </FormControl>
                                 <FormControl>
                                     <Stack gap={2}>
-                                        <FormLabel>I am a...</FormLabel>
-                                        <Radio
-                                            label="Developer"
-                                            defaultChecked
-                                        />
-                                        <Radio label="Company" />
+                                        <FormControl>
+                                            <FormLabel>I am a...</FormLabel>
+                                            <RadioGroup
+                                                defaultValue="develper"
+                                                name="radio-buttons-group"
+                                            >
+                                                <Radio
+                                                    value="developer"
+                                                    label="Developer"
+                                                    variant="outlined"
+                                                />
+                                                <Radio
+                                                    value="company"
+                                                    label="Company"
+                                                    variant="outlined"
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
                                     </Stack>
                                 </FormControl>
                                 <FormControl>
