@@ -1,43 +1,134 @@
-import React from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import Grid from "@mui/joy/Grid";
+import Box from "@mui/joy/Box";
+import Typography from "@mui/joy/Typography";
+import logo from "../assets/logo.png";
+import Button from "@mui/joy/Button";
+import Checkbox from "@mui/joy/Checkbox";
+import Divider from "@mui/joy/Divider";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
+import Link from "@mui/joy/Link";
+import Input from "@mui/joy/Input";
+import Stack from "@mui/joy/Stack";
+import Radio from "@mui/joy/Radio";
+import FormHelperText from "@mui/joy/FormHelperText";
+import RadioGroup from "@mui/joy/RadioGroup";
 
-export default function Signup() {
+const Signup = () => {
     return (
-        <Container fluid className="signup-page">
-            <Row className="justify-content-center align-items-center">
-                <Col md={10} lg={10}>
-                    <h1 className="text-center">Create your account</h1>
-                    <Form>
-                        <Form.Group controlId="formFN">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control type="text" placeholder="First Name" />
-                        </Form.Group>
-                        <Form.Group controlId="formLN">
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control type="text" placeholder="Last Name" />
-                        </Form.Group>
-                        <Form.Group controlId="formEmail">
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control type="email" placeholder="Enter email" />
-                        </Form.Group>
-                        <Form.Group controlId="formPassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Enter password" />
-                        </Form.Group>
-                        <Form.Group controlId="formConfirmPassword">
-                            <Form.Label>Confirm password</Form.Label>
-                            <Form.Control type="password" placeholder="Confirm password" />
-                        </Form.Group>
-                        <Button variant="primary" type="submit" block>
-                            Sign up
-                        </Button>
-                    </Form>
-                    <p className="text-center mt-3">
-                        Already have an account? <Link to="/login">Log in</Link>
-                    </p>
-                </Col>
-            </Row>
-        </Container>
+        <Grid container sx={{ flexGrow: 1, minHeight: "100vh" }}>
+            <Grid
+                item
+                xs={6}
+                sx={{
+                    p: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}
+            >
+                <Grid
+                    sx={{
+                        mb: 4,
+                        display: "flex",
+                        alignItems: "end",
+                        flexDirection: "row",
+                        justifyContent: "flex-start",
+                    }}
+                    xs={12}
+                >
+                    <img src={logo} alt="logo" style={{ width: "122px" }} />
+                </Grid>
+                <Box xs={8}>
+                    <Typography level="h1" sx={{ mb: 1 }}>
+                        Create Account
+                    </Typography>
+                    <Typography>
+                        Sign up as a Developer or an Company to get started.
+                    </Typography>
+
+                    <Box>
+                        <form>
+                            <Stack gap={4} sx={{ mt: 4 }}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={6}>
+                                        <FormControl required>
+                                            <FormLabel>First Name</FormLabel>
+                                            <Input
+                                                type="text"
+                                                name="firstName"
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <FormControl required>
+                                            <FormLabel>Last Name</FormLabel>
+                                            <Input
+                                                type="text"
+                                                name="lastName"
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                </Grid>
+                                <FormControl required>
+                                    <FormLabel>Email</FormLabel>
+                                    <Input type="email" name="email" />
+                                </FormControl>
+                                <FormControl required>
+                                    <FormLabel>Password</FormLabel>
+                                    <Input type="password" name="password" />
+                                </FormControl>
+                                <FormControl>
+                                    <Stack gap={2}>
+                                        <FormControl>
+                                            <FormLabel>I am a...</FormLabel>
+                                            <RadioGroup
+                                                defaultValue="develper"
+                                                name="radio-buttons-group"
+                                            >
+                                                <Radio
+                                                    value="developer"
+                                                    label="Developer"
+                                                    variant="outlined"
+                                                />
+                                                <Radio
+                                                    value="company"
+                                                    label="Company"
+                                                    variant="outlined"
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </Stack>
+                                </FormControl>
+                                <FormControl>
+                                    <Checkbox
+                                        label="Accept Terms & Conditions."
+                                        variant="soft"
+                                        defaultChecked
+                                    />
+                                    <FormHelperText>
+                                        Please review our terms and conditions
+                                        before signing up.
+                                    </FormHelperText>
+                                </FormControl>
+                                <Button type="submit" fullWidth>
+                                    Sign up
+                                </Button>
+                                <Divider></Divider>
+                                <Typography>
+                                    Already have an account? &nbsp;
+                                    <Link href="/login">Log in to your account. </Link>
+                                </Typography>
+                            </Stack>
+                        </form>
+                    </Box>
+                </Box>
+            </Grid>
+            <Grid item xs={6} sx={{ backgroundColor: "#f5f5f5" }}>
+                {/*Background column */}
+            </Grid>
+        </Grid>
     );
-}  
+};
+
+export default Signup;
