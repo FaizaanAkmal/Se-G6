@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -14,21 +12,28 @@ export default function Login() {
   const loginUser = async (event) => {
     event.preventDefault();
     try {
+      
       const response = await axios.post('/api/login', {
         email,
         password,
       });
+
     
       localStorage.setItem('authToken', response.data.token);
 
       navigate('/main');
       
+      
       console.log('Login successful');
       setSuccessMessage('Login successful');
     } 
     catch (error) {
+      
       setError(error.response.data.message);
     }
+
+    
+  
   };
 
   return (
