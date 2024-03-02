@@ -117,7 +117,7 @@ const Signup = () => {
                                 <Divider></Divider>
                                 <Typography>
                                     Already have an account? &nbsp;
-                                    <Link>Log in to your account. </Link>
+                                    <Link href="/login">Log in to your account. </Link>
                                 </Typography>
                             </Stack>
                         </form>
