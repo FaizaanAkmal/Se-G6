@@ -1,6 +1,6 @@
 --Setting up Frontend by the following commands in client folder
 -> npm create vite@latest .
-->  npm i react-router-dom axios
+->  npm i react-router-dom axios bootstrap react-bootstrap
 -> Run by writing npm run dev
 
 ----Setting up the Backend

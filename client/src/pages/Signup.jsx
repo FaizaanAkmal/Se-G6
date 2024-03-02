@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-export default function Signup() {
+function Signup() {
+    const [selectedValue, setSelectedValue] = useState('option1'); // Initial selected value
+
+    const options = [
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+    ];
+
+    const handleChange = (event) => {
+        setSelectedValue(event.target.value);
+    };
+
     return (
         <Container fluid className="signup-page">
             <Row className="justify-content-center align-items-center">
@@ -29,6 +40,17 @@ export default function Signup() {
                             <Form.Label>Confirm password</Form.Label>
                             <Form.Control type="password" placeholder="Confirm password" />
                         </Form.Group>
+                        <Form.Check.Group checked={selectedValue} onChange={handleChange}>
+                            {options.map((option) => (
+                                <Form.Check
+                                    key={option.value}
+                                    type="radio"
+                                    name="radioOptions"
+                                    value={option.value}
+                                    label={option.label}
+                                />
+                            ))}
+                        </Form.Check.Group>
                         <Button variant="primary" type="submit" block>
                             Sign up
                         </Button>
@@ -40,4 +62,6 @@ export default function Signup() {
             </Row>
         </Container>
     );
-}  
+}
+
+export default Signup;
