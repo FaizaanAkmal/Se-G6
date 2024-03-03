@@ -27,7 +27,7 @@ export default function Page1() {
       // Handle response, for example, redirect to next page
       console.log("Form submitted successfully:", response.data);
       // Redirect to the next page
-      navigate("/next-page");
+      navigate("/createjob");
     } catch (error) {
       // Handle error
       console.error("Error submitting form:", error);
