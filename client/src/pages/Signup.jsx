@@ -1,18 +1,7 @@
-import Grid from "@mui/joy/Grid";
-import Box from "@mui/joy/Box";
-import Typography from "@mui/joy/Typography";
 import logo from "../assets/logo.png";
-import Button from "@mui/joy/Button";
-import Checkbox from "@mui/joy/Checkbox";
-import Divider from "@mui/joy/Divider";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
-import Link from "@mui/joy/Link";
-import Input from "@mui/joy/Input";
-import Stack from "@mui/joy/Stack";
-import Radio from "@mui/joy/Radio";
-import FormHelperText from "@mui/joy/FormHelperText";
-import RadioGroup from "@mui/joy/RadioGroup";
+import {
+    Box, Button, Checkbox, Divider, FormControl, FormHelperText, FormLabel,
+    Grid, Input, Link, Radio, RadioGroup, Stack, Typography} from "../joy_imports.jsx";
 
 const Signup = () => {
     return (
@@ -117,7 +106,7 @@ const Signup = () => {
                                 <Divider></Divider>
                                 <Typography>
                                     Already have an account? &nbsp;
-                                    <Link>Log in to your account. </Link>
+                                    <Link href="/login">Log in to your account. </Link>
                                 </Typography>
                             </Stack>
                         </form>
