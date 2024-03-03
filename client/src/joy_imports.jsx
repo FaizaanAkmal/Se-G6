@@ -14,8 +14,10 @@ import Option from "@mui/joy/Option";
 import Radio from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
 import Select from "@mui/joy/Select";
+import Slider from '@mui/joy/Slider';
 import Stack from "@mui/joy/Stack";
-import SvgIcon from "@mui/joy/SvgIcon"
+import SvgIcon from "@mui/joy/SvgIcon";
+import Textarea from '@mui/joy/Textarea';
 import Typography from "@mui/joy/Typography";
 
 export {
@@ -35,7 +37,9 @@ export {
     Radio,
     RadioGroup,
     Select,
+    Slider,
     Stack,
     SvgIcon,
+    Textarea,
     Typography
 };
