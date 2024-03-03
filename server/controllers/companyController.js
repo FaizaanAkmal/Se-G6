@@ -1,7 +1,6 @@
 const Company = require('../models/company');
 
 const page1 = async (req, res) => {
-    //res.json({mssg:"Success"})
     const { name, website, type, country } = req.body;
     const existingName = await Company.findOne({ name });
     if (existingName) {
@@ -25,7 +24,6 @@ const page1 = async (req, res) => {
 }
 
 const page2 = async (req, res) => {
-    //res.json({mssg:"Success"})
     const { industry, size} = req.body;
     const {id} = req.params;
     try {
@@ -44,11 +42,9 @@ const page2 = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
-        //res.status(201).json({ success: true, message: 'User registered successfully.' });
 }
 
 const page3 = async (req, res) => {
-    //res.json({mssg:"Success"})
     const { overview, workCulture, benefits} = req.body;
     const {id} = req.params;
     try {
@@ -67,7 +63,6 @@ const page3 = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
-        //res.status(201).json({ success: true, message: 'User registered successfully.' });
 }
 
 module.exports = {page1, page2, page3};
