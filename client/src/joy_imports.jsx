@@ -15,6 +15,7 @@ import Radio from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
 import Select from "@mui/joy/Select";
 import Stack from "@mui/joy/Stack";
+import SvgIcon from "@mui/joy/SvgIcon"
 import Typography from "@mui/joy/Typography";
 
 export {
@@ -35,5 +36,6 @@ export {
     RadioGroup,
     Select,
     Stack,
+    SvgIcon,
     Typography
 };
