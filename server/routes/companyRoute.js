@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const cors = require('cors')
-const {test} = require('../controllers/companyController')
+const {page1, page2, page3} = require('../controllers/companyController')
 
-router.post('/test', async (req, res) => {
-    res.json({mssg:"Success"})
-})
+router.post('/page1',page1)
+router.patch('/page2/:id',page2)
+router.patch('/page3/:id',page3)
 
 module.exports = router

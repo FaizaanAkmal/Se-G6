@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const devProfile = require('../models/dev');
 
 //Dev Model
 const devSchema = new Schema({
