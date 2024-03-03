@@ -1,10 +1,9 @@
 const express = require('express')
-const router = express.Router()
+const companyRouter = express.Router()
 const cors = require('cors')
-const {test} = require('../controllers/companyController')
+const companyRegister = require('../controllers/companyController')
 
-router.post('/test', async (req, res) => {
-    res.json({mssg:"Success"})
-})
 
-module.exports = router
+companyRouter.post('/companyData',companyRegister)
+
+module.exports = companyRouter

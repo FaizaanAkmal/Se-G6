@@ -6,39 +6,39 @@ const companySchema = new Schema({
   name: {
     type: String,
     unique: true,
-    required: true
+    required: false
   },
   website: {
     type: String,
     unique: true,
-    required: true
+    required: false
   },
   type: {
     type: String,
-    required: true,
+    required:false,
     //enum: ["Agency", "Corporate", "Start-up"]
   },
   country: {
     type: String,
-    required: true,
+    required: false,
   },
   industry: {
     type: String,
-    required: true,
+    required: false,
     //enum: [ "Agriculture", "Construction", "Energy", "Finance", "Healthcare", "IT", "Manufacturing", "Retail", "Transportation", "Tourism"] // Define possible user types
   },
   size: {
     type: String,
-    required: true,
+    required: false,
     //enum: ["0 to 100", "101 to 500", "above 500"]
   },
   overview: {
     type: String,
-    required: true,
+    required: false,
   },
   workCulture: {
     type: String,
-    required: true,
+    required: false,
   },
   benefits: {
     type: String
