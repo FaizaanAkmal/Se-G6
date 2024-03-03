@@ -23,7 +23,7 @@ app.use(
 );
 
 // Defining Routes
-app.use('/user',userrouter)
+app.use('/api',userrouter)
 app.use('/company',companyrouter)
 app.use('/dev', devrouter)
 
