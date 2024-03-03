@@ -8,7 +8,7 @@ import {
     Link, Option, Select, Slider, Stack, Textarea, Typography
 } from "../../../joy_imports.jsx";
 
-export default function Page1() {
+export default function Page3() {
     const [text1, setText1] = React.useState('');
     const [text2, setText2] = React.useState('');
     const [text3, setText3] = React.useState('');

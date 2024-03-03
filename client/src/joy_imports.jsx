@@ -10,6 +10,8 @@ import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
 import Grid from "@mui/joy/Grid";
 import Input from "@mui/joy/Input";
 import Link from "@mui/joy/Link";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
 import Option from "@mui/joy/Option";
 import Radio from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
@@ -33,6 +35,8 @@ export {
     Grid,
     Input,
     Link,
+    List,
+    ListItem,
     Option,
     Radio,
     RadioGroup,
