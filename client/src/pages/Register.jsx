@@ -13,11 +13,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#fff',
     borderRadius: '10px',
     width: '50%',
-    margin: '0 auto',
+    margin: '0 auto', 
   },
   title: {
     marginBottom: theme.spacing(2),
-    color: '#3f51b5',
+    color: '#3f51b5', 
     fontSize: '2rem',
   },
   field: {
@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: theme.spacing(2),
-    backgroundColor: '#3f51b5',
-    color: '#fff',
+    backgroundColor: '#3f51b5', 
+    color: '#fff', 
   },
   error: {
     color: 'red',
@@ -52,7 +52,7 @@ export default function Register() {
 
   const registerUser = async (event) => {
     event.preventDefault();
-
+    
     try {
       // Validate form data
       if (!firstName || !lastName || !email || !password || !userType || !termsAccepted) {
@@ -82,14 +82,14 @@ export default function Register() {
       setError(null);
     } catch (error) {
       // Handle registration error
-      console.log("The Error at frontend is: ", error)
+      console.log("The Error at frontend is: ",error)
       setError(error.response.data.message);
     }
 
-
+   
   };
 
-
+  
 
   return (
     <div className={classes.root}>
@@ -98,34 +98,34 @@ export default function Register() {
       {error && <div className={classes.error}>{error}</div>}
       {successMessage && <div className={classes.success}>{successMessage}</div>}
       <form onSubmit={registerUser}>
-        <TextField
+        <TextField 
           className={classes.field}
           label="First Name"
           variant="outlined"
           value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          onChange={(e) => setFirstName(e.target.value)} 
         />
-        <TextField
+        <TextField 
           className={classes.field}
           label="Last Name"
           variant="outlined"
           value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          onChange={(e) => setLastName(e.target.value)} 
         />
-        <TextField
+        <TextField 
           className={classes.field}
           label="Email"
           variant="outlined"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)} 
         />
-        <TextField
+        <TextField 
           className={classes.field}
           label="Password"
           variant="outlined"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)} 
         />
         <FormControl component="fieldset" className={classes.field}>
           <FormLabel component="legend">User Type</FormLabel>
