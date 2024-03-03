@@ -1,21 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Grid from "@mui/joy/Grid";
-import Box from "@mui/joy/Box";
-import Typography from "@mui/joy/Typography";
 import logo from "../assets/logo.png";
-import Button from "@mui/joy/Button";
-import Checkbox from "@mui/joy/Checkbox";
-import Divider from "@mui/joy/Divider";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
-import Link from "@mui/joy/Link";
-import Input from "@mui/joy/Input";
-import Stack from "@mui/joy/Stack";
-import Radio from "@mui/joy/Radio";
-import FormHelperText from "@mui/joy/FormHelperText";
-import RadioGroup from "@mui/joy/RadioGroup";
+import {
+    Box, Button, Divider, FormControl, FormLabel, Grid, Input, Link, Stack, Typography
+} from "../joy_imports.jsx";
 
 export default function Login() {
     const [email, setEmail] = useState("");
