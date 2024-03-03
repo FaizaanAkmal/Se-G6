@@ -74,15 +74,15 @@ export default function Login() {
                     <Typography>Welcome back! Login to continue.</Typography>
 
                     <Box>
-                        <form>
+                        <form onSubmit={loginUser}>
                             <Stack gap={4} sx={{ mt: 4 }}>
                                 <FormControl required>
                                     <FormLabel>Email</FormLabel>
-                                    <Input type="email" name="email" />
+                                    <Input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                                 </FormControl>
                                 <FormControl required>
                                     <FormLabel>Password</FormLabel>
-                                    <Input type="password" name="password" />
+                                    <Input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                 </FormControl>
                                 <Button type="submit" fullWidth>
                                     Sign up
