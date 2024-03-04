@@ -21,6 +21,9 @@ import Stack from "@mui/joy/Stack";
 import SvgIcon from "@mui/joy/SvgIcon";
 import Textarea from '@mui/joy/Textarea';
 import Typography from "@mui/joy/Typography";
+import logo from "./assets/White_logo.png"
+import background from "./assets/background.png"
+
 
 export {
     Box,
@@ -45,5 +48,7 @@ export {
     Stack,
     SvgIcon,
     Textarea,
-    Typography
+    Typography,
+    logo,
+    background
 };

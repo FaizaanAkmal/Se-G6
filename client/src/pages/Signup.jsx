@@ -1,24 +1,10 @@
-import Grid from "@mui/joy/Grid";
-import Box from "@mui/joy/Box";
-import Typography from "@mui/joy/Typography";
-import logo from "../assets/White_logo.png"
-import background from "../assets/background.png"
-import Button from "@mui/joy/Button";
-import Checkbox from "@mui/joy/Checkbox";
-import Divider from "@mui/joy/Divider";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
-import Link from "@mui/joy/Link";
-import Input from "@mui/joy/Input";
-import Stack from "@mui/joy/Stack";
-import Radio from "@mui/joy/Radio";
-import FormHelperText from "@mui/joy/FormHelperText";
-import RadioGroup from "@mui/joy/RadioGroup";
+
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Sigup.css';
 import { GlobalStyles } from '@mui/system';
+import { Box, Button,Checkbox, Divider, FormControl, FormHelperText, FormLabel,  Grid, Input, Link, Radio, RadioGroup,  Stack,Typography, logo, background } from '../joy_imports';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -67,13 +53,12 @@ const Signup = () => {
       setError(error.response.data.message);
     }
   };
-    return (
+  return (
         <>
             <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }} />
             <Box sx={{ margin: 0, padding: 0, width: '100vw', height: '100vh' }}>
                 <Grid container sx={{ flexGrow: 1, minHeight: "100vh" , backgroundColor: "#181818" }}>
                     <Grid
-                        item
                         xs={6}
                         sx={{
                             p: 4,
@@ -94,7 +79,7 @@ const Signup = () => {
                                 <form onSubmit={registerUser}>
                                     <Stack gap={4} sx={{ mt: 4 , color: "#ffffff"  }}>
                                         <Grid container spacing={2}>
-                                            <Grid item xs={6}>
+                                            <Grid xs={6}>
                                                 <FormControl required>
                                                     <FormLabel sx={{ color: "#ffffff" }}>First Name</FormLabel>
                                                     <Input
@@ -105,7 +90,7 @@ const Signup = () => {
                                                     />
                                                 </FormControl>
                                             </Grid>
-                                            <Grid item xs={6}>
+                                            <Grid xs={6}>
                                                 <FormControl required>
                                                     <FormLabel sx={{ color: "#ffffff" }}>Last Name</FormLabel>
                                                     <Input
@@ -120,7 +105,7 @@ const Signup = () => {
                                         <FormControl required>
                                             <FormLabel sx={{ color: "#ffffff" }}>Email</FormLabel>
                                             <Input type="email" name="email" value={email}
-                                                onChange={(e) => setEmail(e.target.value)} />
+                                                onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
                                         </FormControl>
                                         <FormControl required>
                                             <FormLabel sx={{ color: "#ffffff" }}>Password</FormLabel>
@@ -129,12 +114,13 @@ const Signup = () => {
                                         <FormControl>
                                             <Stack gap={2}>
                                                 <FormControl >
-                                                    <FormLabel sx={{ color: "#ffffff" }}>I am a...</FormLabel>
+                                                    <FormLabel sx={{ color: "#ffffff" }} >I am a...</FormLabel>
                                                     <RadioGroup
                                                         defaultValue="develper"
                                                         name="radio-buttons-group"
                                                         value={userType}
                                                         onChange={(e) => setUserType(e.target.value)}
+
                                                     >
                                                         <Radio
                                                             value="Developer"
@@ -154,7 +140,6 @@ const Signup = () => {
                                             <Checkbox
                                                 label="Accept Terms & Conditions."
                                                 variant="soft"
-                                                defaultChecked
                                                 checked={termsAccepted}
                                                 onChange={(e) => setTermsAccepted(e.target.checked)}
                                                 sx={{ color: "#ffffff" }}
@@ -189,7 +174,7 @@ const Signup = () => {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={6} sx={{ backgroundColor: "#181818", position: "relative" }}>
+                    <Grid xs={6} sx={{ backgroundColor: "#181818", position: "relative" }}>
                         <Grid
                             sx={{
                             position: "absolute",
