@@ -5,6 +5,42 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Sigup.css';
 import { GlobalStyles } from '@mui/system';
 import { Box, Button,Checkbox, Divider, FormControl, FormHelperText, FormLabel,  Grid, Input, Link, Radio, RadioGroup,  Stack,Typography, logo, background } from '../joy_imports';
+import List from '@mui/joy/List';
+import ListItem from '@mui/joy/ListItem';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import  { radioClasses } from '@mui/joy/Radio'; 
+import GitHubIcon from '@mui/icons-material/GitHub';
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+
+function CustomRadio({ label, ...props }) {
+    return (
+      <ListItem variant="outlined" sx={{ boxShadow: 'sm' }}>
+        <ListItemDecorator>
+          {label === 'Developer' ? <GitHubIcon sx={{ color: '#AF56D9' }} /> : <BusinessCenterIcon  sx={{ color: '#AF56D9' }} />}
+        </ListItemDecorator>
+        <Radio
+          overlay
+          value={label}
+          label={label}
+          sx={{ flexGrow: 1, flexDirection: 'row-reverse',color: '#ffffff' }}
+          slotProps={{
+            action: ({ checked }) => ({
+              sx: (theme) => ({
+                ...(checked && {
+                  inset: -1,
+                  border: '2px solid',
+                  borderColor: theme.vars.palette.primary[500],
+                }),
+              }),
+            }),
+          }}
+          {...props}
+        />
+      </ListItem>
+    );
+  }
+
+
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -19,6 +55,8 @@ const Signup = () => {
 
   const registerUser = async (event) => {
     event.preventDefault();
+
+    
     
     try {
       // Validate form data
@@ -86,7 +124,12 @@ const Signup = () => {
                                                         type="text"
                                                         name="firstName"
                                                         value={firstName}
+                                                        placeholder='First Name'
                                                         onChange={(e) => setFirstName(e.target.value)}
+                                                        sx={{
+                                                            '--Input-focusedHighlight': 'var(--myCustomColor)', 
+                                                            '--myCustomColor': '#AF56D9'
+                                                          }}
                                                     />
                                                 </FormControl>
                                             </Grid>
@@ -97,6 +140,7 @@ const Signup = () => {
                                                         type="text"
                                                         name="lastName"
                                                         value={lastName}
+                                                        placeholder='Last Name'
                                                         onChange={(e) => setLastName(e.target.value)}
                                                     />
                                                 </FormControl>
@@ -105,7 +149,7 @@ const Signup = () => {
                                         <FormControl required>
                                             <FormLabel sx={{ color: "#ffffff" }}>Email</FormLabel>
                                             <Input type="email" name="email" value={email}
-                                                onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+                                                onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder='user@example.com' />
                                         </FormControl>
                                         <FormControl required>
                                             <FormLabel sx={{ color: "#ffffff" }}>Password</FormLabel>
@@ -113,27 +157,53 @@ const Signup = () => {
                                         </FormControl>
                                         <FormControl>
                                             <Stack gap={2}>
-                                                <FormControl >
-                                                    <FormLabel sx={{ color: "#ffffff" }} >I am a...</FormLabel>
-                                                    <RadioGroup
-                                                        defaultValue="develper"
-                                                        name="radio-buttons-group"
-                                                        value={userType}
-                                                        onChange={(e) => setUserType(e.target.value)}
-
-                                                    >
-                                                        <Radio
-                                                            value="Developer"
-                                                            label={<Typography sx={{ color: "#ffffff" }}>Developer</Typography>}
-                                                            variant="outlined"
-                                                        />
-                                                        <Radio
-                                                            value="Company"
-                                                            label={<Typography sx={{ color: "#ffffff" }}>Company</Typography>}
-                                                            variant="outlined"
-                                                        />
-                                                    </RadioGroup>
-                                                </FormControl>
+                                                <RadioGroup
+                                                aria-label="I am a..."
+                                                defaultValue="Developer"
+                                                overlay
+                                                name="radio-buttons-group"
+                                                value={userType}
+                                                onChange={(e) => setUserType(e.target.value)}
+                                                sx={{
+                                                    flexDirection: 'row',
+                                                    gap: 2,
+                                                    [`& .${radioClasses.checked}`]: {
+                                                    [`& .${radioClasses.action}`]: {
+                                                        inset: -1,
+                                                        border: '2px solid',
+                                                        borderColor: 'primary.500',
+                                                    },
+                                                    },
+                                                    [`& .${radioClasses.radio}`]: {
+                                                    display: 'contents',
+                                                    '& > svg': {
+                                                        zIndex: 2,
+                                                        position: 'absolute',
+                                                        top: '-8px',
+                                                        right: '-8px',
+                                                        bgcolor: 'background.surface',
+                                                        borderRadius: '50%',
+                                                    },
+                                                    },
+                                                }}
+                                                >
+                                                <List
+                                                    sx={{
+                                                    minWidth: 240,
+                                                    '--List-gap': '0.5rem',
+                                                    '--ListItem-paddingY': '1rem',
+                                                    '--ListItem-radius': '8px',
+                                                    '--ListItemDecorator-size': '32px',
+                                                    }}
+                                                >
+                                                    {['Developer', 'Company'].map((value) => (
+                                                    <CustomRadio
+                                                        key={value}
+                                                        label={value}
+                                                    />
+                                                    ))}
+                                                </List>
+                                                </RadioGroup>
                                             </Stack>
                                         </FormControl>
                                         <FormControl sx={{ color: "#ffffff" }}>
