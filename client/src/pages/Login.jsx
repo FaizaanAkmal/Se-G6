@@ -113,7 +113,6 @@ export default function Login() {
                                 >
                                     Login
                                 </Button>
-                                {/**Center the error inside the alert */}
                                 {error && (
                                     <Alert variant="soft" color="danger">
                                         {error}
