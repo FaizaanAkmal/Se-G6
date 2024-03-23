@@ -108,6 +108,9 @@ export default function PostAJob() {
 
         setError("");
 
+        // scroll to top of the page
+        window.scrollTo(0, 0);
+
         // move to next step
         if (currentStep < 3) setStep(currentStep + 1);
     };
@@ -153,7 +156,7 @@ export default function PostAJob() {
                 container
                 sx={{
                     flexGrow: 1,
-                    minHeight: "100vh",
+                    minHeight: "90vh",
                     justifyContent: "center",
                 }}
             >
