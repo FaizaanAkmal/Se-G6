@@ -10,6 +10,7 @@ import JobPostForm from "./pages/createJob.jsx";
 import Page1 from "./pages/onboarding/company/Page1.jsx";
 import Page2 from "./pages/onboarding/company/CompanyOnboarding.jsx";
 import CompanyOnboarding from "./pages/onboarding/company/CompanyOnboarding.jsx";
+import DevOnboarding from "./pages/onboarding/dev/DevOnboarding.jsx";
 
 axios.defaults.baseURL = " http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -26,6 +27,7 @@ function App() {
                     path="/onboarding/company"
                     element={<CompanyOnboarding />}
                 />
+                <Route path="/onboarding/dev" element={<DevOnboarding />} />
             </Routes>
         </BrowserRouter>
     );
