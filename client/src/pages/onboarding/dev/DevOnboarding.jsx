@@ -34,7 +34,7 @@ import githubIcon from "../../../assets/githubIcon.svg";
 import linkIcon from "../../../assets/linkIcon.svg";
 
 export default function DevOnboarding() {
-    // state management
+    // form fields
     const [country, setCountry] = useState("");
     const [experience, setExperience] = useState("");
     const [bio, setBio] = useState("");
@@ -49,6 +49,9 @@ export default function DevOnboarding() {
     // form validation
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    // form step
+    const [currentStep, setStep] = useState(1);
 
     // navigation
     const navigate = useNavigate();
@@ -84,6 +87,33 @@ export default function DevOnboarding() {
     const handleGithubLinkChange = (e) => {
         setGithubLink(e.target.value);
     };
+
+    // form section handler
+    const handleNext = () => {
+        // validate form fields before moving to next step
+        if (currentStep === 1) {
+            if (!country || !experience || !bio) {
+                setError("Please fill all the required fields.");
+                return;
+            }
+        } else if (currentStep === 3) {
+            if (!interestedJobType || !environmentPreference) {
+                setError("Please fill all the required fields.");
+                return;
+            }
+        }
+
+        setError("");
+
+        // move to next step
+        if (currentStep < 4) setStep(currentStep + 1);
+    };
+
+    const handleBack = () => {
+        // move to previous step
+        if (currentStep > 1) setStep(currentStep - 1);
+    };
+
     // form submission handler
     const handleSubmit = async (e) => {
         // print form data after 1 second
@@ -146,173 +176,312 @@ export default function DevOnboarding() {
                 <Box sx={{ width: "100%" }}>
                     <form onSubmit={handleSubmit}>
                         <Stack gap={4}>
-                            {/* Country */}
-                            <FormControl required>
-                                <FormLabel>Where are you based in?</FormLabel>
-                                <Autocomplete
-                                    name="country"
-                                    options={countryNames}
-                                    placeholder="Select country"
-                                    onChange={handleCountryChange}
-                                />
-                            </FormControl>
-                            {/* Experience */}
-                            <FormControl required>
-                                <FormLabel>
-                                    How many years of experience do you have?
-                                </FormLabel>
-                                <Select
-                                    name="experience"
-                                    placeholder="Select experience (in years)"
-                                    onChange={handleExperienceChange}
-                                >
-                                    {experienceOptions.map((option) => (
-                                        <Option key={option} value={option}>
-                                            {option}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            {/* Bio */}
-                            <FormControl required>
-                                <FormLabel>
-                                    Tell us a little about yourself
-                                </FormLabel>
-                                <Textarea
-                                    name="Bio"
-                                    placeholder="Enter a short bio/description..."
-                                    onChange={handleBioChange}
-                                    minRows={4}
-                                    maxRows={6}
-                                />
-                            </FormControl>
-                            {/* Skills */}
-                            <FormControl>
-                                <FormLabel>
-                                    Skills (select all that apply)
-                                </FormLabel>
-                                <Autocomplete
-                                    name="skills"
-                                    options={skillOptions}
-                                    placeholder="Select skills"
-                                    multiple
-                                    onChange={handleSkillsChange}
-                                />
-                            </FormControl>
-                            {/* Programming Languages */}
-                            <FormControl>
-                                <FormLabel>
-                                    Programming Languages (select all that
-                                    apply)
-                                </FormLabel>
-                                <Autocomplete
-                                    name="languages"
-                                    options={languageOptions}
-                                    placeholder="Select languages"
-                                    multiple
-                                    onChange={handleLanguagesChange}
-                                />
-                            </FormControl>
-                            {/* Technologies */}
-                            <FormControl>
-                                <FormLabel>
-                                    Technologies (select all that apply)
-                                </FormLabel>
-                                <Autocomplete
-                                    name="technologies"
-                                    options={technologyOptions}
-                                    placeholder="Select technologies"
-                                    onChange={handleTechnologiesChange}
-                                    multiple
-                                />
-                            </FormControl>
-                            {/* Job Type */}
-                            <FormControl required>
-                                <FormLabel>
-                                    What’s your interested job type?
-                                </FormLabel>
-                                <Select
-                                    name="jobType"
-                                    placeholder="Select job type"
-                                    onChange={handleJobTypeChange}
-                                >
-                                    {jobTypeOptions.map((option) => (
-                                        <Option key={option} value={option}>
-                                            {option}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            {/* Environment Preference */}
-                            <FormControl required>
-                                <FormLabel>
-                                    What’s your environment preference?
-                                </FormLabel>
-                                <Select
-                                    name="environment"
-                                    placeholder="Select environment"
-                                    onChange={handleEnvironmentChange}
-                                >
-                                    {environmentOptions.map((option) => (
-                                        <Option key={option} value={option}>
-                                            {option}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            {/* Portfolio Link */}
-                            <FormControl>
-                                <FormLabel>
-                                    Link to your portfolio (optional)
-                                </FormLabel>
-                                <Input
-                                    name="portfolioLink"
-                                    type="url"
-                                    placeholder="https://www.example.com"
-                                    onChange={handlePortfolioLinkChange}
-                                    startDecorator={
-                                        <img
-                                            src={linkIcon}
-                                            alt="link icon"
-                                            style={{ width: "20px" }}
+                            {/* First Stage */}
+                            {currentStep === 1 && (
+                                <>
+                                    {/* Country */}
+                                    <FormControl required>
+                                        <FormLabel>
+                                            Where are you based in?
+                                        </FormLabel>
+                                        <Autocomplete
+                                            name="country"
+                                            options={countryNames}
+                                            placeholder="Select country"
+                                            onChange={handleCountryChange}
+                                            value={country}
                                         />
-                                    }
-                                />
-                            </FormControl>
-                            {/* Github Link */}
-                            <FormControl>
-                                <FormLabel>
-                                    Link to your Github profile (optional)
-                                </FormLabel>
-                                <Input
-                                    name="githubLink"
-                                    type="url"
-                                    placeholder="https://github.com/username"
-                                    onChange={handleGithubLinkChange}
-                                    startDecorator={
-                                        <img
-                                            src={githubIcon}
-                                            alt="github icon"
-                                            style={{ width: "20px" }}
+                                    </FormControl>
+                                    {/* Experience */}
+                                    <FormControl required>
+                                        <FormLabel>
+                                            How many years of experience do you
+                                            have?
+                                        </FormLabel>
+                                        <Select
+                                            name="experience"
+                                            placeholder="Select experience (in years)"
+                                            onChange={handleExperienceChange}
+                                            value={experience}
+                                        >
+                                            {experienceOptions.map((option) => (
+                                                <Option
+                                                    key={option}
+                                                    value={option}
+                                                >
+                                                    {option}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    {/* Bio */}
+                                    <FormControl required>
+                                        <FormLabel>
+                                            Tell us a little about yourself
+                                        </FormLabel>
+                                        <Textarea
+                                            name="Bio"
+                                            placeholder="Enter a short bio/description..."
+                                            onChange={handleBioChange}
+                                            minRows={4}
+                                            maxRows={6}
+                                            value={bio}
                                         />
-                                    }
-                                />
-                            </FormControl>
-                            {/* Submission Button */}
-                            <Button
-                                fullWidth
-                                type="submit"
-                                sx={{
-                                    backgroundColor: "#7F56D9",
-                                    color: "white",
-                                    "&:hover": {
-                                        backgroundColor: "#6941C6",
-                                    },
-                                }}
-                                loading={loading}
-                            >
-                                Complete Profile
-                            </Button>
+                                    </FormControl>
+                                </>
+                            )}
+                            {/* Second Stage */}
+                            {currentStep === 2 && (
+                                <>
+                                    {/* Skills */}
+                                    <FormControl>
+                                        <FormLabel>
+                                            Skills (select all that apply)
+                                        </FormLabel>
+                                        <Autocomplete
+                                            name="skills"
+                                            options={skillOptions}
+                                            placeholder="Select skills"
+                                            multiple
+                                            onChange={handleSkillsChange}
+                                            value={skills}
+                                        />
+                                    </FormControl>
+                                    {/* Programming Languages */}
+                                    <FormControl>
+                                        <FormLabel>
+                                            Programming Languages (select all
+                                            that apply)
+                                        </FormLabel>
+                                        <Autocomplete
+                                            name="languages"
+                                            options={languageOptions}
+                                            placeholder="Select languages"
+                                            multiple
+                                            onChange={handleLanguagesChange}
+                                            value={languages}
+                                        />
+                                    </FormControl>
+                                    {/* Technologies */}
+                                    <FormControl>
+                                        <FormLabel>
+                                            Technologies (select all that apply)
+                                        </FormLabel>
+                                        <Autocomplete
+                                            name="technologies"
+                                            options={technologyOptions}
+                                            placeholder="Select technologies"
+                                            onChange={handleTechnologiesChange}
+                                            multiple
+                                            value={technologies}
+                                        />
+                                    </FormControl>
+                                </>
+                            )}
+                            {/* Third Stage */}
+                            {currentStep === 3 && (
+                                <>
+                                    {/* Job Type */}
+                                    <FormControl required>
+                                        <FormLabel>
+                                            What’s your interested job type?
+                                        </FormLabel>
+                                        <Select
+                                            name="jobType"
+                                            placeholder="Select job type"
+                                            onChange={handleJobTypeChange}
+                                            value={interestedJobType}
+                                        >
+                                            {jobTypeOptions.map((option) => (
+                                                <Option
+                                                    key={option}
+                                                    value={option}
+                                                >
+                                                    {option}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    {/* Environment Preference */}
+                                    <FormControl required>
+                                        <FormLabel>
+                                            What’s your environment preference?
+                                        </FormLabel>
+                                        <Select
+                                            name="environment"
+                                            placeholder="Select environment"
+                                            onChange={handleEnvironmentChange}
+                                            value={environmentPreference}
+                                        >
+                                            {environmentOptions.map(
+                                                (option) => (
+                                                    <Option
+                                                        key={option}
+                                                        value={option}
+                                                    >
+                                                        {option}
+                                                    </Option>
+                                                )
+                                            )}
+                                        </Select>
+                                    </FormControl>
+                                </>
+                            )}
+                            {/* Fourth Stage */}
+                            {currentStep === 4 && (
+                                <>
+                                    {/* Portfolio Link */}
+                                    <FormControl>
+                                        <FormLabel>
+                                            Link to your portfolio (optional)
+                                        </FormLabel>
+                                        <Input
+                                            name="portfolioLink"
+                                            type="url"
+                                            placeholder="https://www.example.com"
+                                            onChange={handlePortfolioLinkChange}
+                                            value={portfolioLink}
+                                            startDecorator={
+                                                <img
+                                                    src={linkIcon}
+                                                    alt="link icon"
+                                                    style={{ width: "20px" }}
+                                                />
+                                            }
+                                        />
+                                    </FormControl>
+                                    {/* Github Link */}
+                                    <FormControl>
+                                        <FormLabel>
+                                            Link to your Github profile
+                                            (optional)
+                                        </FormLabel>
+                                        <Input
+                                            name="githubLink"
+                                            type="url"
+                                            placeholder="https://github.com/username"
+                                            onChange={handleGithubLinkChange}
+                                            value={githubLink}
+                                            startDecorator={
+                                                <img
+                                                    src={githubIcon}
+                                                    alt="github icon"
+                                                    style={{ width: "20px" }}
+                                                />
+                                            }
+                                        />
+                                    </FormControl>
+                                </>
+                            )}
+                            {/* 1st Stage Nav Btn */}
+                            {currentStep === 1 && (
+                                <Button
+                                    fullWidth
+                                    type="button"
+                                    sx={{
+                                        backgroundColor: "#F9F5FF",
+                                        color: "#6941C6",
+                                        "&:hover": {
+                                            backgroundColor: "#e3dcf7",
+                                        },
+                                    }}
+                                    loading={loading}
+                                    onClick={handleNext}
+                                >
+                                    Next
+                                </Button>
+                            )}
+                            {/* 2nd + 3rd Stage Btns */}
+                            {currentStep > 1 && currentStep < 4 && (
+                                <>
+                                    <Grid
+                                        container
+                                        spacing={2}
+                                        sx={{ flexGrow: 1 }}
+                                    >
+                                        {/* Back Button */}
+                                        <Grid item xs={4}>
+                                            <Button
+                                                fullWidth
+                                                onClick={handleBack}
+                                                sx={{
+                                                    backgroundColor: "#FFFFFF",
+                                                    color: "#344054",
+                                                    border: "1px solid #D0D5DD",
+                                                    "&:hover": {
+                                                        backgroundColor:
+                                                            "#fafafa",
+                                                        borderColor: "#bfc4ca",
+                                                    },
+                                                }}
+                                            >
+                                                Back
+                                            </Button>
+                                        </Grid>
+                                        {/* Next Button */}
+                                        <Grid item xs={8}>
+                                            <Button
+                                                fullWidth
+                                                onClick={handleNext}
+                                                sx={{
+                                                    backgroundColor: "#F9F5FF",
+                                                    color: "#6941C6",
+                                                    "&:hover": {
+                                                        backgroundColor:
+                                                            "#e3dcf7",
+                                                    },
+                                                }}
+                                            >
+                                                Next
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </>
+                            )}
+                            {/* Submisstion (4th Stage) Btn*/}
+                            {currentStep === 4 && (
+                                <Grid
+                                    container
+                                    spacing={2}
+                                    sx={{ flexGrow: 1 }}
+                                >
+                                    {/* Back Button */}
+                                    <Grid item xs={4}>
+                                        <Button
+                                            fullWidth
+                                            onClick={handleBack}
+                                            sx={{
+                                                backgroundColor: "#FFFFFF",
+                                                color: "#344054",
+                                                border: "1px solid #D0D5DD",
+                                                "&:hover": {
+                                                    backgroundColor: "#fafafa",
+                                                    borderColor: "#bfc4ca",
+                                                },
+                                            }}
+                                        >
+                                            Back
+                                        </Button>
+                                    </Grid>
+                                    {/* Submit Button */}
+                                    <Grid item xs={8}>
+                                        <Button
+                                            fullWidth
+                                            type="submit"
+                                            sx={{
+                                                backgroundColor: "#7F56D9",
+                                                color: "white",
+                                                "&:hover": {
+                                                    backgroundColor: "#6941C6",
+                                                },
+                                            }}
+                                            loading={loading}
+                                        >
+                                            Complete Profile
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            )}
                             {/* Error Alert */}
                             {error && (
                                 <Alert variant="soft" color="danger">
