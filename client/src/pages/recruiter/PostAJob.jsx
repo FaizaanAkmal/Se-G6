@@ -1,0 +1,501 @@
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+// Global constants
+import {
+    jobTypeOptions,
+    environmentOptions,
+    countryNames,
+    experienceOptions,
+    skillOptions,
+    languageOptions,
+    technologyOptions,
+} from "../../globalConstants";
+
+// Custom components
+import Footer from "../../components/Footer";
+
+// UI imports
+import Grid from "@mui/joy/Grid";
+import Box from "@mui/joy/Box";
+import Typography from "@mui/joy/Typography";
+import Button from "@mui/joy/Button";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Input from "@mui/joy/Input";
+import Stack from "@mui/joy/Stack";
+import Select from "@mui/joy/Select";
+import Option from "@mui/joy/Option";
+import Textarea from "@mui/joy/Textarea";
+import Autocomplete from "@mui/joy/Autocomplete";
+import Alert from "@mui/joy/Alert";
+
+export default function PostAJob() {
+    // form fields state
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [requirement, setRequirement] = useState("");
+    const [preferredSkills, setPreferredSkills] = useState([]);
+    const [preferredLanguages, setPreferredLanguages] = useState([]);
+    const [preferredTechnologies, setPreferredTechnologies] = useState([]);
+    const [experience, setExperience] = useState("");
+    const [jobType, setJobType] = useState("");
+    const [environment, setEnvironment] = useState("");
+    const [compensation, setCompensation] = useState("");
+
+    // form validation
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    // step state
+    const [currentStep, setStep] = useState(1);
+
+    // navigation
+    const navigate = useNavigate();
+
+    // handle form field changes
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    };
+    const handleDescriptionChange = (e) => {
+        setDescription(e.target.value);
+    };
+    const handleRequirementChange = (e) => {
+        setRequirement(e.target.value);
+    };
+    const handleSkillsChange = (e, value) => {
+        setPreferredSkills(value);
+    };
+    const handleLanguagesChange = (e, value) => {
+        setPreferredLanguages(value);
+    };
+    const handleTechnologiesChange = (e, value) => {
+        setPreferredTechnologies(value);
+    };
+    const handleExperienceChange = (e, value) => {
+        setExperience(value);
+    };
+    const handleJobTypeChange = (e, value) => {
+        setJobType(value);
+    };
+    const handleEnvironmentChange = (e, value) => {
+        setEnvironment(value);
+    };
+    const handleCompensationChange = (e) => {
+        setCompensation(e.target.value);
+    };
+
+    // go to next step
+    const handleNext = () => {
+        // validate required form fields
+        if (currentStep === 1) {
+            if (!title || !description || !requirement) {
+                setError("Please fill in all required fields.");
+                return;
+            }
+        } else if (currentStep === 2) {
+            if (!experience) {
+                setError("Please select a preferred experience level.");
+                return;
+            }
+        } else if (currentStep === 3) {
+            if (!jobType || !environment) {
+                setError("Please fill in all required fields.");
+                return;
+            }
+        }
+
+        setError("");
+
+        // move to next step
+        if (currentStep < 3) setStep(currentStep + 1);
+    };
+
+    // go to previous step
+    const handleBack = () => {
+        if (currentStep > 1) setStep(currentStep - 1);
+    };
+
+    // Form submission handler
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+
+        const formData = JSON.stringify(
+            {
+                title,
+                description,
+                requirement,
+                preferredSkills,
+                preferredLanguages,
+                preferredTechnologies,
+                experience,
+                jobType,
+                environment,
+                compensation,
+            },
+            null,
+            2
+        );
+
+        // print form data after 1 second
+        setTimeout(() => {
+            alert(`Form data: ${formData}`);
+            setLoading(false);
+        }, 1000);
+    };
+
+    return (
+        <>
+            <Grid
+                container
+                sx={{
+                    flexGrow: 1,
+                    minHeight: "100vh",
+                    justifyContent: "center",
+                }}
+            >
+                <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    sx={{
+                        p: 4,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                    }}
+                >
+                    <Typography
+                        level="h1"
+                        sx={{ mb: 2, textAlign: "left", width: "100%" }}
+                    >
+                        Create a Job Post 🚀
+                    </Typography>
+                    <Typography level="body-lg" sx={{ mb: 4, width: "100%" }}>
+                        Let’s get started on creating your job post. Please fill
+                        in the following fields:
+                    </Typography>
+                    <Box sx={{ width: "100%" }}>
+                        <form onSubmit={handleSubmit}>
+                            <Stack gap={4}>
+                                {/* Step 1 */}
+                                {currentStep === 1 && (
+                                    <>
+                                        <Typography level="h3">
+                                            Step 1 of 3: Basic Information
+                                        </Typography>
+                                        {/* Job Title */}
+                                        <FormControl required>
+                                            <FormLabel>Job title</FormLabel>
+                                            <Input
+                                                type="text"
+                                                placeholder="e.g. Backend Developer"
+                                                onChange={handleTitleChange}
+                                                value={title}
+                                            />
+                                        </FormControl>
+                                        {/* Job Description */}
+                                        <FormControl required>
+                                            <FormLabel>
+                                                Job description
+                                            </FormLabel>
+                                            <Textarea
+                                                placeholder="Provide a detailed description of the job..."
+                                                onChange={
+                                                    handleDescriptionChange
+                                                }
+                                                value={description}
+                                                minRows={8}
+                                                maxRows={16}
+                                            />
+                                        </FormControl>
+                                        {/* Minimum Requirements */}
+                                        <FormControl required>
+                                            <FormLabel>
+                                                Minimum requirements
+                                            </FormLabel>
+                                            <Textarea
+                                                placeholder="Specify the minimum qualifications required for the job..."
+                                                onChange={
+                                                    handleRequirementChange
+                                                }
+                                                value={requirement}
+                                                minRows={6}
+                                                maxRows={12}
+                                            />
+                                        </FormControl>
+                                        {/* Next Button */}
+                                        <Button
+                                            fullWidth
+                                            type="button"
+                                            sx={{
+                                                backgroundColor: "#F9F5FF",
+                                                color: "#6941C6",
+                                                "&:hover": {
+                                                    backgroundColor: "#e3dcf7",
+                                                },
+                                            }}
+                                            loading={loading}
+                                            onClick={handleNext}
+                                        >
+                                            Next
+                                        </Button>
+                                    </>
+                                )}
+                                {/* Step 2 */}
+                                {currentStep === 2 && (
+                                    <>
+                                        <Typography level="h3">
+                                            Step 2 of 3: Preferences
+                                        </Typography>
+                                        {/* Preferred Skills */}
+                                        <FormControl>
+                                            <FormLabel>
+                                                Preferred skills (select all
+                                                that apply)
+                                            </FormLabel>
+                                            <Autocomplete
+                                                placeholder="e.g. Web Development"
+                                                multiple
+                                                options={skillOptions}
+                                                value={preferredSkills}
+                                                onChange={handleSkillsChange}
+                                            />
+                                        </FormControl>
+                                        {/* Preferred Programming Languages */}
+                                        <FormControl>
+                                            <FormLabel>
+                                                Preferred programming languages
+                                                (select all that apply)
+                                            </FormLabel>
+                                            <Autocomplete
+                                                placeholder="e.g. JavaScript"
+                                                multiple
+                                                options={languageOptions}
+                                                value={preferredLanguages}
+                                                onChange={handleLanguagesChange}
+                                            />
+                                        </FormControl>
+                                        {/* Preferred Technologies */}
+                                        <FormControl>
+                                            <FormLabel>
+                                                Preferred technologies (select
+                                                all that apply)
+                                            </FormLabel>
+                                            <Autocomplete
+                                                placeholder="e.g. React"
+                                                multiple
+                                                options={technologyOptions}
+                                                value={preferredTechnologies}
+                                                onChange={
+                                                    handleTechnologiesChange
+                                                }
+                                            />
+                                        </FormControl>
+                                        {/* Experience Level */}
+                                        <FormControl required>
+                                            <FormLabel>
+                                                Preferred experience level
+                                            </FormLabel>
+                                            <Select
+                                                placeholder="e.g. 5+ years"
+                                                value={experience}
+                                                onChange={
+                                                    handleExperienceChange
+                                                }
+                                            >
+                                                {experienceOptions.map(
+                                                    (option) => (
+                                                        <Option
+                                                            key={option}
+                                                            value={option}
+                                                        >
+                                                            {option}
+                                                        </Option>
+                                                    )
+                                                )}
+                                            </Select>
+                                        </FormControl>
+                                        {/* Back + Next Buttons */}
+                                        <Grid
+                                            container
+                                            spacing={2}
+                                            sx={{ flexGrow: 1 }}
+                                        >
+                                            {/* Back Button */}
+                                            <Grid item xs={4}>
+                                                <Button
+                                                    fullWidth
+                                                    onClick={handleBack}
+                                                    sx={{
+                                                        backgroundColor:
+                                                            "#FFFFFF",
+                                                        color: "#344054",
+                                                        border: "1px solid #D0D5DD",
+                                                        "&:hover": {
+                                                            backgroundColor:
+                                                                "#fafafa",
+                                                            borderColor:
+                                                                "#bfc4ca",
+                                                        },
+                                                    }}
+                                                >
+                                                    Back
+                                                </Button>
+                                            </Grid>
+                                            {/* Next Button */}
+                                            <Grid item xs={8}>
+                                                <Button
+                                                    fullWidth
+                                                    onClick={handleNext}
+                                                    sx={{
+                                                        backgroundColor:
+                                                            "#F9F5FF",
+                                                        color: "#6941C6",
+                                                        "&:hover": {
+                                                            backgroundColor:
+                                                                "#e3dcf7",
+                                                        },
+                                                    }}
+                                                >
+                                                    Next
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </>
+                                )}
+                                {/* Step 3 */}
+                                {currentStep === 3 && (
+                                    <>
+                                        <Typography level="h3">
+                                            Step 3 of 3: Job Logistics
+                                        </Typography>
+                                        {/* Job Type */}
+                                        <FormControl required>
+                                            <FormLabel>
+                                                What type of job is this?
+                                            </FormLabel>
+                                            <Select
+                                                placeholder="e.g. Full-time"
+                                                value={jobType}
+                                                onChange={handleJobTypeChange}
+                                            >
+                                                {jobTypeOptions.map(
+                                                    (option) => (
+                                                        <Option
+                                                            key={option}
+                                                            value={option}
+                                                        >
+                                                            {option}
+                                                        </Option>
+                                                    )
+                                                )}
+                                            </Select>
+                                        </FormControl>
+                                        {/* Work Environment */}
+                                        <FormControl required>
+                                            <FormLabel>
+                                                What is the working environment
+                                                for this position?
+                                            </FormLabel>
+                                            <Select
+                                                placeholder="e.g. Remote"
+                                                value={environment}
+                                                onChange={
+                                                    handleEnvironmentChange
+                                                }
+                                            >
+                                                {environmentOptions.map(
+                                                    (option) => (
+                                                        <Option
+                                                            key={option}
+                                                            value={option}
+                                                        >
+                                                            {option}
+                                                        </Option>
+                                                    )
+                                                )}
+                                            </Select>
+                                        </FormControl>
+                                        {/* Compensation */}
+                                        <FormControl>
+                                            <FormLabel>
+                                                Annual Compensation (in USD)
+                                            </FormLabel>
+                                            <Input
+                                                type="number"
+                                                placeholder="e.g. $100,000"
+                                                onChange={
+                                                    handleCompensationChange
+                                                }
+                                                value={compensation}
+                                                startDecorator="$"
+                                            />
+                                        </FormControl>
+                                        {/* Back + Submit Button */}
+                                        <Grid
+                                            container
+                                            spacing={2}
+                                            sx={{ flexGrow: 1 }}
+                                        >
+                                            {/* Back Button */}
+                                            <Grid item xs={4}>
+                                                <Button
+                                                    fullWidth
+                                                    onClick={handleBack}
+                                                    sx={{
+                                                        backgroundColor:
+                                                            "#FFFFFF",
+                                                        color: "#344054",
+                                                        border: "1px solid #D0D5DD",
+                                                        "&:hover": {
+                                                            backgroundColor:
+                                                                "#fafafa",
+                                                            borderColor:
+                                                                "#bfc4ca",
+                                                        },
+                                                    }}
+                                                >
+                                                    Back
+                                                </Button>
+                                            </Grid>
+                                            {/* Submit Button */}
+                                            <Grid item xs={8}>
+                                                <Button
+                                                    fullWidth
+                                                    type="submit"
+                                                    sx={{
+                                                        backgroundColor:
+                                                            "#7F56D9",
+                                                        color: "white",
+                                                        "&:hover": {
+                                                            backgroundColor:
+                                                                "#6941C6",
+                                                        },
+                                                    }}
+                                                    loading={loading}
+                                                >
+                                                    Create Job
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </>
+                                )}
+                                {/* Error Alert */}
+                                {error && (
+                                    <Alert variant="soft" color="danger">
+                                        {error}
+                                    </Alert>
+                                )}
+                            </Stack>
+                        </form>
+                    </Box>
+                </Grid>
+            </Grid>
+            <Footer />
+        </>
+    );
+}

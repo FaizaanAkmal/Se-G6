@@ -13,8 +13,10 @@ import {
     technologyOptions,
 } from "../../../globalConstants";
 
+import JobCard from "../../../components/JobCard.jsx";
+
 // Custom components
-import Footer from "../../../components/Footer";
+import Footer from "../../../components/Footer.jsx";
 
 // UI imports
 import Grid from "@mui/joy/Grid";
@@ -91,7 +93,7 @@ export default function DevOnboarding() {
         setGithubLink(e.target.value);
     };
 
-    // form section handler
+    // go to next section
     const handleNext = () => {
         // validate form fields before moving to next step
         if (currentStep === 1) {
@@ -112,6 +114,7 @@ export default function DevOnboarding() {
         if (currentStep < 4) setStep(currentStep + 1);
     };
 
+    // go to previous section
     const handleBack = () => {
         // move to previous step
         if (currentStep > 1) setStep(currentStep - 1);
@@ -531,6 +534,7 @@ export default function DevOnboarding() {
                 </Grid>
             </Grid>
             <Footer />
+            {/* <JobCard /> */}
         </>
     );
 }

@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import axios from "axios";
-import Page3 from "./pages/onboarding/company/Page3.jsx";
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
@@ -11,6 +10,7 @@ import Page1 from "./pages/onboarding/company/Page1.jsx";
 import Page2 from "./pages/onboarding/company/CompanyOnboarding.jsx";
 import CompanyOnboarding from "./pages/onboarding/company/CompanyOnboarding.jsx";
 import DevOnboarding from "./pages/onboarding/dev/DevOnboarding.jsx";
+import PostAJob from "./pages/recruiter/PostAJob.jsx";
 
 axios.defaults.baseURL = " http://localhost:8000";
 axios.defaults.withCredentials = true;
@@ -28,6 +28,7 @@ function App() {
                     element={<CompanyOnboarding />}
                 />
                 <Route path="/onboarding/dev" element={<DevOnboarding />} />
+                <Route path="/recruiter/create-job" element={<PostAJob />} />
             </Routes>
         </BrowserRouter>
     );
