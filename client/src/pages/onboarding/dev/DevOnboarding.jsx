@@ -4,13 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 // Global constants
 import {
-    jobTypeOptions,
-    environmentOptions,
-    countryNames,
-    experienceOptions,
-    skillOptions,
-    languageOptions,
-    technologyOptions,
+    jobTypeOptions, environmentOptions, countryNames, experienceOptions,
+    skillOptions, languageOptions, technologyOptions,
 } from "../../../globalConstants";
 
 import JobCard from "../../../components/JobCard.jsx";
@@ -19,19 +14,10 @@ import JobCard from "../../../components/JobCard.jsx";
 import Footer from "../../../components/Footer.jsx";
 
 // UI imports
-import Grid from "@mui/joy/Grid";
-import Box from "@mui/joy/Box";
-import Typography from "@mui/joy/Typography";
-import Button from "@mui/joy/Button";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
-import Input from "@mui/joy/Input";
-import Stack from "@mui/joy/Stack";
-import Select from "@mui/joy/Select";
-import Option from "@mui/joy/Option";
-import Textarea from "@mui/joy/Textarea";
-import Autocomplete from "@mui/joy/Autocomplete";
-import Alert from "@mui/joy/Alert";
+import {
+    Grid, Box, Typography, Button, FormControl, FormLabel, Input,
+    Stack, Select, Option, Textarea, Autocomplete, Alert
+} from "../../../joyImports.jsx";
 
 // custom assets
 import onboardingIcon from "../../../assets/onboardingIcon.svg";

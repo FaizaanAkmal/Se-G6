@@ -3,7 +3,6 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import axios from "axios";
 import { useState } from "react";
-import JobPostForm from "./pages/createJob.jsx";
 import CompanyOnboarding from "./pages/onboarding/company/CompanyOnboarding.jsx";
 import DevOnboarding from "./pages/onboarding/dev/DevOnboarding.jsx";
 import PostAJob from "./pages/recruiter/PostAJob.jsx";
@@ -56,15 +55,14 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<Login />} />
-                    <Route path="/createjob" element={<JobPostForm />} />
-                    <Route path="/" element={<Signup />} />
+                    <Route path="/signup" element={<Signup />} />
                     <Route
                         path="/onboarding/company"
                         element={<CompanyOnboarding />}
                     />
                     <Route path="/onboarding/dev" element={<DevOnboarding />} />
                     <Route
-                        path="/recruiter/create-job"
+                        path="/createjob"
                         element={<PostAJob />}
                     />
                 </Routes>

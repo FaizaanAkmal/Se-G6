@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Grid, Box, Typography, FormControl, FormLabel, FormHelperText, Button } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import { Grid, Box, Typography, FormControl, FormLabel, FormHelperText, Button } from '@mui/joy';
+import TextField from '@mui/joy/TextField';
+import Autocomplete from '@mui/joy/Autocomplete';
 
 const JobPostForm = () => {
   const [formData, setFormData] = useState({
