@@ -70,9 +70,14 @@ function CustomRadio({ label, ...props }) {
             userType,
         });
 
-      // Handle successful registration
-      setSuccessMessage(response.data.message);
-      navigate('/login');
+            // Make API request to register user
+            const response = await axios.post("/api/register", {
+                firstName,
+                lastName,
+                email,
+                password,
+                userType,
+            });
 
       // Clear form fields
       setFirstName('');
