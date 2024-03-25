@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const JobPost = require('../models/jobpost');
 const jwt = require('jsonwebtoken');
 
 // Registering a New User
@@ -71,21 +70,6 @@ const loginUser = async (req, res) => {
     }
 };
 
-//creating a new job post
-const jobpost = async (req, res) => {
-    try {
-        const { title, description, tags } = req.body;
-          const jobPost = await JobPost.create({
-            title,
-            description,
-            tags
-          });
-      
-          res.json({ status: 'ok', id: jobPost._id });
-        } catch (err) {
-          console.error(err);
-          res.status(500).json({ status: 'error', error: 'Something went wrong' });
-        }
-};
 
-module.exports = { registerUser,loginUser, jobpost}; 
+
+module.exports = { registerUser,loginUser }; 
