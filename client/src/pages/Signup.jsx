@@ -39,17 +39,17 @@ const Signup = () => {
             });
 
             // Handle successful registration
-            setSuccessMessage(response.data.message);
-            navigate('/login');
+            if (response.data.success) {
+                // Redirect to onboarding page based on userType
+                if (userType === "Company")
+                    navigate('/onboarding/company');
 
-            // Clear form fields
-            setFirstName('');
-            setLastName('');
-            setEmail('');
-            setPassword('');
-            setUserType('');
-            setTermsAccepted(false);
-            setError(null);
+                if (userType === "Developer")
+                    navigate('/onboarding/dev');
+            }
+            // Handle unsuccessful registration
+            // TODO
+
         } catch (error) {
             // Handle registration error
             console.log("The Error at frontend is: ", error)

@@ -1,10 +1,9 @@
 const express = require('express')
-const router = express.Router()
+const devRouter = express.Router()
 const cors = require('cors')
-const {page1, page2, page3} = require('../controllers/devController')
+const {devRegister, devEdit} = require('../controllers/devController')
 
-router.post('/page1',page1)
-router.patch('/page2/:id',page2)
-router.patch('/page3/:id',page3)
+devRouter.post('/profile',devRegister)
+devRouter.patch('/profile', devEdit)
 
 module.exports = router
