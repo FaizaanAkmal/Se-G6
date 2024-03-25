@@ -57,21 +57,12 @@ function CustomRadio({ label, ...props }) {
   const [successMessage, setSuccessMessage] = useState('');
 
   const registerUser = async (event) => {
-    event.preventDefault();
+        event.preventDefault();
 
-    try {
-    
-      // Make API request to register user
-      const response = await axios.post('/api/register', {
-            firstName,
-            lastName,
-            email,
-            password,
-            userType,
-        });
-
-            // Make API request to register user
-            const response = await axios.post("/api/register", {
+        try {
+        
+        // Make API request to register user
+        const response = await axios.post('/api/register', {
                 firstName,
                 lastName,
                 email,
@@ -79,25 +70,41 @@ function CustomRadio({ label, ...props }) {
                 userType,
             });
 
-      // Clear form fields
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPassword('');
-      setUserType('');
-      setTermsAccepted(false);
-      setError(null);
-    } 
-    catch (error) {
-        setError(error);
-    }
-  };
-  return (
+            
+            // Handle successful registration
+            if (response.data.success) {
+                // Redirect to onboarding page based on userType
+                if (userType === "Company") navigate("/onboarding/company");
+
+                if (userType === "Developer") navigate("/onboarding/dev");
+            }
+            // Handle unsuccessful registration
+            else {
+                throw new Error(response.data.message);
+            }
+            // TODO
+        } catch (error) {
+            // Handle registration error
+            console.log("The Error at frontend is: ", error);
+            setError(error);
+        }
+    };
+    return (
         <>
             <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }} />
-            <Box sx={{ margin: 0, padding: 0, width: '100vw', height: '100vh' }}>
-                <Grid container sx={{ flexGrow: 1, minHeight: "100vh" , backgroundColor: "#181818" }}>
+            <Box
+                sx={{ margin: 0, padding: 0, width: "100vw", height: "100vh" }}
+            >
+                <Grid
+                    container
+                    sx={{
+                        flexGrow: 1,
+                        minHeight: "100vh",
+                        backgroundColor: "#181818",
+                    }}
+                >
                     <Grid
+                        item
                         xs={6}
                         sx={{
                             p: 4,
@@ -107,20 +114,33 @@ function CustomRadio({ label, ...props }) {
                         }}
                     >
                         <Box xs={8}>
-                            <Typography level="h1" sx={{ mb: 1 , color: "#ffffff"  } }>
+                            <Typography
+                                level="h1"
+                                sx={{ mb: 1, color: "#ffffff" }}
+                            >
                                 Create Account
-                            </Typography >
-                            <Typography sx={{color: "#ffffff" }}>
-                                Sign up as a Developer or an Company to get started.
+                            </Typography>
+                            <Typography sx={{ color: "#ffffff" }}>
+                                Sign up as a Developer or an Company to get
+                                started.
                             </Typography>
 
                             <Box>
                                 <form onSubmit={registerUser}>
-                                    <Stack gap={4} sx={{ mt: 4 , color: "#ffffff"  }}>
+                                    <Stack
+                                        gap={4}
+                                        sx={{ mt: 4, color: "#ffffff" }}
+                                    >
                                         <Grid container spacing={2}>
-                                            <Grid xs={6}>
+                                            <Grid item xs={6}>
                                                 <FormControl required>
-                                                    <FormLabel sx={{ color: "#ffffff" }}>First Name</FormLabel>
+                                                    <FormLabel
+                                                        sx={{
+                                                            color: "#ffffff",
+                                                        }}
+                                                    >
+                                                        First Name
+                                                    </FormLabel>
                                                     <Input
                                                         type="text"
                                                         name="firstName"
