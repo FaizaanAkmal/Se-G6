@@ -4,13 +4,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Sigup.css';
 import { GlobalStyles } from '@mui/system';
-import { Box, Button,Checkbox, Divider, FormControl, FormHelperText, FormLabel,  Grid, Input, Link, Radio, RadioGroup,  Stack,Typography, logo, background } from '../joy_imports';
+import { Box, Button,Checkbox, FormControl, FormHelperText, FormLabel,  Grid, Input, Link, Radio, RadioGroup,  Stack,Typography, logo, background } from '../joy_imports';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import  { radioClasses } from '@mui/joy/Radio'; 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import PropTypes from 'prop-types';
 
 function CustomRadio({ label, ...props }) {
     return (
@@ -38,11 +39,13 @@ function CustomRadio({ label, ...props }) {
         />
       </ListItem>
     );
-  }
+}
+    CustomRadio.propTypes = {
+        label: PropTypes.string.isRequired,
+    };
 
 
-
-const Signup = () => {
+  const Signup = () => {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -56,22 +59,16 @@ const Signup = () => {
   const registerUser = async (event) => {
     event.preventDefault();
 
-    
-    
     try {
-      // Validate form data
-      if (!firstName || !lastName || !email || !password || !userType || !termsAccepted) {
-        throw new Error('Please fill in all required fields.');
-      }
-
+    
       // Make API request to register user
       const response = await axios.post('/api/register', {
-        firstName,
-        lastName,
-        email,
-        password,
-        userType,
-      });
+            firstName,
+            lastName,
+            email,
+            password,
+            userType,
+        });
 
       // Handle successful registration
       setSuccessMessage(response.data.message);
@@ -85,10 +82,9 @@ const Signup = () => {
       setUserType('');
       setTermsAccepted(false);
       setError(null);
-    } catch (error) {
-      // Handle registration error
-      console.log("The Error at frontend is: ",error)
-      setError(error.response.data.message);
+    } 
+    catch (error) {
+        setError(error);
     }
   };
   return (
@@ -131,6 +127,11 @@ const Signup = () => {
                                                             '--myCustomColor': '#AF56D9'
                                                           }}
                                                     />
+                                                    {error && error.response.data.field === "firstName" && (
+                                                        <Typography variant="body2" sx={{ color: 'red', fontWeight: '500' }}>
+                                                            {error.response.data.message}
+                                                        </Typography>
+                                                    )}
                                                 </FormControl>
                                             </Grid>
                                             <Grid xs={6}>
@@ -143,6 +144,11 @@ const Signup = () => {
                                                         placeholder='Last Name'
                                                         onChange={(e) => setLastName(e.target.value)}
                                                     />
+                                                    {error && error.response.data.field === "lastname" && (
+                                                      <Typography variant="body2" sx={{ color: 'red', fontWeight: '500' }}>
+                                                            {error.response.data.message}
+                                                        </Typography>
+                                                    )}
                                                 </FormControl>
                                             </Grid>
                                         </Grid>
@@ -150,10 +156,20 @@ const Signup = () => {
                                             <FormLabel sx={{ color: "#ffffff" }}>Email</FormLabel>
                                             <Input type="email" name="email" value={email}
                                                 onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder='user@example.com' />
+                                            {error && error.response.data.field === "email" && (
+                                                <Typography variant="body2" sx={{ color: 'red', fontWeight: '500' }}>
+                                                    {error.response.data.message}
+                                                </Typography>
+                                            )}
                                         </FormControl>
                                         <FormControl required>
                                             <FormLabel sx={{ color: "#ffffff" }}>Password</FormLabel>
                                             <Input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                            {error && error.response.data.field === "password" && (
+                                               <Typography variant="body2" sx={{ color: 'red', fontWeight: '500' }}>
+                                                    {error.response.data.message}
+                                                </Typography>
+                                            )}
                                         </FormControl>
                                         <FormControl>
                                             <Stack gap={2}>
@@ -228,7 +244,18 @@ const Signup = () => {
                                             }}>
                                             Sign up
                                         </Button>
-                                        <Divider></Divider>
+                                          {/* Error message for overall form submission */}
+                                            {error && error.response.data.field === "general" && (
+                                               <Typography variant="body2" sx={{ color: 'red', fontWeight: '500' }}>
+                                                    {error.response.data.message}
+                                                </Typography>
+                                            )}
+                                            {/* Success message */}
+                                            {successMessage && (
+                                                <Typography variant="body2" sx={{ color: 'success.main' }}>
+                                                    {successMessage}
+                                                </Typography>
+                                            )}
                                         <Typography>
                                             Already have an account? &nbsp;
                                             <Link href="/login" sx={{
