@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import {
     jobTypeOptions, environmentOptions, countryNames, experienceOptions,
     skillOptions, languageOptions, technologyOptions,
-} from "../../globalConstants";
+} from "../../globalConstants.js";
 
 // Custom components
-import Footer from "../../components/Footer";
+import Footer from "../../components/Footer.jsx";
 
 // UI imports
 import {

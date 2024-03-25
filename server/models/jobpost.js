@@ -10,8 +10,36 @@ const JobPost = new Schema({
     type: String,
     required: true
   },
-  tags: {
+  requirement: {
+    type: String,
+    required: true
+  },
+  preferredSkills: {
     type: [String],
+    required: true
+  },
+  preferredLanguages: {
+    type: [String],
+    required: true
+  },
+  preferredTechnologies: {
+    type: [String],
+    required: true
+  },
+  experience: {
+    type: String,
+    required: true
+  },
+  jobType: {
+    type: String,
+    required: true
+  },
+  environment: {
+    type: String,
+    required: true
+  },
+  compensation: {
+    type: String,
     required: true
   }
 });

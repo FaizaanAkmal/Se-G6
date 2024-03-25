@@ -1,9 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const userrouter = require("./routes/authRoute");
-const companyrouter = require("./routes/companyRoute")
-const devrouter = require("./routes/devRoute")
+const userRouter = require("./routes/authRoute");
+const companyRouter = require("./routes/companyRoute")
+const devRouter = require("./routes/devRoute")
+const jobRouter = require("./routes/jobRoute")
 const cookieParser = require('cookie-parser')
 const { errorMiddleware } = require("./middlewares/Error.js");
 require('dotenv').config(); // Load environment variables
@@ -23,9 +24,10 @@ app.use(
 );
 
 // Defining Routes
-app.use('/api',userrouter)
-app.use('/company',companyrouter)
-app.use('/dev', devrouter)
+app.use('/api',userRouter)
+app.use('/company',companyRouter)
+app.use('/dev', devRouter)
+app.use('/job', jobRouter)
 
 // Using Error Middleware
 app.use(errorMiddleware);

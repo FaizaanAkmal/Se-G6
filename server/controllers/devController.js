@@ -2,27 +2,67 @@ const Dev = require('../models/dev');
 
 // TODO
 const devRegister = async (req, res) => {
-    const { country, experience, bio } = req.body;
+    const {
+        country,
+        experience,
+        bio,
+        skills,
+        languages,
+        technologies,
+        interestedJobType,
+        environmentPreference,
+        portfolioLink,
+        githubLink,
+    } = req.body;
     Dev.skills, Dev.prefs, Dev.portfolio, Dev.gitlink = null
     const newUser = new Dev({
         country,
         experience,
-        bio
-        });
+        bio,
+        skills,
+        languages,
+        technologies,
+        interestedJobType,
+        environmentPreference,
+        portfolioLink,
+        githubLink,
+    });
         await newUser.save();
-
      
         res.status(201).json({ success: true, message: 'User registered successfully.',newUser });
 }
 
 // TODO
 const devEdit = async (req, res) => {
-    const { skills, prefs} = req.body;
+    const {
+        country,
+        experience,
+        bio,
+        skills,
+        languages,
+        technologies,
+        interestedJobType,
+        environmentPreference,
+        portfolioLink,
+        githubLink,
+    } = req.body;
+
     const {id} = req.params;
     try {
         const updatedDev = await Dev.findOneAndUpdate(
             { _id: id }, 
-            { skills, prefs },
+            {
+                country,
+                experience,
+                bio,
+                skills,
+                languages,
+                technologies,
+                interestedJobType,
+                environmentPreference,
+                portfolioLink,
+                githubLink,
+            },
             { new: true } 
         );
 

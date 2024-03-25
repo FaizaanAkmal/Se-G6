@@ -1,16 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const devProfile = require('../models/dev');
+const devProfile = require("../models/dev");
 
 //Dev Model
 const devSchema = new Schema({
   country: {
     type: String,
-    required: true
+    required: true,
   },
   experience: {
     type: Number,
-    required: true
+    required: true,
   },
   bio: {
     type: String,
@@ -20,18 +20,32 @@ const devSchema = new Schema({
     type: [String],
     required: true,
   },
-  prefs: {
+  languages: {
     type: [String],
+    required: true,
+  },
+  technologies: {
+    type: [String],
+    required: true,
+  },
+  interestedJobType: {
+    type: String,
+    required: true,
+  },
+  environmentPreference: {
+    type: String,
     required: true,
   },
   portfolio: {
     type: String,
+    required: true,
   },
   gitLink: {
     type: String,
-  }
+    required: true,
+  },
 });
 
-const devModel = mongoose.model('Dev', devSchema);
+const devModel = mongoose.model("Dev", devSchema);
 
 module.exports = devModel;

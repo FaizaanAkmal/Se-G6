@@ -11,13 +11,13 @@ import {
     skillOptions,
     languageOptions,
     technologyOptions,
-} from "../../../globalConstants";
+} from "../../globalConstants.js";
 
-import JobCard from "../../../components/JobCard.jsx";
+import JobCard from "../../components/JobCard.jsx";
 
 // Custom components
-import Navbar from "../../../components/Navbar.jsx";
-import Footer from "../../../components/Footer.jsx";
+import Navbar from "../../components/Navbar.jsx";
+import Footer from "../../components/Footer.jsx";
 
 // UI imports
 import {
@@ -34,7 +34,7 @@ import {
     Textarea,
     Autocomplete,
     Alert,
-} from "../../../joyImports.jsx";
+} from "../../joyImports.jsx";
 
 // custom assets
 import onboardingIcon from "../../../assets/onboardingIcon.svg";
