@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Sigup.css';
+// import '../styles/Sigup.css';
 import { GlobalStyles } from '@mui/system';
 import { Box, Button,Checkbox, FormControl, FormHelperText, FormLabel,  Grid, Input, Link, Radio, RadioGroup,  Stack,Typography, logo, background } from '../joy_imports';
 import List from '@mui/joy/List';
