@@ -47,3 +47,5 @@ const JobPost = new Schema({
 const jobPost = mongoose.model('jobpost', JobPost);
 
 module.exports = jobPost;
+
+// PostedBy reference user_id from User or companyName from Company

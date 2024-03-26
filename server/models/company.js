@@ -48,3 +48,7 @@ const companySchema = new Schema({
 const companyModel = mongoose.model('Company', companySchema);
 
 module.exports = companyModel;
+
+// reference user_id from User
+// profileComplete: boolean
+// jobPosts: [job_ids]

@@ -6,13 +6,12 @@ import loginBackground from "../assets/loginBackground.png";
 import {
     Grid, Box, Typography, Button, Divider, FormControl, FormLabel,
     Link, Input, Stack
-} from "../joyImports.jsx";
+} from "@mui/joy";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
-    const [successMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate();
 
     const loginUser = async (event) => {
@@ -23,13 +22,19 @@ export default function Login() {
                 password,
             });
 
-            localStorage.setItem("authToken", response.data.token);
-
-            navigate("/main");
-
-            console.log("Login successful");
-            setSuccessMessage("Login successful");
+            if (response.data.success)
+            {
+                localStorage.setItem("authToken", response.data.token);
+                navigate("/main");  // redirect to dashboard
+            }
+            // TODO (handle unsuccessful login)
+            else
+            {
+                console.log(response.data);
+            }
         } catch (error) {
+            // Handle registration error
+            console.log("The Error at frontend is: ", error);
             setError(error.response.data.message);
         }
     };

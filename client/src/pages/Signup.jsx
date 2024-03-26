@@ -5,21 +5,9 @@ import { GlobalStyles } from "@mui/system";
 import logo from "../assets/White_logo.png";
 import background from "../assets/background.png";
 import {
-    Grid,
-    Box,
-    Typography,
-    Button,
-    Checkbox,
-    Divider,
-    FormControl,
-    FormLabel,
-    Link,
-    Input,
-    Stack,
-    Radio,
-    FormHelperText,
-    RadioGroup,
-} from "../joyImports.jsx";
+    Grid, Box, Typography, Button, Checkbox, Divider, FormControl, FormLabel,
+    Link, Input, Stack, Radio, FormHelperText, RadioGroup,
+} from "@mui/joy";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -59,16 +47,16 @@ const Signup = () => {
 
             // Handle successful registration
             if (response.data.success) {
+                // TODO: get user_id from response -> locally store or create context
                 // Redirect to onboarding page based on userType
                 if (userType === "Company") navigate("/onboarding/company");
 
                 if (userType === "Developer") navigate("/onboarding/dev");
             }
-            // Handle unsuccessful registration
+            // Handle unsuccessful registration (TODO)
             else {
-                throw new Error(response.data.message);
+                console.log(response.data.message);
             }
-            // TODO
         } catch (error) {
             // Handle registration error
             console.log("The Error at frontend is: ", error);

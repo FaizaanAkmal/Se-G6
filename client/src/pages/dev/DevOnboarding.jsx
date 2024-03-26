@@ -21,25 +21,14 @@ import Footer from "../../components/Footer.jsx";
 
 // UI imports
 import {
-    Grid,
-    Box,
-    Typography,
-    Button,
-    FormControl,
-    FormLabel,
-    Input,
-    Stack,
-    Select,
-    Option,
-    Textarea,
-    Autocomplete,
-    Alert,
-} from "../../joyImports.jsx";
+    Grid, Box, Typography, Button, FormControl, FormLabel, Input, Stack,
+    Select, Option, Textarea, Autocomplete, Alert,
+} from "@mui/joy";
 
 // custom assets
-import onboardingIcon from "../../../assets/onboardingIcon.svg";
-import githubIcon from "../../../assets/githubIcon.svg";
-import linkIcon from "../../../assets/linkIcon.svg";
+import onboardingIcon from "../../assets/onboardingIcon.svg";
+import githubIcon from "../../assets/githubIcon.svg";
+import linkIcon from "../../assets/linkIcon.svg";
 
 export default function DevOnboarding() {
     // form fields

@@ -1,15 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import onboardingIcon from "../../../assets/onboardingIcon.svg";
-import Footer from "../../../components/Footer";
+import onboardingIcon from "../../assets/onboardingIcon.svg";
+import Footer from "../../components/Footer";
 import {
     Grid, Box, Typography, Button, FormControl, FormLabel, Input, Stack,
     Select, Option, Textarea, Autocomplete, Alert
-} from "../../../joyImports.jsx";
+} from "@mui/joy";
 import {
     companySizes, companyTypes, industryTypes, countryNames
-} from "../../../globalConstants";
+} from "../../globalConstants";
 
 export default function CompanyOnboarding() {
     const navigate = useNavigate();

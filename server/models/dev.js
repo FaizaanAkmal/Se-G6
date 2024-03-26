@@ -49,3 +49,8 @@ const devSchema = new Schema({
 const devModel = mongoose.model("Dev", devSchema);
 
 module.exports = devModel;
+
+// reference user_id from User
+// profileComplete: boolean
+// appliedTo or jobHistory: [job_ids]
+// bookmarked: [job_ids]

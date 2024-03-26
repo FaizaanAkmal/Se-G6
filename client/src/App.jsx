@@ -3,9 +3,9 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import axios from "axios";
 import { useState } from "react";
-import CompanyOnboarding from "./pages/onboarding/company/CompanyOnboarding.jsx";
-import DevOnboarding from "./pages/onboarding/dev/DevOnboarding.jsx";
-import PostAJob from "./pages/recruiter/PostAJob.jsx";
+import CompanyOnboarding from "./pages/company/CompanyOnboarding.jsx";
+import DevOnboarding from "./pages/dev/DevOnboarding.jsx";
+import PostAJob from "./pages/company/PostAJob.jsx";
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";

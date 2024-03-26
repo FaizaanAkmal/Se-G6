@@ -15,7 +15,7 @@ import Footer from "../../components/Footer.jsx";
 import {
     Grid, Box, Typography, Button, FormControl, FormLabel, Input,
     Stack, Select, Option, Textarea, Autocomplete, Alert
-} from "../../joyImports.jsx";
+} from "@mui/joy";
 
 export default function PostAJob() {
     // form fields state

@@ -18,7 +18,7 @@ import {
     Textarea,
     Autocomplete,
     Alert,
-} from "../joyImports";
+} from "@mui/joy";
 import { Avatar } from "@mui/joy";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";

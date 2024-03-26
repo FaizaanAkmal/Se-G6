@@ -1,4 +1,4 @@
-const JobPost = require("../models/job");
+const JobPost = require("../models/jobpost");
 
 //creating a new job post
 const createJob = async (req, res) => {
@@ -25,15 +25,15 @@ const createJob = async (req, res) => {
 };
 
 const getJob = async (req, res) => {
-    // TODO
+    // TODO: return Job with job_id in req
 };
 
 const editJob = async (req, res) => {
-    // TODO
+    // TODO: update Job info with job_id in req
 };
 
 const deleteJob = async (req, res) => {
-    // TODO
+    // TODO: remove Job with job_id in req
 };
 
 module.exports = { createJob, getJob, editJob, deleteJob };
