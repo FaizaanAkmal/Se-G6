@@ -4,17 +4,34 @@ import { useNavigate } from "react-router-dom";
 
 // Global constants
 import {
-    jobTypeOptions, environmentOptions, countryNames, experienceOptions,
-    skillOptions, languageOptions, technologyOptions,
+    jobTypeOptions,
+    environmentOptions,
+    countryNames,
+    experienceOptions,
+    skillOptions,
+    languageOptions,
+    technologyOptions,
 } from "../../globalConstants";
 
 // Custom components
+import Navbar from "../../components/Navbar.jsx";
 import Footer from "../../components/Footer";
 
 // UI imports
 import {
-    Grid, Box, Typography, Button, FormControl, FormLabel, Input,
-    Stack, Select, Option, Textarea, Autocomplete, Alert
+    Grid,
+    Box,
+    Typography,
+    Button,
+    FormControl,
+    FormLabel,
+    Input,
+    Stack,
+    Select,
+    Option,
+    Textarea,
+    Autocomplete,
+    Alert,
 } from "../../joyImports.jsx";
 
 export default function PostAJob() {
@@ -138,6 +155,7 @@ export default function PostAJob() {
 
     return (
         <>
+            <Navbar currentPage="postJob" />
             <Grid
                 container
                 sx={{
