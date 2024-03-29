@@ -1,0 +1,24 @@
+// constants
+
+const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship", "Any"];
+
+const environmentOptions = ["Remote", "Office", "Hybrid", "Any"];
+
+const companySizes = ["1-10", "10-50", "50+"];
+
+const companyTypes = ["Agency", "Corporate", "Start-up"];
+
+const industryTypes = ["Agriculture", "Construction", "Energy", "Finance", "Healthcare", "IT", "Manufacturing", "Retail", "Transportation", "Tourism"];
+    
+const countryNames = ["Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Côte d'Ivoire","Cabo Verde","Cambodia","Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo (Congo-Brazzaville)","Costa Rica","Croatia","Cuba","Cyprus","Czechia (Czech Republic)","Democratic Republic of the Congo","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia",'Eswatini (fmr. "Swaziland")',"Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Holy See","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar (formerly Burma)","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau","Palestine State","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
+
+const experienceOptions = ["0 years", "1-2 years", "3-5 years", "5-10 years", "10+ years"];
+
+const skillOptions = ["Machine Learning", "Android Development", "iOS Development", "Cloud Computing", "Cybersecurity", "UI/UX Design", "Agile Development", "Software Testing", "Project Management", "Data Analysis", "DevOps", "Blockchain", "Systems Architecture", "Networking", "Embedded Systems", "Game Development", "Web Development", "Backend Development", "Frontend Development", "Full-stack Development", "Database Management", "Quality Assurance", "IoT", "Big Data", "AR/VR"];
+
+const languageOptions = ["JavaScript", "Python", "Java", "C", "C++", "Golang", "Swift", "Kotlin", "C#", "R", "PHP", "TypeScript", "Ruby", "Scala", "Rust", "Objective-C", "Perl", "Lua", "MATLAB", "Groovy", "Visual Basic .NET", "Fortran", "COBOL", "F#", "Dart", "Shell", "Go", "Haskell", "Julia", "Clojure"];
+
+const technologyOptions = ["MERN", "MEAN", "MEVN", "LAMP", "Django", "Flask", "Spring", "Ruby on Rails", "ASP.NET", "Express", "Vue", "React", "Angular", "jQuery", "Bootstrap", "Tailwind", "Material-UI", "Sass", "GraphQL", "REST", "WebSockets", "Socket.IO", "Docker", "Kubernetes", "Jenkins", "CircleCI", "OpenAI APIs", "AWS", "Azure", "Google Cloud", "Firebase", "MongoDB", "PostgreSQL", "MySQL", "Redis"];
+
+export {jobTypeOptions,environmentOptions,countryNames,experienceOptions,skillOptions,languageOptions,technologyOptions, companySizes, companyTypes, industryTypes
+};
