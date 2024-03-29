@@ -159,7 +159,7 @@ export default function DevOnboarding() {
 
     return (
         <>
-            <Navbar currentPage={"dashboard"} />
+            {/* <Navbar currentPage={"dashboard"} /> */}
             <Grid
                 container
                 sx={{

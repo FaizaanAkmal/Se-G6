@@ -59,10 +59,7 @@ function App() {
                         element={<CompanyOnboarding />}
                     />
                     <Route path="/onboarding/dev" element={<DevOnboarding />} />
-                    <Route
-                        path="/createjob"
-                        element={<PostAJob />}
-                    />
+                    <Route path="/createjob" element={<PostAJob />} />
                 </Routes>
             </BrowserRouter>
         </CssVarsProvider>
