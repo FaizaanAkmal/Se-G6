@@ -16,7 +16,6 @@ import {
 import JobCard from "../../../components/JobCard.jsx";
 
 // Custom components
-import Navbar from "../../../components/Navbar.jsx";
 import Footer from "../../../components/Footer.jsx";
 
 // UI imports
@@ -159,7 +158,6 @@ export default function DevOnboarding() {
 
     return (
         <>
-            {/* <Navbar currentPage={"dashboard"} /> */}
             <Grid
                 container
                 sx={{
@@ -541,7 +539,6 @@ export default function DevOnboarding() {
                 </Grid>
             </Grid>
             <Footer />
-            {/* <JobCard /> */}
         </>
     );
 }
