@@ -1,9 +1,14 @@
 const express = require('express')
 const companyRouter = express.Router()
 const cors = require('cors')
-const {companyRegister, companyEdit} = require('../controllers/companyController')
+const {companyRegister, companyEdit , createJobPost} = require('../controllers/companyController')
 
-companyRouter.post('/profile',companyRegister)
+//Handling Company Creation and Editing Routes
+companyRouter.post('/onboarding',companyRegister)
 companyRouter.patch('/profile', companyEdit)
+
+//Handling Create JobPost
+companyRouter.post('/createJobPost',createJobPost)
+
 
 module.exports = companyRouter

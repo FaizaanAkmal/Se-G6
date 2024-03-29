@@ -74,23 +74,30 @@ export default function CompanyOnboarding() {
         event.preventDefault();
 
         // create a new FormData object with the state data
-        const formData = new FormData();
-        formData.append("companyName", companyName);
-        formData.append("website", website);
-        formData.append("companyType", companyType);
-        formData.append("country", country);
-        formData.append("industry", industry);
-        formData.append("companySize", companySize);
-        formData.append("companyOverview", companyOverview);
-        formData.append("companyWorkCulture", companyWorkCulture);
-        formData.append("companyBenefits", companyBenefits);
+        const requestData = {
+            companyName,
+            website,
+            companyType,
+            country,
+            industry,
+            companySize,
+            companyOverview,
+            companyWorkCulture,
+            companyBenefits
+        };
+    
+        console.log("Request data before sending:", requestData);
 
-        const formJson = Object.fromEntries(formData.entries());
-        alert(JSON.stringify(formJson));
+        try{ 
+            const response = await axios.post('/company/onboarding',requestData)
 
-        // Here you would typically send the formData to your server
-        // For demonstration, we'll just navigate to another page
-        // navigate("/dashboard");
+            console.log(response.data)
+            navigate("/dashboard")
+        }
+        catch(error){
+            console.error("Error Submitting Form",error)
+        }
+
     };
 
     return (
@@ -152,7 +159,7 @@ export default function CompanyOnboarding() {
                                         </FormControl>
                                         <FormControl required>
                                             <FormLabel>
-                                                What's your website?
+                                                What&apos;s your website?
                                             </FormLabel>
                                             <Input
                                                 type="url"
@@ -197,6 +204,7 @@ export default function CompanyOnboarding() {
                                                     setCountry(value)
                                                 }
                                                 value={country}
+                                                
                                             />
                                         </FormControl>
                                         {/* // Only show the Next button if not on the
@@ -246,7 +254,7 @@ export default function CompanyOnboarding() {
                                         </FormControl>
                                         <FormControl required>
                                             <FormLabel>
-                                                What's your company size?
+                                                What&rsquo;s your company size?
                                             </FormLabel>
                                             <Select
                                                 name="companySize"
@@ -333,7 +341,7 @@ export default function CompanyOnboarding() {
                                         </FormControl>
                                         <FormControl required>
                                             <FormLabel>
-                                                What's the work culture at your
+                                                 What&rsquo;s the work culture at your
                                                 company?
                                             </FormLabel>
                                             <Textarea

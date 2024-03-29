@@ -4,18 +4,18 @@ import { useNavigate } from "react-router-dom";
 
 // Global constants
 import {
-    jobTypeOptions, environmentOptions, countryNames, experienceOptions,
+    jobTypeOptions, environmentOptions,experienceOptions,
     skillOptions, languageOptions, technologyOptions,
-} from "../../globalConstants";
+} from "../../../globalConstants.js";
 
 // Custom components
-import Footer from "../../components/Footer";
+import Footer from "../../../components/Footer.jsx";
 
 // UI imports
 import {
     Grid, Box, Typography, Button, FormControl, FormLabel, Input,
     Stack, Select, Option, Textarea, Autocomplete, Alert
-} from "../../joyImports.jsx";
+} from "../../../joyImports.jsx";
 
 export default function PostAJob() {
     // form fields state
@@ -112,28 +112,35 @@ export default function PostAJob() {
         setLoading(true);
         setError("");
 
-        const formData = JSON.stringify(
-            {
-                title,
-                description,
-                requirement,
-                preferredSkills,
-                preferredLanguages,
-                preferredTechnologies,
-                experience,
-                jobType,
-                environment,
-                compensation,
-            },
-            null,
-            2
-        );
+        // create a data object to send in the request
+        const requestData = {
+            title,
+            description,
+            requirement,
+            preferredSkills,
+            preferredLanguages,
+            preferredTechnologies,
+            experience,
+            jobType,
+            environment,
+            compensation
+        };
 
-        // print form data after 1 second
-        setTimeout(() => {
-            alert(`Form data: ${formData}`);
-            setLoading(false);
-        }, 1000);
+        console.log("Request data before sending:", requestData);
+        try {
+            // Send a POST request to the server
+            const response = await axios.post('/company/createJobPost', requestData);
+
+            console.log("Response:", response.data);
+
+            // Navigate to the dashboard or handle the response accordingly
+            navigate("/dashboard");
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            // Handle error state or display error message
+        }
+
+        setLoading(false);
     };
 
     return (
