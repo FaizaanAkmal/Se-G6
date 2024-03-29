@@ -41,6 +41,15 @@ export default function DevDashboard() {
     // Handler to change the active tab
     const handleTabChange = (tab) => {
         setActiveTab(tab);
+        if (tab === "Bookmarked") {
+            // API call to get bookmarked jobs
+        }
+        if (tab === "Applied") {
+            // API call to get applied jobs
+        }
+        if (tab === "All") {
+            // API call to get all jobs
+        }
     };
 
     return (
@@ -142,7 +151,6 @@ export default function DevDashboard() {
                     )}
 
                     {/* Pagination */}
-
                     {noMoreJobs && (
                         <Button
                             variant="soft"
