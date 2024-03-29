@@ -1,40 +1,46 @@
 const Company = require("../models/company");
+const JobPost = require("../models/jobpost");
 
 const companyRegister = async (req, res) => {
-  // console.log("Data Received:",req.body)
-  const {
-    companyName,
-    website,
-    companyType,
-    country,
-    industry,
-    companySize,
-    companyOverview,
-    companyWorkCulture,
-    companyBenefits,
-  } = req.body;
-
-  // Create a new company
-  const newCompany = new Company({
-    name: companyName,
-    website: website,
-    type: companyType,
-    country: country,
-    industry: industry,
-    size: companySize,
-    overview: companyOverview,
-    workCulture: companyWorkCulture,
-    benefits: companyBenefits,
-  });
-
   try {
+    // Destructure the required fields from the request body
+    console.log("Response From Company: ", req.body);
+    const {
+      companyName,
+      website,
+      companyType,
+      country,
+      industry,
+      companySize,
+      companyOverview,
+      companyWorkCulture,
+      companyBenefits,
+    } = req.body;
+
+    // Create a new company instance
+    const newCompany = new Company({
+      name: companyName,
+      website,
+      type: companyType,
+      country,
+      industry,
+      size: companySize,
+      overview: companyOverview,
+      workCulture: companyWorkCulture,
+      benefits: companyBenefits,
+    });
+
     // Save the new company to the database
     const savedCompany = await newCompany.save();
 
-    // Send a success message along with the ObjectId of the created company
-    res.json({ message: "Success", companyId: savedCompany._id });
+    // Send a success response with the ObjectId of the created company
+    res.status(201).json({
+      message: "Company created successfully",
+      companyId: savedCompany._id,
+    });
   } catch (error) {
     console.error("Error creating company:", error);
+    // Send an error response if an error occurs during company creation
     res.status(500).json({ message: "Error creating company" });
   }
 };
@@ -82,4 +88,50 @@ const companyEdit = async (req, res) => {
   }
 };
 
-module.exports = { companyRegister, companyEdit };
+const createJobPost = async (req, res) => {
+  try {
+    // Destructure the required fields from the request body
+    console.log("Response From creating JobPost: ", req.body);
+    const {
+      title,
+      description,
+      requirement,
+      preferredSkills,
+      preferredLanguages,
+      preferredTechnologies,
+      experience,
+      jobType,
+      environment,
+      compensation,
+    } = req.body;
+
+    // Create a new job post instance
+    const newJobPost = new JobPost({
+      title,
+      description,
+      requirement,
+      preferredSkills,
+      preferredLanguages,
+      preferredTechnologies,
+      experience,
+      jobType,
+      environment,
+      compensation,
+    });
+
+    // Save the new job post to the database
+    const savedJobPost = await newJobPost.save();
+
+    // Send a success response with the ObjectId of the created job post
+    res.status(201).json({
+      message: "Job post created successfully",
+      jobPostId: savedJobPost._id,
+    });
+  } catch (error) {
+    console.error("Error creating job post:", error);
+    // Send an error response if an error occurs during job post creation
+    res.status(500).json({ message: "Error creating job post" });
+  }
+};
+
+module.exports = { companyRegister, companyEdit, createJobPost };

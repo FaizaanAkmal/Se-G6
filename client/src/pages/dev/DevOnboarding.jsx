@@ -530,7 +530,6 @@ export default function DevOnboarding() {
                 </Grid>
             </Grid>
             <Footer />
-            {/* <JobCard /> */}
         </>
     );
 }

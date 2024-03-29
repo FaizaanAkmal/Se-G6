@@ -1,51 +1,49 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const JobPost = new Schema({
+const JobPostSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   requirement: {
     type: String,
-    required: true
+    required: true,
   },
   preferredSkills: {
     type: [String],
-    required: true
+    default: [],
   },
   preferredLanguages: {
     type: [String],
-    required: true
+    default: [],
   },
   preferredTechnologies: {
     type: [String],
-    required: true
+    default: [],
   },
   experience: {
     type: String,
-    required: true
+    required: true,
   },
   jobType: {
     type: String,
-    required: true
+    required: true,
   },
   environment: {
     type: String,
-    required: true
+    required: true,
   },
   compensation: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
-const jobPost = mongoose.model('jobpost', JobPost);
+const JobPost = mongoose.model("JobPost", JobPostSchema);
 
-module.exports = jobPost;
-
-// PostedBy reference user_id from User or companyName from Company
+module.exports = JobPost;

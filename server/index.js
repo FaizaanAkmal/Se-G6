@@ -1,13 +1,13 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 const userRouter = require("./routes/authRoute");
-const companyRouter = require("./routes/companyRoute")
-const devRouter = require("./routes/devRoute")
-const jobRouter = require("./routes/jobRoute")
-const cookieParser = require('cookie-parser')
+const companyRouter = require("./routes/companyRoute");
+const devRouter = require("./routes/devRoute");
+const jobRouter = require("./routes/jobRoute");
+const cookieParser = require("cookie-parser");
 const { errorMiddleware } = require("./middlewares/Error.js");
-require('dotenv').config(); // Load environment variables
+require("dotenv").config(); // Load environment variables
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -24,14 +24,18 @@ app.use(
 );
 
 // Defining Routes
-app.use('/api',userRouter)
-app.use('/company',companyRouter)
-app.use('/dev', devRouter)
-app.use('/job', jobRouter)
+
+//User Registering Route
+app.use("/api", userrouter);
+
+// Handling Company Routes
+app.use("/company", companyrouter);
+
+// Handling Developer Routes
+app.use("/dev", devrouter);
 
 // Using Error Middleware
 app.use(errorMiddleware);
-
 
 mongoose
   .connect(process.env.MONGO_URI)

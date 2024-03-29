@@ -1,47 +1,45 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-//Company Model
+// Company Model
 const companySchema = new Schema({
   name: {
     type: String,
     unique: true,
-    required: false
+    required: true // Assuming companyName is required
   },
   website: {
     type: String,
     unique: true,
-    required: false
+    required: true // Assuming website is required
   },
   type: {
     type: String,
-    required:false,
-    //enum: ["Agency", "Corporate", "Start-up"]
+    required: true // Assuming companyType is required
   },
   country: {
     type: String,
-    required: false,
+    required: true // Assuming country is required
   },
   industry: {
     type: String,
-    required: false,
-    //enum: [ "Agriculture", "Construction", "Energy", "Finance", "Healthcare", "IT", "Manufacturing", "Retail", "Transportation", "Tourism"] // Define possible user types
+    required: true // Assuming industry is required
   },
   size: {
     type: String,
-    required: false,
-    //enum: ["0 to 100", "101 to 500", "above 500"]
+    required: true // Assuming companySize is required
   },
   overview: {
     type: String,
-    required: false,
+    required: true // Assuming companyOverview is required
   },
   workCulture: {
     type: String,
-    required: false,
+    required: true // Assuming companyWorkCulture is required
   },
   benefits: {
-    type: String
+    type: String,
+    required: true // Assuming companyBenefits is required
   }
 });
 

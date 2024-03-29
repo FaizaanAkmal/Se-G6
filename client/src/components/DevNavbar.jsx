@@ -18,14 +18,14 @@ import {
     Textarea,
     Autocomplete,
     Alert,
-} from "@mui/joy";
+} from "../joyImports";
 import { Avatar } from "@mui/joy";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";
 import MenuItem from "@mui/joy/MenuItem";
 import Dropdown from "@mui/joy/Dropdown";
 
-export default function Navbar({ currentPage }) {
+export default function DevNavbar({ currentPage }) {
     // Logout handler
     const handleLogout = () => {
         console.log("Logging out...");
@@ -54,8 +54,8 @@ export default function Navbar({ currentPage }) {
                 <Button variant="plain" color={getButtonColor("dashboard")}>
                     Dashboard
                 </Button>
-                <Button variant="plain" color={getButtonColor("postJob")}>
-                    Post a Job
+                <Button variant="plain" color={getButtonColor("search")}>
+                    Search
                 </Button>
                 <Button variant="plain" color={getButtonColor("settings")}>
                     Settings

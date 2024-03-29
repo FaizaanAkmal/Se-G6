@@ -2,10 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import axios from "axios";
-import { useState } from "react";
 import CompanyOnboarding from "./pages/company/CompanyOnboarding.jsx";
-import DevOnboarding from "./pages/dev/DevOnboarding.jsx";
 import PostAJob from "./pages/company/PostAJob.jsx";
+import DevOnboarding from "./pages/dev/DevOnboarding.jsx";
+import DevDashboard from "./pages/dev/DevDashboard.jsx";
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
@@ -46,9 +46,8 @@ const newTheme = extendTheme({
     },
 });
 
-axios.defaults.baseURL = " http://localhost:8000";
-axios.defaults.withCredentials = true;
-
+axios.defaults.baseURL= ' http://localhost:8000'
+axios.defaults.withCredentials=true
 function App() {
     return (
         <CssVarsProvider theme={newTheme}>
@@ -61,10 +60,8 @@ function App() {
                         element={<CompanyOnboarding />}
                     />
                     <Route path="/onboarding/dev" element={<DevOnboarding />} />
-                    <Route
-                        path="/createjob"
-                        element={<PostAJob />}
-                    />
+                    <Route path="/createjob" element={<PostAJob />} />
+                    <Route path="/dev" element={<DevDashboard />} />
                 </Routes>
             </BrowserRouter>
         </CssVarsProvider>
@@ -72,3 +69,4 @@ function App() {
 }
 
 export default App;
+
