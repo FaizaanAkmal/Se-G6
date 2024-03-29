@@ -7,25 +7,15 @@ import logo from "../assets/logo.png";
 
 // UI imports
 import {
-    Grid,
     Box,
-    Typography,
     Button,
-    FormControl,
-    FormLabel,
-    Input,
+    Dropdown,
+    Menu,
+    MenuButton,
+    MenuItem,
     Stack,
-    Select,
-    Option,
-    Textarea,
-    Autocomplete,
-    Alert,
-} from "../joyImports";
-import { Avatar } from "@mui/joy";
-import Menu from "@mui/joy/Menu";
-import MenuButton from "@mui/joy/MenuButton";
-import MenuItem from "@mui/joy/MenuItem";
-import Dropdown from "@mui/joy/Dropdown";
+    Avatar
+} from "@mui/joy";
 
 export default function DevNavbar({ currentPage }) {
     const navigate = useNavigate();

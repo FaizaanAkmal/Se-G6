@@ -1,15 +1,16 @@
 import React, { useState } from "react"; // Ensure useState is imported
 
 // UI Imports
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
-import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
-import Stack from "@mui/joy/Stack";
-import Box from "@mui/joy/Box";
-import IconButton from "@mui/joy/IconButton";
-import Link from "@mui/joy/Link";
-import Avatar from "@mui/joy/Avatar";
+import {
+    Box,Card,
+    CardContent,
+    Chip,
+    IconButton,
+    Link,
+    Typography,
+    Stack,
+    Avatar
+} from "@mui/joy";
 
 // Assets Imports
 import companySizeIcon from "../assets/companySizeIcon.svg";
