@@ -3,16 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // UI Imports
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
-import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
-import Stack from "@mui/joy/Stack";
-import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
-import Link from "@mui/joy/Link";
-import Avatar from "@mui/joy/Avatar";
-import Grid from "@mui/joy/Grid";
+import {
+    Grid, Box, Typography, Button, Stack, Card, CardContent, Chip, Link, Avatar
+} from "@mui/joy";
 
 // Custom Components Imports
 import DevNavbar from "../../components/DevNavbar";
