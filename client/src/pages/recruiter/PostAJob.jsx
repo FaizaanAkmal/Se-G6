@@ -16,6 +16,7 @@ import {
 // Custom components
 import Navbar from "../../components/Navbar.jsx";
 import Footer from "../../components/Footer";
+import JobCard from "../../components/JobCard.jsx";
 
 // UI imports
 import {
