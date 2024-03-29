@@ -274,13 +274,17 @@ function CustomRadio({ label, ...props }) {
                                                 conditions before signing up.
                                             </FormHelperText>
                                         </FormControl>
-                                        <Button type="submit" fullWidth sx={{
-                                                background: '#a636e7',
-                                                color: 'white',
-                                                '&:hover': {
-                                                    background: '#8b2dcf', // Darken color on hover
+                                        <Button
+                                            type="submit"
+                                            fullWidth
+                                            sx={{
+                                                background: "#a636e7",
+                                                color: "white",
+                                                "&:hover": {
+                                                    background: "#8b2dcf", // Darken color on hover
                                                 },
-                                            }}>
+                                            }}
+                                        >
                                             Sign up
                                         </Button>
                                           {/* Error message for overall form submission */}
@@ -297,20 +301,32 @@ function CustomRadio({ label, ...props }) {
                                             )}
                                         <Typography>
                                             Already have an account? &nbsp;
-                                            <Link href="/login" sx={{
-                                                textDecoration: 'none',
-                                                color: '#a636e7',
-                                                '&:hover': {
-                                                    color: '#a636e7', // Darken color on hover
-                                                },
-                                                }}>Log in to your account. </Link>
+                                            <Link
+                                                href="/login"
+                                                sx={{
+                                                    textDecoration: "none",
+                                                    color: "#a636e7",
+                                                    "&:hover": {
+                                                        color: "#a636e7", // Darken color on hover
+                                                    },
+                                                }}
+                                            >
+                                                Log in to your account.{" "}
+                                            </Link>
                                         </Typography>
                                     </Stack>
                                 </form>
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid xs={6} sx={{ backgroundColor: "#181818", position: "relative" }}>
+                    <Grid
+                        item
+                        xs={6}
+                        sx={{
+                            backgroundColor: "#181818",
+                            position: "relative",
+                        }}
+                    >
                         <Grid
                             sx={{
                             position: "absolute",

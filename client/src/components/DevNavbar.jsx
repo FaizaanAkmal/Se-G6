@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Asset imports
 import logo from "../assets/logo.png";
@@ -26,6 +28,7 @@ import MenuItem from "@mui/joy/MenuItem";
 import Dropdown from "@mui/joy/Dropdown";
 
 export default function DevNavbar({ currentPage }) {
+    const navigate = useNavigate();
     // Logout handler
     const handleLogout = () => {
         console.log("Logging out...");
@@ -34,6 +37,22 @@ export default function DevNavbar({ currentPage }) {
     // Helper function to determine button color based on the current page
     const getButtonColor = (pageName) => {
         return currentPage === pageName ? "primary" : "neutral";
+    };
+
+    // handleTabChange function
+    const handleTabChange = (tab) => {
+        if (tab === "dashboard") {
+            // navigate to (/dev)
+            navigate("/dev");
+        }
+        if (tab === "search") {
+            // navigate to (/dev/searchjobs)
+            navigate("/dev/search");
+        }
+        if (tab === "settings") {
+            // navigate to (/dev/settings)
+            navigate("/dev/settings");
+        }
     };
 
     return (
@@ -51,13 +70,25 @@ export default function DevNavbar({ currentPage }) {
         >
             <img src={logo} alt="logo" width="100" />
             <Stack direction="row" spacing={2} alignItems="center">
-                <Button variant="plain" color={getButtonColor("dashboard")}>
+                <Button
+                    variant="plain"
+                    color={getButtonColor("dashboard")}
+                    onClick={() => handleTabChange("dashboard")}
+                >
                     Dashboard
                 </Button>
-                <Button variant="plain" color={getButtonColor("search")}>
+                <Button
+                    variant="plain"
+                    color={getButtonColor("search")}
+                    onClick={() => handleTabChange("search")}
+                >
                     Search
                 </Button>
-                <Button variant="plain" color={getButtonColor("settings")}>
+                <Button
+                    variant="plain"
+                    color={getButtonColor("settings")}
+                    onClick={() => handleTabChange("settings")}
+                >
                     Settings
                 </Button>
                 {/* Assuming 'OR' is a button or a user's initials/avatar */}
