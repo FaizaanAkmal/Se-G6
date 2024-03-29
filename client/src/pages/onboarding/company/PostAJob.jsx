@@ -14,7 +14,7 @@ import {
 } from "../../globalConstants";
 
 // Custom components
-import Navbar from "../../components/Navbar.jsx";
+import CompanyNavbar from "../../components/CompanyNavbar.jsx";
 import Footer from "../../components/Footer";
 import JobCard from "../../components/JobCard.jsx";
 
@@ -163,7 +163,7 @@ export default function PostAJob() {
 
     return (
         <>
-            <Navbar currentPage="postJob" />
+            <CompanyNavbar currentPage="postJob" />
             <Grid
                 container
                 sx={{
