@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Global constants
 import {
@@ -41,6 +41,7 @@ import githubIcon from "../../assets/githubIcon.svg";
 import linkIcon from "../../assets/linkIcon.svg";
 
 export default function DevOnboarding() {
+  const { userId } = useParams();
   // form fields
   const [country, setCountry] = useState("");
   const [experience, setExperience] = useState("");
@@ -127,33 +128,34 @@ export default function DevOnboarding() {
 
   // form submission handler
   const handleSubmit = async (e) => {
-    // print form data after 1 second
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    setTimeout(() => {
-      alert(
-        "Form data: " +
-          JSON.stringify(
-            {
-              country,
-              experience,
-              bio,
-              skills,
-              languages,
-              technologies,
-              interestedJobType,
-              environmentPreference,
-              portfolioLink,
-              githubLink,
-            },
-            null,
-            2
-          )
-      );
+    try {
+      const response = await axios.post("/dev/onboarding", {
+        userId,
+        country,
+        experience,
+        bio,
+        skills,
+        languages,
+        technologies,
+        interestedJobType,
+        environmentPreference,
+        portfolioLink,
+        githubLink,
+      });
+
+      // Handle the response from the backend as needed
+      // console.log("Response from backend:", response.data);
       setLoading(false);
-    }, 1000);
+      navigate(`/developer/dashboard/${userId}`);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setError("Error submitting form. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (

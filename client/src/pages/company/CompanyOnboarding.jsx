@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import onboardingIcon from "../../assets/onboardingIcon.svg";
 import Footer from "../../components/Footer";
 
@@ -30,6 +30,7 @@ import {
 } from "../../globalConstants";
 
 export default function CompanyOnboarding() {
+  const { userId } = useParams();
   const navigate = useNavigate();
 
   // State to control the visibility of form sections
@@ -102,6 +103,7 @@ export default function CompanyOnboarding() {
       companyOverview,
       companyWorkCulture,
       companyBenefits,
+      userId,
     };
 
     console.log("Request data before sending:", requestData);
@@ -110,7 +112,7 @@ export default function CompanyOnboarding() {
       const response = await axios.post("/company/onboarding", requestData);
 
       console.log(response.data);
-      navigate("/dashboard");
+      navigate(`/company/dashboard/${userId}`);
     } catch (error) {
       console.error("Error Submitting Form", error);
     }

@@ -32,16 +32,21 @@ function CustomRadio({ label, ...props }) {
     <ListItem variant="outlined" sx={{ boxShadow: "sm" }}>
       <ListItemDecorator>
         {label === "Developer" ? (
-          <GitHubIcon color="#AF56D9"/>
+          <GitHubIcon color="#AF56D9" />
         ) : (
-          <BusinessCenterIcon color="#AF56D9"/>
+          <BusinessCenterIcon color="#AF56D9" />
         )}
       </ListItemDecorator>
       <Radio
         overlay
         value={label}
         label={label}
-        sx={{ flexGrow: 1, flexDirection: "row-reverse", color: "#ffffff", pl: "20px" }}
+        sx={{
+          flexGrow: 1,
+          flexDirection: "row-reverse",
+          color: "#ffffff",
+          pl: "20px",
+        }}
         slotProps={{
           action: ({ checked }) => ({
             sx: (theme) => ({
@@ -88,11 +93,12 @@ const Signup = () => {
 
       // Handle successful registration
       if (response.data.success) {
-        // TODO: get user_id from response -> locally store or create context
-        // Redirect to onboarding page based on userType
-        if (userType === "Company") navigate("/onboarding/company");
-
-        if (userType === "Developer") navigate("/onboarding/dev");
+        const userId = response.data.user._id;
+        if (userType === "Developer") {
+          navigate(`/onboarding/dev/${userId}`);
+        } else if (userType === "Company") {
+          navigate(`/onboarding/company/${userId}`);
+        }
       }
       // Handle unsuccessful registration
       else {

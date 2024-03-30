@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Global constants
 import {
@@ -36,6 +36,9 @@ import {
 } from "@mui/joy";
 
 export default function PostAJob() {
+  const { userId } = useParams();
+  console.log("UserId Here: ", userId);
+
   // form fields state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -142,6 +145,7 @@ export default function PostAJob() {
       jobType,
       environment,
       compensation,
+      userId,
     };
 
     console.log("Request data before sending:", requestData);
@@ -152,7 +156,7 @@ export default function PostAJob() {
       console.log("Response:", response.data);
 
       // Navigate to the dashboard or handle the response accordingly
-      navigate("/dashboard");
+      navigate(`/company/dashboard/${userId}`);
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle error state or display error message
