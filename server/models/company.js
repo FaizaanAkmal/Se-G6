@@ -1,48 +1,52 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 // Company Model
 const companySchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User' 
+  },
   name: {
     type: String,
     unique: true,
-    required: true // Assuming companyName is required
+    required: true,
   },
   website: {
     type: String,
     unique: true,
-    required: true // Assuming website is required
+    required: true,
   },
   type: {
     type: String,
-    required: true // Assuming companyType is required
+    required: true,
   },
   country: {
     type: String,
-    required: true // Assuming country is required
+    required: true,
   },
   industry: {
     type: String,
-    required: true // Assuming industry is required
+    required: true,
   },
   size: {
     type: String,
-    required: true // Assuming companySize is required
+    required: true,
   },
   overview: {
     type: String,
-    required: true // Assuming companyOverview is required
+    required: true,
   },
   workCulture: {
     type: String,
-    required: true // Assuming companyWorkCulture is required
+    required: true,
   },
   benefits: {
     type: String,
-    required: true // Assuming companyBenefits is required
-  }
+    required: true,
+  },
 });
 
-const companyModel = mongoose.model('Company', companySchema);
+const companyModel = mongoose.model("Company", companySchema);
 
 module.exports = companyModel;
