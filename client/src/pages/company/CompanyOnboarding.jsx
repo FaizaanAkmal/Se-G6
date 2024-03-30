@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import onboardingIcon from "../../assets/onboardingIcon.svg";
 import Footer from "../../components/Footer";
+import { useParams } from "react-router-dom";
 
 // UI Imports
 import {
@@ -45,6 +46,7 @@ export default function CompanyOnboarding() {
   const [companyOverview, setCompanyOverview] = useState("");
   const [companyWorkCulture, setCompanyWorkCulture] = useState("");
   const [companyBenefits, setCompanyBenefits] = useState("");
+  const { userId } = useParams();
 
   // Error handling state
   const [error, setError] = useState(null);
@@ -102,6 +104,7 @@ export default function CompanyOnboarding() {
       companyOverview,
       companyWorkCulture,
       companyBenefits,
+      userId
     };
 
     console.log("Request data before sending:", requestData);
@@ -110,7 +113,7 @@ export default function CompanyOnboarding() {
       const response = await axios.post("/company/onboarding", requestData);
 
       console.log(response.data);
-      navigate("/dashboard");
+      navigate(`/recruiter/dashboard/${userId}`);
     } catch (error) {
       console.error("Error Submitting Form", error);
     }

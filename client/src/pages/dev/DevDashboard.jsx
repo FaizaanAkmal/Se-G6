@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // UI Imports
 import { Grid, Typography, Button, Stack } from "@mui/joy";
@@ -11,25 +12,38 @@ import JobCard from "../../components/JobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
 export default function DevDashboard() {
-  // State to keep track of the active tab
   const [activeTab, setActiveTab] = useState("All");
   const [loading, setLoading] = useState(false);
   const [noMoreJobs, setNoMoreJobs] = useState(true);
+  const [jobs, setJobs] = useState([]);
+  const { userId } = useParams();
 
-  // load more jobs handler
+  const fetchJobsData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("/dev/getJobs");
+      console.log("Response data,",response)
+      setJobs(response.data);
+      setNoMoreJobs(false); 
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobsData();
+  }, []);
+
   const loadMoreJobs = async () => {
     setLoading(true);
-    // API call to load more jobs
-
-    // Simulating API call
     setTimeout(() => {
       setLoading(false);
-      // set noMoreJobs to false if there are more jobs to load (simulating)
       setNoMoreJobs(false);
     }, 2000);
   };
 
-  // Handler to change the active tab
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     if (tab === "Bookmarked") {
@@ -64,11 +78,9 @@ export default function DevDashboard() {
             flexDirection: "column",
           }}
         >
-          {/* Page Title */}
           <Typography level="h1" sx={{ width: "100%" }} mb={4}>
             Your Job Feed
           </Typography>
-          {/* Tabs */}
           <Stack
             direction="row"
             spacing={1}
@@ -80,7 +92,6 @@ export default function DevDashboard() {
               border: "1px solid #F2F4F7",
             }}
           >
-            {/* Tabs with active state handling */}
             <Button
               variant={activeTab === "All" ? "outlined" : "plain"}
               color="neutral"
@@ -118,21 +129,17 @@ export default function DevDashboard() {
               Applied
             </Button>
           </Stack>
-          {/* Content based on active tab */}
           {activeTab === "All" && (
             <Stack spacing={2} mt={4}>
-              <JobCard />
-              <JobCard />
-              <JobCard />
-              <JobCard />
+              {jobs.map((job) => (
+                <JobCard key={job._id} job={job} />
+              ))}
             </Stack>
           )}
           {activeTab === "Bookmarked" && (
             <div>{/* Content for Bookmarked */}</div>
           )}
           {activeTab === "Applied" && <div>{/* Content for Applied */}</div>}
-
-          {/* Pagination */}
           {noMoreJobs && (
             <Button
               variant="soft"

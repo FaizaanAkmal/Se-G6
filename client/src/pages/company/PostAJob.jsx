@@ -1,12 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // Global constants
 import {
   jobTypeOptions,
   environmentOptions,
-  countryNames,
   experienceOptions,
   skillOptions,
   languageOptions,
@@ -16,7 +16,6 @@ import {
 // Custom components
 import CompanyNavbar from "../../components/CompanyNavbar.jsx";
 import Footer from "../../components/Footer";
-import JobCard from "../../components/JobCard.jsx";
 
 // UI imports
 import {
@@ -47,6 +46,8 @@ export default function PostAJob() {
   const [jobType, setJobType] = useState("");
   const [environment, setEnvironment] = useState("");
   const [compensation, setCompensation] = useState("");
+  const { userId } = useParams();
+  console.log("UserId Here: ",userId)
 
   // form validation
   const [loading, setLoading] = useState(false);
@@ -142,6 +143,7 @@ export default function PostAJob() {
       jobType,
       environment,
       compensation,
+      userId
     };
 
     console.log("Request data before sending:", requestData);
@@ -152,7 +154,7 @@ export default function PostAJob() {
       console.log("Response:", response.data);
 
       // Navigate to the dashboard or handle the response accordingly
-      navigate("/dashboard");
+      navigate(`/recruiter/dashboard/${userId}`);
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle error state or display error message

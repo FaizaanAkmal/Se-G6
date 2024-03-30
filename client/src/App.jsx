@@ -7,9 +7,9 @@ import PostAJob from "./pages/company/PostAJob.jsx";
 import DevOnboarding from "./pages/dev/DevOnboarding.jsx";
 import DevDashboard from "./pages/dev/DevDashboard.jsx";
 import SearchJobs from "./pages/SearchJobs.jsx";
-import { useState } from "react";
 
-import RecDashboard from "./pages/recruiter/RecDashboard.jsx";
+
+import RecDashboard from "./pages/company/RecDashboard.jsx";
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
@@ -59,15 +59,12 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={<Signup />} />
-                    <Route
-                        path="/onboarding/company"
-                        element={<CompanyOnboarding />}
-                    />
-                    <Route path="/onboarding/dev" element={<DevOnboarding />} />
-                    <Route path="/createjob" element={<PostAJob />} />
-                    <Route path="/dev" element={<DevDashboard />} />
+                    <Route path="/onboarding/company/:userId" element={<CompanyOnboarding />} />
+                    <Route path="/onboarding/dev/:userId" element={<DevOnboarding />} />
+                    <Route path="/createjob/:userId" element={<PostAJob />} />
+                    <Route path="/developer/dashboard/:userId" element={<DevDashboard />} />
                     <Route path="/dev/search" element={<SearchJobs />} />
-                    <Route path="/recruiter/dashboard" element={<RecDashboard />} />
+                    <Route path="/recruiter/dashboard/:userId" element={<RecDashboard />} />
                 </Routes>
             </BrowserRouter>
         </CssVarsProvider>

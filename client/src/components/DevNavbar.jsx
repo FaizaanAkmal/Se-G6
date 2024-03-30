@@ -1,26 +1,16 @@
-import * as React from "react";
+
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 
 // Asset imports
 import logo from "../assets/logo.png";
 
 // UI imports
 import {
-    Grid,
     Box,
-    Typography,
     Button,
-    FormControl,
-    FormLabel,
-    Input,
     Stack,
-    Select,
-    Option,
-    Textarea,
-    Autocomplete,
-    Alert,
-} from "../joyImports";
+} from "../joy_imports";
 import { Avatar } from "@mui/joy";
 import Menu from "@mui/joy/Menu";
 import MenuButton from "@mui/joy/MenuButton";

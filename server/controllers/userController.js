@@ -119,7 +119,7 @@ const registerUser = async (req, res) => {
 
     res
       .status(201)
-      .json({ success: true, message: "User registered successfully." });
+      .json({ success: true, message: "User registered successfully." , user: newUser });
   } catch (error) {
     console.log("Here");
     console.error("Error registering user:", error);
@@ -151,7 +151,7 @@ const loginUser = async (req, res) => {
     });
 
     res.cookie("token", token, { httpOnly: true, sameSite: "strict" });
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, userType: user.userType, userId: user._id });
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ success: false, message: "Internal server error." });
