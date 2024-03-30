@@ -3,17 +3,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // UI Imports
-import Typography from "@mui/joy/Typography";
-import Stack from "@mui/joy/Stack";
-import Button from "@mui/joy/Button";
-import Grid from "@mui/joy/Grid";
+import { Grid, Typography, Button, Stack } from "@mui/joy";
 
 // Custom Components Imports
 import CompanyNavbar from "../../components/CompanyNavbar";
 import JobCard from "../../components/JobCard";
 import Footer from "../../components/Footer";
 
-export default function RecDashboard() {
+export default function CompanyDashboard() {
     const navigate = useNavigate();
 
     // State to keep track of the active tab

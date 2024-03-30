@@ -4,10 +4,10 @@ import Signup from "./pages/Signup.jsx";
 import axios from "axios";
 import CompanyOnboarding from "./pages/company/CompanyOnboarding.jsx";
 import PostAJob from "./pages/company/PostAJob.jsx";
+import CompanyDashboard from "./pages/company/CompanyDashboard.jsx";
 import DevOnboarding from "./pages/dev/DevOnboarding.jsx";
 import DevDashboard from "./pages/dev/DevDashboard.jsx";
 import SearchJobs from "./pages/SearchJobs.jsx";
-import RecDashboard from "./pages/company/RecDashboard.jsx";
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
@@ -55,17 +55,14 @@ function App() {
         <CssVarsProvider theme={newTheme}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/login" element={<Login />} />
                     <Route path="/" element={<Signup />} />
-                    <Route
-                        path="/onboarding/company"
-                        element={<CompanyOnboarding />}
-                    />
-                    <Route path="/onboarding/dev" element={<DevOnboarding />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/onboarding/company" element={<CompanyOnboarding />} />
+                    <Route path="/company" element={<CompanyDashboard />} />
                     <Route path="/createjob" element={<PostAJob />} />
+                    <Route path="/onboarding/dev" element={<DevOnboarding />} />
                     <Route path="/dev" element={<DevDashboard />} />
                     <Route path="/dev/search" element={<SearchJobs />} />
-                    <Route path="/company" element={<RecDashboard />} />
                 </Routes>
             </BrowserRouter>
         </CssVarsProvider>
