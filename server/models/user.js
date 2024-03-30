@@ -27,8 +27,8 @@ const userSchema = new Schema({
   },
   profileCompleted: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const UserModel = mongoose.model("User", userSchema);
