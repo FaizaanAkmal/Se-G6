@@ -25,6 +25,10 @@ const userSchema = new Schema({
     required: true,
     enum: ["Developer", "Company"], // Define possible user types
   },
+  profileCompleted: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const UserModel = mongoose.model("User", userSchema);

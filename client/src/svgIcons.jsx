@@ -1,9 +1,9 @@
 // SVG Icons
-const GitHubIcon = () => {
+const GitHubIcon = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="#AF56D9"
+      fill={props.color}
       width="50"
       height="50"
       viewBox="0 0 50 50"
@@ -13,11 +13,11 @@ const GitHubIcon = () => {
   );
 };
 
-const BusinessCenterIcon = () => {
+const BusinessCenterIcon = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="#AF56D9"
+      fill={props.color}
       width="50"
       height="50"
       viewBox="0 0 50 50"

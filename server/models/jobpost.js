@@ -42,6 +42,24 @@ const JobPostSchema = new Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    required: true,
+    default: "open"
+  },
+  datePosted: {
+    type: Date,
+    default: Date.now()
+  },
+  postedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company',
+    required: true
+  },
+  shortlisted: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Dev',
+  }]
 });
 
 const JobPost = mongoose.model("JobPost", JobPostSchema);

@@ -32,9 +32,9 @@ function CustomRadio({ label, ...props }) {
     <ListItem variant="outlined" sx={{ boxShadow: "sm" }}>
       <ListItemDecorator>
         {label === "Developer" ? (
-          <GitHubIcon />
+          <GitHubIcon color="#AF56D9"/>
         ) : (
-          <BusinessCenterIcon />
+          <BusinessCenterIcon color="#AF56D9"/>
         )}
       </ListItemDecorator>
       <Radio

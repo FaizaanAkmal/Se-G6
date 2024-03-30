@@ -4,6 +4,10 @@ const devProfile = require("../models/dev");
 
 //Dev Model
 const devSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User' 
+  },
   country: {
     type: String,
     required: true,
@@ -44,13 +48,16 @@ const devSchema = new Schema({
     type: String,
     required: true,
   },
+  jobHistory: [{
+    type: Schema.Types.ObjectId,
+    ref: 'JobPost',
+  }],
+  bookmarkedJobs: [{
+    type: Schema.Types.ObjectId,
+    ref: 'JobPost'
+  }]
 });
 
 const devModel = mongoose.model("Dev", devSchema);
 
 module.exports = devModel;
-
-// reference user_id from User
-// profileComplete: boolean
-// appliedTo or jobHistory: [job_ids]
-// bookmarked: [job_ids]

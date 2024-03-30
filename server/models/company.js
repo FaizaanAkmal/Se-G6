@@ -3,6 +3,10 @@ const { Schema } = mongoose;
 
 // Company Model
 const companySchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User' 
+  },
   name: {
     type: String,
     unique: true,
@@ -46,7 +50,3 @@ const companySchema = new Schema({
 const companyModel = mongoose.model("Company", companySchema);
 
 module.exports = companyModel;
-
-// reference user_id from User
-// profileComplete: boolean
-// jobPosts: [job_ids]
