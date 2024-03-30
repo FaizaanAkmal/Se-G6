@@ -1,10 +1,17 @@
-const express = require('express')
-const router = express.Router()
-const cors = require('cors')
-const {page1, page2, page3} = require('../controllers/companyController')
+const express = require("express");
+const companyRouter = express.Router();
+const cors = require("cors");
+const {
+  companyRegister,
+  companyEdit,
+  createJobPost,
+} = require("../controllers/companyController");
 
-router.post('/page1',page1)
-router.patch('/page2/:id',page2)
-router.patch('/page3/:id',page3)
+//Handling Company Creation and Editing Routes
+companyRouter.post("/onboarding", companyRegister);
+companyRouter.patch("/profile", companyEdit);
 
-module.exports = router
+//Handling Create JobPost
+companyRouter.post("/createJobPost", createJobPost);
+
+module.exports = companyRouter;

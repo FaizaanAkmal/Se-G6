@@ -1,134 +1,396 @@
-import Grid from "@mui/joy/Grid";
-import Box from "@mui/joy/Box";
-import Typography from "@mui/joy/Typography";
-import logo from "../assets/logo.png";
-import Button from "@mui/joy/Button";
-import Checkbox from "@mui/joy/Checkbox";
-import Divider from "@mui/joy/Divider";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
-import Link from "@mui/joy/Link";
-import Input from "@mui/joy/Input";
-import Stack from "@mui/joy/Stack";
-import Radio from "@mui/joy/Radio";
-import FormHelperText from "@mui/joy/FormHelperText";
-import RadioGroup from "@mui/joy/RadioGroup";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { GlobalStyles } from "@mui/system";
+import logo from "../assets/White_logo.png";
+import background from "../assets/background.png";
+import {
+  Grid,
+  Box,
+  Typography,
+  Button,
+  Checkbox,
+  Divider,
+  FormControl,
+  FormLabel,
+  Link,
+  List,
+  ListItem,
+  ListItemDecorator,
+  radioClasses,
+  Input,
+  Stack,
+  Radio,
+  FormHelperText,
+  RadioGroup,
+} from "@mui/joy";
+
+import { GitHubIcon, BusinessCenterIcon } from "../svgIcons";
+import PropTypes from "prop-types";
+function CustomRadio({ label, ...props }) {
+  return (
+    <ListItem variant="outlined" sx={{ boxShadow: "sm" }}>
+      <ListItemDecorator>
+        {label === "Developer" ? (
+          <GitHubIcon color="#AF56D9" />
+        ) : (
+          <BusinessCenterIcon color="#AF56D9" />
+        )}
+      </ListItemDecorator>
+      <Radio
+        overlay
+        value={label}
+        label={label}
+        sx={{
+          flexGrow: 1,
+          flexDirection: "row-reverse",
+          color: "#ffffff",
+          pl: "20px",
+        }}
+        slotProps={{
+          action: ({ checked }) => ({
+            sx: (theme) => ({
+              ...(checked && {
+                inset: -1,
+                border: "2px solid",
+                borderColor: theme.vars.palette.primary[500],
+              }),
+            }),
+          }),
+        }}
+        {...props}
+      />
+    </ListItem>
+  );
+}
+CustomRadio.propTypes = {
+  label: PropTypes.string.isRequired,
+};
 
 const Signup = () => {
-    return (
-        <Grid container sx={{ flexGrow: 1, minHeight: "100vh" }}>
-            <Grid
-                item
-                xs={6}
-                sx={{
-                    p: 4,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                }}
-            >
-                <Grid
-                    sx={{
-                        mb: 4,
-                        display: "flex",
-                        alignItems: "end",
-                        flexDirection: "row",
-                        justifyContent: "flex-start",
-                    }}
-                    xs={12}
-                >
-                    <img src={logo} alt="logo" style={{ width: "122px" }} />
-                </Grid>
-                <Box xs={8}>
-                    <Typography level="h1" sx={{ mb: 1 }}>
-                        Create Account
-                    </Typography>
-                    <Typography>
-                        Sign up as a Developer or an Company to get started.
-                    </Typography>
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
-                    <Box>
-                        <form>
-                            <Stack gap={4} sx={{ mt: 4 }}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={6}>
-                                        <FormControl required>
-                                            <FormLabel>First Name</FormLabel>
-                                            <Input
-                                                type="text"
-                                                name="firstName"
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <FormControl required>
-                                            <FormLabel>Last Name</FormLabel>
-                                            <Input
-                                                type="text"
-                                                name="lastName"
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                </Grid>
-                                <FormControl required>
-                                    <FormLabel>Email</FormLabel>
-                                    <Input type="email" name="email" />
-                                </FormControl>
-                                <FormControl required>
-                                    <FormLabel>Password</FormLabel>
-                                    <Input type="password" name="password" />
-                                </FormControl>
-                                <FormControl>
-                                    <Stack gap={2}>
-                                        <FormControl>
-                                            <FormLabel>I am a...</FormLabel>
-                                            <RadioGroup
-                                                defaultValue="develper"
-                                                name="radio-buttons-group"
-                                            >
-                                                <Radio
-                                                    value="developer"
-                                                    label="Developer"
-                                                    variant="outlined"
-                                                />
-                                                <Radio
-                                                    value="company"
-                                                    label="Company"
-                                                    variant="outlined"
-                                                />
-                                            </RadioGroup>
-                                        </FormControl>
-                                    </Stack>
-                                </FormControl>
-                                <FormControl>
-                                    <Checkbox
-                                        label="Accept Terms & Conditions."
-                                        variant="soft"
-                                        defaultChecked
-                                    />
-                                    <FormHelperText>
-                                        Please review our terms and conditions
-                                        before signing up.
-                                    </FormHelperText>
-                                </FormControl>
-                                <Button type="submit" fullWidth>
-                                    Sign up
-                                </Button>
-                                <Divider></Divider>
-                                <Typography>
-                                    Already have an account? &nbsp;
-                                    <Link>Log in to your account. </Link>
-                                </Typography>
-                            </Stack>
-                        </form>
-                    </Box>
-                </Box>
+  const registerUser = async (event) => {
+    event.preventDefault();
+
+    try {
+      // Make API request to register user
+      const response = await axios.post("/api/register", {
+        firstName,
+        lastName,
+        email,
+        password,
+        userType,
+      });
+
+      // Handle successful registration
+      if (response.data.success) {
+        const userId = response.data.user._id;
+        if (userType === "Developer") {
+          navigate(`/onboarding/dev/${userId}`);
+        } else if (userType === "Company") {
+          navigate(`/onboarding/company/${userId}`);
+        }
+      }
+      // Handle unsuccessful registration
+      else {
+        throw new Error(response.data.message);
+      }
+      // TODO
+    } catch (error) {
+      // Handle registration error
+      console.log("The Error at frontend is: ", error);
+      setError(error);
+    }
+  };
+  return (
+    <>
+      <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }} />
+      <Box sx={{ margin: 0, padding: 0, width: "100vw", height: "100vh" }}>
+        <Grid
+          container
+          sx={{
+            flexGrow: 1,
+            minHeight: "100vh",
+            backgroundColor: "#181818",
+          }}
+        >
+          <Grid
+            item
+            xs={6}
+            sx={{
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Box xs={8}>
+              <Typography level="h1" sx={{ mb: 1, color: "#ffffff" }}>
+                Create Account
+              </Typography>
+              <Typography sx={{ color: "#ffffff" }}>
+                Sign up as a Developer or an Company to get started.
+              </Typography>
+
+              <Box>
+                <form onSubmit={registerUser}>
+                  <Stack gap={4} sx={{ mt: 4, color: "#ffffff" }}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <FormControl required>
+                          <FormLabel
+                            sx={{
+                              color: "#ffffff",
+                            }}
+                          >
+                            First Name
+                          </FormLabel>
+                          <Input
+                            type="text"
+                            name="firstName"
+                            value={firstName}
+                            placeholder="First Name"
+                            onChange={(e) => setFirstName(e.target.value)}
+                            sx={{
+                              "--Input-focusedHighlight":
+                                "var(--myCustomColor)",
+                              "--myCustomColor": "#AF56D9",
+                            }}
+                          />
+                          {error &&
+                            error.response.data.field === "firstName" && (
+                              <Typography
+                                variant="body2"
+                                sx={{ color: "red", fontWeight: "500" }}
+                              >
+                                {error.response.data.message}
+                              </Typography>
+                            )}
+                        </FormControl>
+                      </Grid>
+                      <Grid xs={6}>
+                        <FormControl required>
+                          <FormLabel
+                            sx={{
+                              color: "#ffffff",
+                            }}
+                          >
+                            Last Name
+                          </FormLabel>
+                          <Input
+                            type="text"
+                            name="lastName"
+                            value={lastName}
+                            placeholder="Last Name"
+                            onChange={(e) => setLastName(e.target.value)}
+                          />
+                          {error &&
+                            error.response.data.field === "lastname" && (
+                              <Typography
+                                variant="body2"
+                                sx={{ color: "red", fontWeight: "500" }}
+                              >
+                                {error.response.data.message}
+                              </Typography>
+                            )}
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                    <FormControl required>
+                      <FormLabel sx={{ color: "#ffffff" }}>Email</FormLabel>
+                      <Input
+                        type="email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="email"
+                        placeholder="user@example.com"
+                      />
+                      {error && error.response.data.field === "email" && (
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "red", fontWeight: "500" }}
+                        >
+                          {error.response.data.message}
+                        </Typography>
+                      )}
+                    </FormControl>
+                    <FormControl required>
+                      <FormLabel sx={{ color: "#ffffff" }}>Password</FormLabel>
+                      <Input
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      {error && error.response.data.field === "password" && (
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "red", fontWeight: "500" }}
+                        >
+                          {error.response.data.message}
+                        </Typography>
+                      )}
+                    </FormControl>
+                    <FormControl>
+                      <Stack gap={2}>
+                        <RadioGroup
+                          aria-label="I am a..."
+                          defaultValue="Developer"
+                          overlay
+                          name="radio-buttons-group"
+                          value={userType}
+                          onChange={(e) => setUserType(e.target.value)}
+                          sx={{
+                            flexDirection: "row",
+                            gap: 2,
+                            [`& .${radioClasses.checked}`]: {
+                              [`& .${radioClasses.action}`]: {
+                                inset: -1,
+                                border: "2px solid",
+                                borderColor: "primary.500",
+                              },
+                            },
+                            [`& .${radioClasses.radio}`]: {
+                              display: "contents",
+                              "& > svg": {
+                                zIndex: 2,
+                                position: "absolute",
+                                top: "-8px",
+                                right: "-8px",
+                                bgcolor: "background.surface",
+                                borderRadius: "50%",
+                              },
+                            },
+                          }}
+                        >
+                          <List
+                            sx={{
+                              minWidth: 240,
+                              "--List-gap": "0.5rem",
+                              "--ListItem-paddingY": "1rem",
+                              "--ListItem-radius": "8px",
+                            }}
+                          >
+                            {["Developer", "Company"].map((value) => (
+                              <CustomRadio key={value} label={value} />
+                            ))}
+                          </List>
+                        </RadioGroup>
+                      </Stack>
+                    </FormControl>
+                    <FormControl sx={{ color: "#ffffff" }}>
+                      <Checkbox
+                        label="Accept Terms & Conditions."
+                        variant="soft"
+                        checked={termsAccepted}
+                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                        sx={{ color: "#ffffff" }}
+                      />
+                      <FormHelperText>
+                        Please review our terms and conditions before signing
+                        up.
+                      </FormHelperText>
+                    </FormControl>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      sx={{
+                        background: "#a636e7",
+                        color: "white",
+                        "&:hover": {
+                          background: "#8b2dcf", // Darken color on hover
+                        },
+                      }}
+                    >
+                      Sign up
+                    </Button>
+                    {/* Error message for overall form submission */}
+                    {error && error.response.data.field === "general" && (
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "red", fontWeight: "500" }}
+                      >
+                        {error.response.data.message}
+                      </Typography>
+                    )}
+                    {/* Success message */}
+                    {successMessage && (
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "success.main" }}
+                      >
+                        {successMessage}
+                      </Typography>
+                    )}
+                    <Typography>
+                      Already have an account? &nbsp;
+                      <Link
+                        href="/login"
+                        sx={{
+                          textDecoration: "none",
+                          color: "#a636e7",
+                          "&:hover": {
+                            color: "#a636e7", // Darken color on hover
+                          },
+                        }}
+                      >
+                        Log in to your account.{" "}
+                      </Link>
+                    </Typography>
+                  </Stack>
+                </form>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sx={{
+              backgroundColor: "#181818",
+              position: "relative",
+            }}
+          >
+            <Grid
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 1,
+                mt: -10,
+              }}
+            >
+              <img src={logo} alt="logo" style={{ width: "122px" }} />
             </Grid>
-            <Grid item xs={6} sx={{ backgroundColor: "#f5f5f5" }}>
-                {/*Background column */}
+            <Grid
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src={background}
+                alt="background"
+                style={{ width: "500px" }}
+              />
             </Grid>
+          </Grid>
         </Grid>
-    );
+      </Box>
+    </>
+  );
 };
 
 export default Signup;

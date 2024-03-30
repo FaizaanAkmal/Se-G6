@@ -1,68 +1,143 @@
-const Company = require('../models/company');
+const Company = require("../models/company");
+const JobPost = require("../models/jobpost");
 
-const page1 = async (req, res) => {
-    const { name, website, type, country } = req.body;
-    const existingName = await Company.findOne({ name });
-    if (existingName) {
-    return res.status(400).json({ success: false, message: 'Company name is already registered.' });
-    }
-    const existingWebsite = await Company.findOne({ website });
-    if (existingWebsite) {
-    return res.status(400).json({ success: false, message: 'Website is already registered.' });
-    }
-    Company.industry, Company.size, Company.overview, Company.workCulture, Company.benefits = null
-    const newUser = new Company({
-        name,
+const companyRegister = async (req, res) => {
+  try {
+    // Destructure the required fields from the request body
+    console.log("Response From Company: ", req.body);
+    const {
+      companyName,
+      website,
+      companyType,
+      country,
+      industry,
+      companySize,
+      companyOverview,
+      companyWorkCulture,
+      companyBenefits,
+      userId
+    } = req.body;
+
+    // Create a new company instance
+    const newCompany = new Company({
+      userId,
+      name: companyName,
+      website,
+      type: companyType,
+      country,
+      industry,
+      size: companySize,
+      overview: companyOverview,
+      workCulture: companyWorkCulture,
+      benefits: companyBenefits,
+    });
+
+    // Save the new company to the database
+    const savedCompany = await newCompany.save();
+
+    // Send a success response with the ObjectId of the created company
+    res.status(201).json({
+      message: "Company created successfully",
+      companyId: savedCompany._id,
+    });
+  } catch (error) {
+    console.error("Error creating company:", error);
+    // Send an error response if an error occurs during company creation
+    res.status(500).json({ message: "Error creating company" });
+  }
+};
+
+// update company info (TODO)
+const companyEdit = async (req, res) => {
+  const {
+    companyName,
+    website,
+    companyType,
+    country,
+    industry,
+    companySize,
+    companyOverview,
+    companyWorkCulture,
+    companyBenefits,
+  } = req.body;
+
+  const { id } = req.params;
+  try {
+    const updatedCompany = await Company.findOneAndUpdate(
+      { _id: id }, // Filter: Find the company by its ID
+      {
+        companyName,
         website,
-        type,
-        country
-        });
-        await newUser.save();
+        companyType,
+        country,
+        industry,
+        companySize,
+        companyOverview,
+        companyWorkCulture,
+        companyBenefits,
+      }, // Update
+      { new: true } // Options: Return the updated document
+    );
 
-     
-        res.status(201).json({ success: true, message: 'User registered successfully.',newUser });
-}
-
-const page2 = async (req, res) => {
-    const { industry, size} = req.body;
-    const {id} = req.params;
-    try {
-        const updatedCompany = await Company.findOneAndUpdate(
-            { _id: id }, // Filter: Find the company by its ID
-            { industry, size }, // Update: Set the new industry and size
-            { new: true } // Options: Return the updated document
-        );
-
-        // If the company doesn't exist, return 404
-        if (!updatedCompany) {
-            return res.status(404).json({ error: "Company not found" });
-        }
-
-        res.status(200).json(updatedCompany);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+    // If the company doesn't exist, return 404
+    if (!updatedCompany) {
+      return res.status(404).json({ error: "Company not found" });
     }
-}
 
-const page3 = async (req, res) => {
-    const { overview, workCulture, benefits} = req.body;
-    const {id} = req.params;
-    try {
-        const updatedCompany = await Company.findOneAndUpdate(
-            { _id: id }, // Filter: Find the company by its ID
-            { overview, workCulture, benefits }, // Update: Set the new industry and size
-            { new: true } // Options: Return the updated document
-        );
+    res.status(200).json(updatedCompany);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-        // If the company doesn't exist, return 404
-        if (!updatedCompany) {
-            return res.status(404).json({ error: "Company not found" });
-        }
+const createJobPost = async (req, res) => {
+  try {
+    // Destructure the required fields from the request body
+    console.log("Response From creating JobPost: ", req.body);
+    const {
+      title,
+      description,
+      requirement,
+      preferredSkills,
+      preferredLanguages,
+      preferredTechnologies,
+      experience,
+      jobType,
+      environment,
+      compensation,
+      userId
+    } = req.body;
 
-        res.status(200).json(updatedCompany);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-}
+    // Find the company based on the userId
+    const company = await Company.findOne({ userId });
+    // Create a new job post instance
+    const newJobPost = new JobPost({
+      title,
+      description,
+      requirement,
+      preferredSkills,
+      preferredLanguages,
+      preferredTechnologies,
+      experience,
+      jobType,
+      environment,
+      compensation,
+      postedBy: company._id
+    });
 
-module.exports = {page1, page2, page3};
+    // Save the new job post to the database
+    const savedJobPost = await newJobPost.save();
+
+    // Send a success response with the ObjectId of the created job post
+    res.status(201).json({
+      message: "Job post created successfully",
+      jobPostId: savedJobPost._id,
+    });
+  } catch (error) {
+    console.error("Error creating job post:", error);
+    // Send an error response if an error occurs during job post creation
+    res.status(500).json({ message: "Error creating job post" });
+  }
+};
+
+module.exports = { companyRegister, companyEdit, createJobPost };

@@ -1,22 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-//Company Model
+// Company Model
 const companySchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   name: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   website: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   type: {
     type: String,
     required: true,
-    //enum: ["Agency", "Corporate", "Start-up"]
   },
   country: {
     type: String,
@@ -24,27 +27,26 @@ const companySchema = new Schema({
   },
   industry: {
     type: String,
-    //required: true,
-    //enum: [ "Agriculture", "Construction", "Energy", "Finance", "Healthcare", "IT", "Manufacturing", "Retail", "Transportation", "Tourism"] // Define possible user types
+    required: true,
   },
   size: {
     type: String,
-    //required: true,
-    //enum: ["0 to 100", "101 to 500", "above 500"]
+    required: true,
   },
   overview: {
     type: String,
-    //required: true,
+    required: true,
   },
   workCulture: {
     type: String,
-    //required: true,
+    required: true,
   },
   benefits: {
-    type: String
-  }
+    type: String,
+    required: true,
+  },
 });
 
-const companyModel = mongoose.model('Company', companySchema);
+const companyModel = mongoose.model("Company", companySchema);
 
 module.exports = companyModel;

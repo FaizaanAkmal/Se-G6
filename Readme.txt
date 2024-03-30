@@ -1,6 +1,6 @@
 # Setting up Frontend by the following commands in client folder
 -> npm create vite@latest .
-->  npm i react-router-dom axios @mui/joy @emotion/react @emotion/styled
+->  npm i react-router-dom axios @mui/joy @emotion/react @emotion/styled date-fns
 -> Run by writing npm run dev
 
 # Setting up the Backend
