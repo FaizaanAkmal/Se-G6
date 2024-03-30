@@ -8,6 +8,7 @@ import DevOnboarding from "./pages/onboarding/dev/DevOnboarding.jsx";
 import PostAJob from "./pages/recruiter/PostAJob.jsx";
 import DevDashboard from "./pages/developer/DevDashboard.jsx";
 import SearchJobs from "./pages/developer/SearchJobs.jsx";
+import RecDashboard from "./pages/recruiter/RecDashboard.jsx";
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
@@ -66,6 +67,7 @@ function App() {
                     <Route path="/createjob" element={<PostAJob />} />
                     <Route path="/dev" element={<DevDashboard />} />
                     <Route path="/dev/search" element={<SearchJobs />} />
+                    <Route path="/recruiter/dashboard" element={<RecDashboard />} />
                 </Routes>
             </BrowserRouter>
         </CssVarsProvider>
