@@ -24,25 +24,24 @@ import {
   FormHelperText,
   RadioGroup,
 } from "@mui/joy";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
-// import { GitHubIcon, BusinessCenterIcon } from "../svgIcons";
+
+import { GitHubIcon, BusinessCenterIcon } from "../svgIcons";
 import PropTypes from "prop-types";
 function CustomRadio({ label, ...props }) {
   return (
     <ListItem variant="outlined" sx={{ boxShadow: "sm" }}>
       <ListItemDecorator>
         {label === "Developer" ? (
-          <GitHubIcon sx={{ color: "#AF56D9" }} />
+          <GitHubIcon />
         ) : (
-          <BusinessCenterIcon sx={{ color: "#AF56D9" }} />
+          <BusinessCenterIcon />
         )}
       </ListItemDecorator>
       <Radio
         overlay
         value={label}
         label={label}
-        sx={{ flexGrow: 1, flexDirection: "row-reverse", color: "#ffffff" }}
+        sx={{ flexGrow: 1, flexDirection: "row-reverse", color: "#ffffff", pl: "20px" }}
         slotProps={{
           action: ({ checked }) => ({
             sx: (theme) => ({
@@ -274,7 +273,6 @@ const Signup = () => {
                               "--List-gap": "0.5rem",
                               "--ListItem-paddingY": "1rem",
                               "--ListItem-radius": "8px",
-                              "--ListItemDecorator-size": "32px",
                             }}
                           >
                             {["Developer", "Company"].map((value) => (
