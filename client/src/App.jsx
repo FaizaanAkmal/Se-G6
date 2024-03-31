@@ -63,7 +63,7 @@ function App() {
                     <Route path="/onboarding/dev/:userId" element={<DevOnboarding />} />
                     <Route path="/createjob/:userId" element={<PostAJob />} />
                     <Route path="/developer/dashboard/:userId" element={<DevDashboard />} />
-                    <Route path="/dev/search" element={<SearchJobs />} />
+                    <Route path="/dev/search/:userId" element={<SearchJobs />} />
                     <Route path="/recruiter/dashboard/:userId" element={<RecDashboard />} />
                 </Routes>
             </BrowserRouter>
