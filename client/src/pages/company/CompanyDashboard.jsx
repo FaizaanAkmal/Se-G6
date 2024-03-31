@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // UI Imports
@@ -9,6 +9,8 @@ import { Grid, Typography, Button, Stack } from "@mui/joy";
 import CompanyNavbar from "../../components/CompanyNavbar";
 import JobCard from "../../components/JobCard";
 import Footer from "../../components/Footer";
+
+import { apiRoutes, clientRoutes } from "../../routes.js";
 
 export default function CompanyDashboard() {
     // State to keep track of the active tab
@@ -20,14 +22,14 @@ export default function CompanyDashboard() {
     const navigate = useNavigate();
 
     // state received
-    const { userId } = useParams();
+    const { userId } = useLocation();
 
     // Load jobs based on active tab
     const loadJobs = async () => {
         setLoading(true);
         try {
             // Simulating API call
-            const response = await axios.get(`/api/jobs?status=${activeTab}`);
+            const response = await axios.get(apiRoutes.job.getAll);
             setJobs(response.data);
         } catch (error) {
             console.error("Error fetching jobs:", error);
@@ -47,7 +49,7 @@ export default function CompanyDashboard() {
     // Handler for "Post a Job" button
     const handlePostJob = () => {
         // Redirect to job posting page
-        navigate("/createJob", {userId: userId});
+        navigate(clientRoutes.postAJob, {state: {userId: userId}});
     };
 
     return (

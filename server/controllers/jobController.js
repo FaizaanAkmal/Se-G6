@@ -1,4 +1,5 @@
 const JobPost = require("../models/jobpost");
+const Company = require("../models/company");
 
 //creating a new job post
 const createJob = async (req, res) => {
@@ -58,7 +59,7 @@ const getJob = async (req, res) => {
 const getAllJobs = async (req, res) => {
   // TODO: return all Jobs matching query in req
   try {
-    const jobs = await Job.find({ status: "open" }).populate('postedBy'); // Populate the 'postedBy' field with the entire Company object
+    const jobs = await JobPost.find({ status: "open" }).populate('postedBy'); // Populate the 'postedBy' field with the entire Company object
     // console.log("Jobs",jobs)
 
     res.status(200).json(jobs);
