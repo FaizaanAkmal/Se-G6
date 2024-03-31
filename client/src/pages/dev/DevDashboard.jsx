@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // UI Imports
 import { Grid, Typography, Button, Stack } from "@mui/joy";
@@ -11,20 +11,34 @@ import JobCard from "../../components/JobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
 export default function DevDashboard() {
-  // State to keep track of the active tab
   const [activeTab, setActiveTab] = useState("All");
   const [loading, setLoading] = useState(false);
   const [noMoreJobs, setNoMoreJobs] = useState(true);
+  const [jobs, setJobs] = useState([]);
+  const { userId } = useParams();
 
-  // load more jobs handler
+  const fetchJobsData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("/dev/getJobs");
+      console.log("Response data,",response)
+      setJobs(response.data);
+      setNoMoreJobs(false); 
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobsData();
+  }, []);
+
   const loadMoreJobs = async () => {
     setLoading(true);
-    // API call to load more jobs
-
-    // Simulating API call
     setTimeout(() => {
       setLoading(false);
-      // set noMoreJobs to false if there are more jobs to load (simulating)
       setNoMoreJobs(false);
     }, 2000);
   };
@@ -121,10 +135,9 @@ export default function DevDashboard() {
           {/* Content based on active tab */}
           {activeTab === "All" && (
             <Stack spacing={2} mt={4}>
-              <JobCard />
-              <JobCard />
-              <JobCard />
-              <JobCard />
+              {jobs.map((job) => (
+                <JobCard key={job._id} job={job} />
+              ))}
             </Stack>
           )}
           {activeTab === "Bookmarked" && (

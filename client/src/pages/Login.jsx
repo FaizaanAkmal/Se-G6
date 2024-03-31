@@ -32,7 +32,23 @@ export default function Login() {
 
       if (response.data.success) {
         localStorage.setItem("authToken", response.data.token);
-        navigate("/main"); // redirect to dashboard
+        const userType = response.data.userType;
+        const userId = response.data.userId;
+
+        console.log("UserType: ",userType)
+        console.log("UserId: ",userId)
+
+        if (userType === "Developer") {
+          console.log("Developer")
+          navigate(`/dev/dashboard/${userId}`);
+        } else if (userType === "Company") {
+          console.log("Company")
+          navigate(`/company/dashboard/${userId}`);
+        } else {
+          // Handle unknown userType
+          console.log("Unknown userType:", userType);
+        }
+
       }
       // TODO (handle unsuccessful login)
       else {

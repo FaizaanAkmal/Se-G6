@@ -88,11 +88,15 @@ const Signup = () => {
 
       // Handle successful registration
       if (response.data.success) {
-        // TODO: get user_id from response -> locally store or create context
-        // Redirect to onboarding page based on userType
-        if (userType === "Company") navigate("/onboarding/company");
-
-        if (userType === "Developer") navigate("/onboarding/dev");
+        const userId = response.data.user._id;
+        if (userType === "Developer") 
+        {
+          navigate(`/onboarding/dev/${userId}`);
+        } 
+        else if (userType === "Company") 
+        {
+          navigate(`/onboarding/company/${userId}`);
+        }
       }
       // Handle unsuccessful registration
       else {

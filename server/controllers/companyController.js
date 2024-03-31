@@ -15,10 +15,12 @@ const companyRegister = async (req, res) => {
       companyOverview,
       companyWorkCulture,
       companyBenefits,
+      userId
     } = req.body;
 
     // Create a new company instance
     const newCompany = new Company({
+      userId,
       name: companyName,
       website,
       type: companyType,
@@ -103,8 +105,11 @@ const createJobPost = async (req, res) => {
       jobType,
       environment,
       compensation,
+      userId
     } = req.body;
 
+    // Find the company based on the userId
+    const company = await Company.findOne({ userId });
     // Create a new job post instance
     const newJobPost = new JobPost({
       title,
@@ -117,6 +122,7 @@ const createJobPost = async (req, res) => {
       jobType,
       environment,
       compensation,
+      postedBy: company._id
     });
 
     // Save the new job post to the database

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // UI Imports
 import { Grid, Typography, Button, Stack } from "@mui/joy";
@@ -12,6 +12,8 @@ import Footer from "../../components/Footer";
 
 export default function CompanyDashboard() {
     const navigate = useNavigate();
+    const { userId } = useParams();
+    console.log("UserID: ",userId)
 
     // State to keep track of the active tab
     const [activeTab, setActiveTab] = useState("Active");
@@ -33,7 +35,7 @@ export default function CompanyDashboard() {
 
     useEffect(() => {
         loadJobs();
-    }, [activeTab]); // Reload jobs when activeTab changes
+    }, [activeTab,userId]); // Reload jobs when activeTab changes
 
     // Handler to change the active tab
     const handleTabChange = (tab) => {
@@ -43,7 +45,7 @@ export default function CompanyDashboard() {
     // Handler for "Post a Job" button
     const handlePostJob = () => {
         // Redirect to job posting page
-        navigate("../createJob");
+        navigate(`/createJob/${userId}`);
     };
 
     return (

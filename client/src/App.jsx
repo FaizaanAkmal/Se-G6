@@ -57,12 +57,12 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/onboarding/company" element={<CompanyOnboarding />} />
-                    <Route path="/company" element={<CompanyDashboard />} />
-                    <Route path="/createjob" element={<PostAJob />} />
-                    <Route path="/onboarding/dev" element={<DevOnboarding />} />
-                    <Route path="/dev" element={<DevDashboard />} />
-                    <Route path="/dev/search" element={<SearchJobs />} />
+                    <Route path="/onboarding/company/:userId" element={<CompanyOnboarding />} />
+                    <Route path="/company/dashboard/:userId" element={<CompanyDashboard />} />
+                    <Route path="/createJob/:userId" element={<PostAJob />} />
+                    <Route path="/onboarding/dev/:userId" element={<DevOnboarding />} />
+                    <Route path="/dev/dashboard/:userId" element={<DevDashboard />} />
+                    <Route path="/dev/search/:userId" element={<SearchJobs />} />
                 </Routes>
             </BrowserRouter>
         </CssVarsProvider>

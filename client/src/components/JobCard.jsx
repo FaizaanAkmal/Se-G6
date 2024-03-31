@@ -18,7 +18,7 @@ import timePostedIcon from "../assets/timePostedIcon.svg";
 import bookmarkActiveIcon from "../assets/bookmarkActiveIcon.svg";
 import bookmarkInactiveIcon from "../assets/bookmarkInactiveIcon.svg";
 
-const JobCard = () => {
+const JobCard = ({job}) => {
     // State to manage bookmark toggle
     const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -33,6 +33,12 @@ const JobCard = () => {
             // Add logic to add bookmark to user's list
         }
     };
+
+    // Calculate days ago
+    const datePosted = new Date(job.datePosted);
+    const currentDate = new Date();
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const daysAgo = Math.round(Math.abs((currentDate - datePosted) / oneDay));
 
     // Handler function for card click
     const handleCardClick = () => {
@@ -89,7 +95,7 @@ const JobCard = () => {
                                             color="primary"
                                             sx={{ color: "#101828" }}
                                         >
-                                            Senior React Developer
+                                            {job.title}
                                         </Link>
                                         {/* Key facts */}
                                         <Stack
@@ -99,7 +105,7 @@ const JobCard = () => {
                                         >
                                             {/* Company Name */}
                                             <Typography level="title-md">
-                                                Ultralytics
+                                                {job.postedBy.name}
                                             </Typography>
                                             {/* Company Size */}
                                             <Typography
@@ -112,7 +118,7 @@ const JobCard = () => {
                                                     />
                                                 }
                                             >
-                                                10-20
+                                                 {job.postedBy.size}
                                             </Typography>
                                             {/* Time Posted */}
                                             <Typography
@@ -125,7 +131,11 @@ const JobCard = () => {
                                                     />
                                                 }
                                             >
-                                                3 days ago
+                                                {daysAgo === 0
+                                                    ? 'Today'
+                                                    : `${daysAgo} day${
+                                                          daysAgo > 1 ? 's' : ''
+                                                      } ago`}
                                             </Typography>
                                         </Stack>
                                     </Stack>
@@ -157,7 +167,7 @@ const JobCard = () => {
                                         }}
                                         variant="outlined"
                                     >
-                                        Full-time
+                                        {job.jobType}
                                     </Chip>
                                     {/* Add more chips as needed */}
                                 </Stack>
