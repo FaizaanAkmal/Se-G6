@@ -34,6 +34,9 @@ import DevNavbar from "../components/DevNavbar";
 import JobCard from "../components/JobCard";
 import Footer from "../components/Footer";
 
+// Routes Import
+import { apiRoutes, clientRoutes } from "../routes.js";
+
 export default function SearchJobs() {
   // User input states
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,7 +58,7 @@ export default function SearchJobs() {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      let response = await axios.get("/dev/getJobs");
+      let response = await axios.get(apiRoutes.job.getAll);
       let filteredJobs = response.data.slice(); 
 
       // Apply filters

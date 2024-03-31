@@ -1,9 +1,11 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { GlobalStyles } from "@mui/system";
 import logo from "../assets/White_logo.png";
 import background from "../assets/background.png";
+import { GitHubIcon, BusinessCenterIcon } from "../svgIcons";
+import PropTypes from "prop-types";
 import {
   Grid,
   Box,
@@ -24,24 +26,27 @@ import {
   FormHelperText,
   RadioGroup,
 } from "@mui/joy";
-
-import { GitHubIcon, BusinessCenterIcon } from "../svgIcons";
-import PropTypes from "prop-types";
+import { apiRoutes, clientRoutes} from "../routes.js";
 function CustomRadio({ label, ...props }) {
   return (
     <ListItem variant="outlined" sx={{ boxShadow: "sm" }}>
       <ListItemDecorator>
         {label === "Developer" ? (
-          <GitHubIcon color="#AF56D9"/>
+          <GitHubIcon color="#AF56D9" />
         ) : (
-          <BusinessCenterIcon color="#AF56D9"/>
+          <BusinessCenterIcon color="#AF56D9" />
         )}
       </ListItemDecorator>
       <Radio
         overlay
         value={label}
         label={label}
-        sx={{ flexGrow: 1, flexDirection: "row-reverse", color: "#ffffff", pl: "20px" }}
+        sx={{
+          flexGrow: 1,
+          flexDirection: "row-reverse",
+          color: "#ffffff",
+          pl: "20px",
+        }}
         slotProps={{
           action: ({ checked }) => ({
             sx: (theme) => ({
@@ -78,7 +83,7 @@ const Signup = () => {
 
     try {
       // Make API request to register user
-      const response = await axios.post("/api/register", {
+      const response = await axios.post(apiRoutes.user.register, {
         firstName,
         lastName,
         email,
@@ -89,13 +94,10 @@ const Signup = () => {
       // Handle successful registration
       if (response.data.success) {
         const userId = response.data.user._id;
-        if (userType === "Developer") 
-        {
-          navigate(`/onboarding/dev/${userId}`);
-        } 
-        else if (userType === "Company") 
-        {
-          navigate(`/onboarding/company/${userId}`);
+        if (userType === "Developer") {
+          navigate(clientRoutes.devProfileSetup, { userId: userId });
+        } else if (userType === "Company") {
+          navigate(clientRoutes.companyProfileSetup, { userId: userId });
         }
       }
       // Handle unsuccessful registration

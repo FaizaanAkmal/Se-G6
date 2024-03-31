@@ -1,5 +1,5 @@
 import { useState , useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // UI Imports
@@ -10,20 +10,28 @@ import DevNavbar from "../../components/DevNavbar.jsx";
 import JobCard from "../../components/JobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
+// Routes Import
+import { apiRoutes, clientRoutes } from "../../routes.js";
+
 export default function DevDashboard() {
   const [activeTab, setActiveTab] = useState("All");
   const [loading, setLoading] = useState(false);
   const [noMoreJobs, setNoMoreJobs] = useState(true);
   const [jobs, setJobs] = useState([]);
-  const { userId } = useParams();
+
+  // navigation
+  const navigate = useNavigate();
+
+  // state received
+  const { userId } = useLocation();
 
   const fetchJobsData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/dev/getJobs");
+      const response = await axios.get(apiRoutes.job.getAll);
       console.log("Response data,",response)
       setJobs(response.data);
-      setNoMoreJobs(false); 
+      setNoMoreJobs(false);
     } catch (error) {
       console.error("Error fetching jobs:", error);
     } finally {

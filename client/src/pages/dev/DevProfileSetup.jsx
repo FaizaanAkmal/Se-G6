@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // Global constants
@@ -36,11 +36,14 @@ import {
 } from "@mui/joy";
 
 // custom assets
-import onboardingIcon from "../../assets/onboardingIcon.svg";
+import profileSetupIcon from "../../assets/profileSetupIcon.svg";
 import githubIcon from "../../assets/githubIcon.svg";
 import linkIcon from "../../assets/linkIcon.svg";
 
-export default function DevOnboarding() {
+// Routes Import
+import { apiRoutes, clientRoutes } from "../../routes.js";
+
+export default function DevProfileSetup() {
   // form fields
   const [country, setCountry] = useState("");
   const [experience, setExperience] = useState("");
@@ -52,7 +55,12 @@ export default function DevOnboarding() {
   const [environmentPreference, setEnvironmentPreference] = useState("");
   const [portfolioLink, setPortfolioLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
-  const { userId } = useParams();
+
+  // navigation
+  const navigate = useNavigate();
+
+  // state received
+  const { userId } = useLocation();
 
   // form validation
   const [loading, setLoading] = useState(false);
@@ -60,9 +68,6 @@ export default function DevOnboarding() {
 
   // form step
   const [currentStep, setStep] = useState(1);
-
-  // navigation
-  const navigate = useNavigate();
 
   // event handlers
   const handleCountryChange = (e, value) => {
@@ -131,9 +136,9 @@ export default function DevOnboarding() {
     e.preventDefault();
     setLoading(true);
     setError("");
-  
+
     try {
-      const response = await axios.post("/dev/onboarding", {
+      const response = await axios.post(apiRoutes.dev.register, {
         userId,
         country,
         experience,
@@ -146,11 +151,11 @@ export default function DevOnboarding() {
         portfolioLink,
         githubLink,
       });
-  
+
       // Handle the response from the backend as needed
       // console.log("Response from backend:", response.data);
       setLoading(false);
-      navigate(`/developer/dashboard/${userId}`);
+      navigate(clientRoutes.devDashboard, { userId: userId });
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("Error submitting form. Please try again.");
@@ -181,8 +186,8 @@ export default function DevOnboarding() {
           }}
         >
           <img
-            src={onboardingIcon}
-            alt="onboarding icon"
+            src={profileSetupIcon}
+            alt="profileSetup icon"
             style={{ width: "56px", marginBottom: "30px" }}
           />
           <Typography level="h1" sx={{ mb: 2, textAlign: "center" }}>

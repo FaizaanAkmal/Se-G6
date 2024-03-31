@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // Asset imports
@@ -17,9 +17,15 @@ import {
     Avatar
 } from "@mui/joy";
 
+import { clientRoutes } from "../routes.js";
+
 export default function DevNavbar({ currentPage }) {
+    // navigation
     const navigate = useNavigate();
-    const { userId } = useParams();
+
+    // state received
+    const { userId } = useLocation();
+
     // Logout handler
     const handleLogout = () => {
         console.log("Logging out...");
@@ -34,15 +40,15 @@ export default function DevNavbar({ currentPage }) {
     const handleTabChange = (tab) => {
         if (tab === "dashboard") {
             // navigate to (/dev)
-            navigate(`/dev/dashboard/${userId}`);
+            navigate(clientRoutes.devDashboard, { userId: userId });
         }
         if (tab === "search") {
             // navigate to (/dev/searchjobs)
-            navigate(`/dev/search/${userId}`);
+            navigate(clientRoutes.searchJobs, { userId: userId });
         }
         if (tab === "settings") {
             // navigate to (/dev/settings)
-            navigate(`/dev/settings/${userId}`);
+            navigate(clientRoutes.devSettings, { userId: userId });
         }
     };
 
