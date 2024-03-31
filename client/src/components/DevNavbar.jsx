@@ -1,7 +1,6 @@
-
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
-
+import * as React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Asset imports
 import logo from "../assets/logo.png";
@@ -10,17 +9,23 @@ import logo from "../assets/logo.png";
 import {
     Box,
     Button,
+    Dropdown,
+    Menu,
+    MenuButton,
+    MenuItem,
     Stack,
-} from "../joy_imports";
-import { Avatar } from "@mui/joy";
-import Menu from "@mui/joy/Menu";
-import MenuButton from "@mui/joy/MenuButton";
-import MenuItem from "@mui/joy/MenuItem";
-import Dropdown from "@mui/joy/Dropdown";
+    Avatar
+} from "@mui/joy";
+
+import { clientRoutes } from "../routes.js";
 
 export default function DevNavbar({ currentPage }) {
+    // navigation
     const navigate = useNavigate();
-    const { userId } = useParams();
+
+    // state received
+    const { userId } = useLocation();
+
     // Logout handler
     const handleLogout = () => {
         console.log("Logging out...");
@@ -35,15 +40,15 @@ export default function DevNavbar({ currentPage }) {
     const handleTabChange = (tab) => {
         if (tab === "dashboard") {
             // navigate to (/dev)
-            navigate(`/developer/dashboard/${userId}`);
+            navigate(clientRoutes.devDashboard, { userId: userId });
         }
         if (tab === "search") {
             // navigate to (/dev/searchjobs)
-            navigate(`/dev/search/${userId}`);
+            navigate(clientRoutes.searchJobs, { userId: userId });
         }
         if (tab === "settings") {
             // navigate to (/dev/settings)
-            navigate(`/dev/settings/${userId}`);
+            navigate(clientRoutes.devSettings, { userId: userId });
         }
     };
 

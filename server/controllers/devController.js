@@ -1,5 +1,4 @@
 const Dev = require("../models/dev");
-const Job = require("../models/jobpost")
 
 // TODO
 const devRegister = async (req, res) => {
@@ -93,16 +92,4 @@ const devEdit = async (req, res) => {
   }
 };
 
-
-const getJobs = async (req, res) => {
-  try {
-    const jobs = await Job.find({ status: "open" }).populate('postedBy'); // Populate the 'postedBy' field with the entire Company object
-    // console.log("Jobs",jobs)
-
-    res.status(200).json(jobs);
-  } catch (error) {
-    console.error("Error fetching jobs:", error);
-    res.status(500).json({ message: "Error fetching jobs" });
-  }
-};
-module.exports = { devRegister, devEdit,getJobs };
+module.exports = { devRegister, devEdit };

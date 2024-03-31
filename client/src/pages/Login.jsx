@@ -15,6 +15,7 @@ import {
   Input,
   Stack,
 } from "@mui/joy";
+import { apiRoutes, clientRoutes } from "../routes.js";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ export default function Login() {
   const loginUser = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("/api/login", {
+      const response = await axios.post(apiRoutes.user.login, {
         email,
         password,
       });
@@ -35,20 +36,19 @@ export default function Login() {
         const userType = response.data.userType;
         const userId = response.data.userId;
 
-        console.log("UserType: ",userType)
-        console.log("UserId: ",userId)
+        console.log("UserType: ", userType);
+        console.log("UserId: ", userId);
 
         if (userType === "Developer") {
-          console.log("Developer")
-          navigate(`/developer/dashboard/${userId}`);
+          console.log("Developer");
+          navigate(clientRoutes.devDashboard, { userId: userId });
         } else if (userType === "Company") {
-          console.log("Company")
-          navigate(`/recruiter/dashboard/${userId}`);
+          console.log("Company");
+          navigate(clientRoutes.companyDashboard, { userId: userId });
         } else {
           // Handle unknown userType
           console.log("Unknown userType:", userType);
         }
-
       }
       // TODO (handle unsuccessful login)
       else {
