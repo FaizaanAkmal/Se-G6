@@ -26,13 +26,16 @@ app.use(
 // Defining Routes
 
 //User Registering Route
-app.use("/api", userRouter);
+app.use("/user", userRouter);
 
 // Handling Company Routes
 app.use("/company", companyRouter);
 
 // Handling Developer Routes
 app.use("/dev", devRouter);
+
+// Handling Job Routes
+app.use("/job", jobRouter);
 
 // Using Error Middleware
 app.use(errorMiddleware);
