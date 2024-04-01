@@ -1,12 +1,11 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
 
 // Global constants
 import {
   jobTypeOptions,
   environmentOptions,
-  countryNames,
   experienceOptions,
   skillOptions,
   languageOptions,
@@ -35,6 +34,9 @@ import {
   Alert,
 } from "@mui/joy";
 
+// Routes Import
+import { apiRoutes, clientRoutes } from "../../routes.js";
+
 export default function PostAJob() {
   const { userId } = useParams();
   console.log("UserId Here: ", userId);
@@ -51,15 +53,18 @@ export default function PostAJob() {
   const [environment, setEnvironment] = useState("");
   const [compensation, setCompensation] = useState("");
 
+  // navigation
+  const navigate = useNavigate();
+
+  // state received
+  const { userId } = useLocation();
+
   // form validation
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   // step state
   const [currentStep, setStep] = useState(1);
-
-  // navigation
-  const navigate = useNavigate();
 
   // handle form field changes
   const handleTitleChange = (e) => {
@@ -145,18 +150,18 @@ export default function PostAJob() {
       jobType,
       environment,
       compensation,
-      userId,
+      userId
     };
 
     console.log("Request data before sending:", requestData);
     try {
       // Send a POST request to the server
-      const response = await axios.post("/company/createJobPost", requestData);
+      const response = await axios.post(apiRoutes.job.create, requestData);
 
       console.log("Response:", response.data);
 
       // Navigate to the dashboard or handle the response accordingly
-      navigate(`/company/dashboard/${userId}`);
+      navigate(clientRoutes.companyDashboard, { userId: userId });
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle error state or display error message

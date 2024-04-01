@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // UI Imports
 import { Grid, Typography, Button, Stack } from "@mui/joy";
@@ -10,26 +10,32 @@ import CompanyNavbar from "../../components/CompanyNavbar";
 import JobCard from "../../components/JobCard";
 import Footer from "../../components/Footer";
 
+import { apiRoutes, clientRoutes } from "../../routes.js";
+
 export default function CompanyDashboard() {
-  const navigate = useNavigate();
+    // State to keep track of the active tab
+    const [activeTab, setActiveTab] = useState("Active");
+    const [jobs, setJobs] = useState([]);
+    const [loading, setLoading] = useState(false);
+    
+    // navigation
+    const navigate = useNavigate();
 
-  // State to keep track of the active tab
-  const [activeTab, setActiveTab] = useState("Active");
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(false);
+    // state received
+    const { userId } = useLocation();
 
-  // Load jobs based on active tab
-  const loadJobs = async () => {
-    setLoading(true);
-    try {
-      // Simulating API call
-      const response = await axios.get(`/api/jobs?status=${activeTab}`);
-      setJobs(response.data);
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
-    }
-    setLoading(false);
-  };
+    // Load jobs based on active tab
+    const loadJobs = async () => {
+        setLoading(true);
+        try {
+            // Simulating API call
+            const response = await axios.get(apiRoutes.job.getAll);
+            setJobs(response.data);
+        } catch (error) {
+            console.error("Error fetching jobs:", error);
+        }
+        setLoading(false);
+    };
 
   useEffect(() => {
     loadJobs();
@@ -40,11 +46,11 @@ export default function CompanyDashboard() {
     setActiveTab(tab);
   };
 
-  // Handler for "Post a Job" button
-  const handlePostJob = () => {
-    // Redirect to job posting page
-    navigate("../createJob");
-  };
+    // Handler for "Post a Job" button
+    const handlePostJob = () => {
+        // Redirect to job posting page
+        navigate(clientRoutes.postAJob, {state: {userId: userId}});
+    };
 
   return (
     <>

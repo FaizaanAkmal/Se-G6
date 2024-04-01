@@ -1,12 +1,11 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // Global Constants
 import {
   jobTypeOptions,
   environmentOptions,
-  countryNames,
   experienceOptions,
   skillOptions,
   languageOptions,
@@ -23,7 +22,7 @@ import {
   Option,
   Autocomplete,
   Alert,
-  Grid,
+  Grid
 } from "@mui/joy";
 
 // Custom Assets Imports
@@ -34,6 +33,9 @@ import sortIcon from "../assets/sortIcon.svg";
 import DevNavbar from "../components/DevNavbar";
 import JobCard from "../components/JobCard";
 import Footer from "../components/Footer";
+
+// Routes Import
+import { apiRoutes, clientRoutes } from "../routes.js";
 
 export default function SearchJobs() {
   // User input states
@@ -49,18 +51,88 @@ export default function SearchJobs() {
   const [loading, setLoading] = useState(false);
   const [noMoreJobs, setNoMoreJobs] = useState(true);
   const [error, setError] = useState(null);
+  const [jobs, setJobs] = useState([]);
+
+
+  // Function to fetch jobs based on search criteria
+  const fetchJobs = async () => {
+    try {
+      setLoading(true);
+      let response = await axios.get(apiRoutes.job.getAll);
+      let filteredJobs = response.data.slice(); 
+
+      // Apply filters
+      if (searchQuery) {
+        filteredJobs = filteredJobs.filter(job =>
+          job.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      if (skills.length > 0) {
+        filteredJobs = filteredJobs.filter(job =>
+          job.preferredSkills && skills.some(skill =>
+            job.preferredSkills.map(skill => skill.toLowerCase()).includes(skill.toLowerCase())
+          )
+        );
+      }
+      if (languages.length > 0) {
+        filteredJobs = filteredJobs.filter(job => {
+           
+          return job.preferredLanguages && languages.some(language => {
+              
+              return job.preferredLanguages.map(lang => lang.toLowerCase()).includes(language.toLowerCase());
+          });
+        });
+  
+      }
+      if (technologies.length > 0) {
+        filteredJobs = filteredJobs.filter(job =>
+          job.preferredTechnologies && technologies.some(technology =>
+            job.preferredTechnologies.map(tech => tech.toLowerCase()).includes(technology.toLowerCase())
+          )
+        );
+      }
+      if (jobType) {
+        filteredJobs = filteredJobs.filter(job =>
+          job.jobType.toLowerCase() === jobType.toLowerCase()
+        );
+      }
+      if (experience) {
+        filteredJobs = filteredJobs.filter(job =>
+          job.experience.toLowerCase() === experience.toLowerCase()
+        );
+      }
+      if (environment) {
+        filteredJobs = filteredJobs.filter(job =>
+          job.environment.toLowerCase() === environment.toLowerCase()
+        );
+      }
+
+      setJobs(filteredJobs);
+      setNoMoreJobs(false);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      setError("Error fetching jobs. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Simulate initial search on component mount
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   // search jobs handler
   const searchJobs = async () => {
     setLoading(true);
-    // API call to search jobs
-
-    // Simulating API call
-    setTimeout(() => {
+    try {
+      await fetchJobs(); // Call fetchJobs with the current filter values and search query
+    } catch (error) {
+      console.error("Error searching jobs:", error);
+      setError("Error searching jobs. Please try again.");
+    } finally {
       setLoading(false);
-      // set noMoreJobs to false if there are more jobs to load (simulating)
-      setNoMoreJobs(false);
-    }, 2000);
+    }
   };
 
   // clear filters handler
@@ -72,6 +144,7 @@ export default function SearchJobs() {
     setJobType("");
     setExperience("");
     setEnvironment("");
+    fetchJobs();
   };
 
   // change handlers for user inputs
@@ -336,10 +409,9 @@ export default function SearchJobs() {
 
             {/* Job Cards */}
             <Stack spacing={2}>
-              <JobCard />
-              <JobCard />
-              <JobCard />
-              <JobCard />
+            {jobs.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
             </Stack>
             {/* Pagination */}
             {noMoreJobs && (
