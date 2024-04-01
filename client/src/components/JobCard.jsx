@@ -1,15 +1,17 @@
 import React, { useState } from "react"; // Ensure useState is imported
+import { differenceInDays, formatDistanceToNow } from 'date-fns';
 
 // UI Imports
-import Card from "@mui/joy/Card";
-import CardContent from "@mui/joy/CardContent";
-import Typography from "@mui/joy/Typography";
-import Chip from "@mui/joy/Chip";
-import Stack from "@mui/joy/Stack";
-import Box from "@mui/joy/Box";
-import IconButton from "@mui/joy/IconButton";
-import Link from "@mui/joy/Link";
-import Avatar from "@mui/joy/Avatar";
+import {
+    Box,Card,
+    CardContent,
+    Chip,
+    IconButton,
+    Link,
+    Typography,
+    Stack,
+    Avatar
+} from "@mui/joy";
 
 // Assets Imports
 import companySizeIcon from "../assets/companySizeIcon.svg";
@@ -17,7 +19,7 @@ import timePostedIcon from "../assets/timePostedIcon.svg";
 import bookmarkActiveIcon from "../assets/bookmarkActiveIcon.svg";
 import bookmarkInactiveIcon from "../assets/bookmarkInactiveIcon.svg";
 
-const JobCard = () => {
+const JobCard = ({job}) => {
     // State to manage bookmark toggle
     const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -32,6 +34,9 @@ const JobCard = () => {
             // Add logic to add bookmark to user's list
         }
     };
+
+    const datePosted = new Date(job.datePosted);
+    const daysAgo = differenceInDays(new Date(), datePosted);
 
     // Handler function for card click
     const handleCardClick = () => {
@@ -88,7 +93,7 @@ const JobCard = () => {
                                             color="primary"
                                             sx={{ color: "#101828" }}
                                         >
-                                            Senior React Developer
+                                            {job.title}
                                         </Link>
                                         {/* Key facts */}
                                         <Stack
@@ -98,7 +103,7 @@ const JobCard = () => {
                                         >
                                             {/* Company Name */}
                                             <Typography level="title-md">
-                                                Ultralytics
+                                                {job.postedBy.name}
                                             </Typography>
                                             {/* Company Size */}
                                             <Typography
@@ -111,7 +116,7 @@ const JobCard = () => {
                                                     />
                                                 }
                                             >
-                                                10-20
+                                                 {job.postedBy.size}
                                             </Typography>
                                             {/* Time Posted */}
                                             <Typography
@@ -124,7 +129,11 @@ const JobCard = () => {
                                                     />
                                                 }
                                             >
-                                                3 days ago
+                                                {daysAgo === 0
+                                                    ? 'Today'
+                                                    : `${daysAgo} day${
+                                                          daysAgo > 1 ? 's' : ''
+                                                      } ago`}
                                             </Typography>
                                         </Stack>
                                     </Stack>
@@ -156,7 +165,7 @@ const JobCard = () => {
                                         }}
                                         variant="outlined"
                                     >
-                                        Full-time
+                                        {job.jobType}
                                     </Chip>
                                     {/* Add more chips as needed */}
                                 </Stack>
