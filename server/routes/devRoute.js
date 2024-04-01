@@ -7,8 +7,7 @@ const {
   getJobs,
 } = require("../controllers/devController");
 
-devRouter.post("/onboarding", devRegister);
-devRouter.patch("/profile", devEdit);
-devRouter.get("/getJobs", getJobs);
+devRouter.post("/profileSetup", devRegister);
+devRouter.patch("/profileEdit", devEdit);
 
 module.exports = devRouter;

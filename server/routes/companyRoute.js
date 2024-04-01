@@ -4,14 +4,10 @@ const cors = require("cors");
 const {
   companyRegister,
   companyEdit,
-  createJobPost,
 } = require("../controllers/companyController");
 
 //Handling Company Creation and Editing Routes
-companyRouter.post("/onboarding", companyRegister);
-companyRouter.patch("/profile", companyEdit);
-
-//Handling Create JobPost
-companyRouter.post("/createJobPost", createJobPost);
+companyRouter.post("/profileSetup", companyRegister);
+companyRouter.patch("/profileEdit", companyEdit);
 
 module.exports = companyRouter;

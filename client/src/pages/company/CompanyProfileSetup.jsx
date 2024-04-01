@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import onboardingIcon from "../../assets/onboardingIcon.svg";
-import Footer from "../../components/Footer";
+
+// Icons
+import profileSetupIcon from "../../assets/profileSetupIcon.svg";
+import Footer from "../../components/Footer.jsx";
 
 // UI Imports
 import {
@@ -27,15 +29,14 @@ import {
   companyTypes,
   industryTypes,
   countryNames,
-} from "../../globalConstants";
+} from "../../globalConstants.js";
 
-export default function CompanyOnboarding() {
-  const { userId } = useParams();
-  const navigate = useNavigate();
+import { apiRoutes, clientRoutes } from "../../routes.js";
 
+export default function CompanyProfileSetup() {  
   // State to control the visibility of form sections
   const [currentStep, setCurrentStep] = useState(1);
-
+  
   // Form fields state
   const [companyName, setCompanyName] = useState("");
   const [website, setWebsite] = useState("");
@@ -46,6 +47,12 @@ export default function CompanyOnboarding() {
   const [companyOverview, setCompanyOverview] = useState("");
   const [companyWorkCulture, setCompanyWorkCulture] = useState("");
   const [companyBenefits, setCompanyBenefits] = useState("");
+
+  // navigation
+  const navigate = useNavigate();
+  
+  // state received
+  const { userId } = useLocation();
 
   // Error handling state
   const [error, setError] = useState(null);
@@ -103,16 +110,16 @@ export default function CompanyOnboarding() {
       companyOverview,
       companyWorkCulture,
       companyBenefits,
-      userId,
+      userId
     };
 
     console.log("Request data before sending:", requestData);
 
     try {
-      const response = await axios.post("/company/onboarding", requestData);
+      const response = await axios.post(apiRoutes.company.register, requestData);
 
       console.log(response.data);
-      navigate(`/company/dashboard/${userId}`);
+      navigate(clientRoutes.companyDashboard, { userId: userId });
     } catch (error) {
       console.error("Error Submitting Form", error);
     }
@@ -140,8 +147,8 @@ export default function CompanyOnboarding() {
           }}
         >
           <img
-            src={onboardingIcon}
-            alt="onboardingIcon"
+            src={profileSetupIcon}
+            alt="profileSetup icon"
             style={{ width: "56px", marginBottom: "30px" }}
           />
           <Typography level="h1" sx={{ mb: 2, textAlign: "center" }}>

@@ -23,12 +23,7 @@ const devRegister = async (req, res) => {
 
     // Validate that portfolioLink and githubLink are provided
     if (!portfolioLink || !githubLink) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Portfolio link and Github link are required.",
-        });
+      return res.status(400).json({ success: false, message: "Portfolio link and Github link are required." });
     }
 
     const newUser = new Dev({
@@ -44,21 +39,13 @@ const devRegister = async (req, res) => {
       portfolio: portfolioLink,
       gitLink: githubLink,
     });
-
+    
     await newUser.save();
-
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "User registered successfully.",
-        newUser,
-      });
+  
+    res.status(201).json({ success: true, message: "User registered successfully.", newUser });
   } catch (error) {
     console.error("Error registering user:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Error registering user." });
+    res.status(500).json({ success: false, message: "Error registering user." });
   }
 };
 
