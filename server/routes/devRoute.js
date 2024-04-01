@@ -1,14 +1,9 @@
 const express = require("express");
 const devRouter = express.Router();
 const cors = require("cors");
-const {
-  devRegister,
-  devEdit,
-  getJobs,
-} = require("../controllers/devController");
+const { devRegister, devEdit } = require("../controllers/devController");
 
-devRouter.post("/onboarding", devRegister);
-devRouter.patch("/profile", devEdit);
-devRouter.get("/getJobs", getJobs);
+devRouter.post("/profileSetup", devRegister);
+devRouter.patch("/profileEdit", devEdit);
 
 module.exports = devRouter;

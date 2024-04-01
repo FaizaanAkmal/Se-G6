@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const companySchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User' 
   },
   name: {
     type: String,

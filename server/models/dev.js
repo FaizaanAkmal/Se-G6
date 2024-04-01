@@ -6,7 +6,7 @@ const devProfile = require("../models/dev");
 const devSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User' 
   },
   country: {
     type: String,
@@ -48,18 +48,14 @@ const devSchema = new Schema({
     type: String,
     required: true,
   },
-  jobHistory: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "JobPost",
-    },
-  ],
-  bookmarkedJobs: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "JobPost",
-    },
-  ],
+  jobHistory: [{
+    type: Schema.Types.ObjectId,
+    ref: 'JobPost',
+  }],
+  bookmarkedJobs: [{
+    type: Schema.Types.ObjectId,
+    ref: 'JobPost'
+  }]
 });
 
 const devModel = mongoose.model("Dev", devSchema);

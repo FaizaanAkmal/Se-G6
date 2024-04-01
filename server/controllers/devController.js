@@ -1,5 +1,4 @@
 const Dev = require("../models/dev");
-const Job = require("../models/jobpost");
 
 // TODO
 const devRegister = async (req, res) => {
@@ -23,12 +22,7 @@ const devRegister = async (req, res) => {
 
     // Validate that portfolioLink and githubLink are provided
     if (!portfolioLink || !githubLink) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Portfolio link and Github link are required.",
-        });
+      return res.status(400).json({ success: false, message: "Portfolio link and Github link are required." });
     }
 
     const newUser = new Dev({
@@ -44,21 +38,13 @@ const devRegister = async (req, res) => {
       portfolio: portfolioLink,
       gitLink: githubLink,
     });
-
+    
     await newUser.save();
-
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "User registered successfully.",
-        newUser,
-      });
+  
+    res.status(201).json({ success: true, message: "User registered successfully.", newUser });
   } catch (error) {
     console.error("Error registering user:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Error registering user." });
+    res.status(500).json({ success: false, message: "Error registering user." });
   }
 };
 
@@ -106,15 +92,4 @@ const devEdit = async (req, res) => {
   }
 };
 
-const getJobs = async (req, res) => {
-  try {
-    const jobs = await Job.find({ status: "open" }).populate("postedBy"); // Populate the 'postedBy' field with the entire Company object
-    // console.log("Jobs",jobs)
-
-    res.status(200).json(jobs);
-  } catch (error) {
-    console.error("Error fetching jobs:", error);
-    res.status(500).json({ message: "Error fetching jobs" });
-  }
-};
-module.exports = { devRegister, devEdit, getJobs };
+module.exports = { devRegister, devEdit };

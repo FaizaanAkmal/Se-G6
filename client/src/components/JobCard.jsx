@@ -1,5 +1,4 @@
 import React, { useState } from "react"; // Ensure useState is imported
-import { differenceInDays, formatDistanceToNow } from 'date-fns';
 
 // UI Imports
 import {
@@ -35,8 +34,11 @@ const JobCard = ({job}) => {
         }
     };
 
+    // Calculate days ago
     const datePosted = new Date(job.datePosted);
-    const daysAgo = differenceInDays(new Date(), datePosted);
+    const currentDate = new Date();
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const daysAgo = Math.round(Math.abs((currentDate - datePosted) / oneDay));
 
     // Handler function for card click
     const handleCardClick = () => {
