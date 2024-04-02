@@ -23,7 +23,7 @@ export default function DevDashboard() {
   const navigate = useNavigate();
 
   // state received
-  const { userId } = useLocation();
+  const { userId } = useLocation().state;
 
   const fetchJobsData = async () => {
     try {
