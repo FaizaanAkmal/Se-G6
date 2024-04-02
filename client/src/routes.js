@@ -12,6 +12,10 @@ const apiRoutes = {
     getAll: "/job/all",
     edit: "/job/edit",
     delete: "/job/delete",
+    addBookmark: (jobId,userId) => `/job/addBookmark/${jobId}/${userId}`,
+    removeBookmark: (jobId,userId) => `/job/removeBookmark/${jobId}/${userId}`,
+    getBookmarkedJobs: (userId) => `/job/getBookmarkedJobs/${userId}`,
+    getDevJobs: (userId) => `/job/getDevJobs/${userId}`,
   },
 
   // Developer Routes

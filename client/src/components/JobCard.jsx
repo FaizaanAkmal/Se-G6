@@ -1,5 +1,5 @@
-import React, { useState } from "react"; // Ensure useState is imported
-
+import  { useState,useEffect } from "react"; // Ensure useState is imported
+import axios from "axios";
 // UI Imports
 import {
     Box,Card,
@@ -11,28 +11,38 @@ import {
     Stack,
     Avatar
 } from "@mui/joy";
-
 // Assets Imports
 import companySizeIcon from "../assets/companySizeIcon.svg";
 import timePostedIcon from "../assets/timePostedIcon.svg";
 import bookmarkActiveIcon from "../assets/bookmarkActiveIcon.svg";
 import bookmarkInactiveIcon from "../assets/bookmarkInactiveIcon.svg";
+import { apiRoutes } from "../routes.js";
 
-const JobCard = ({job}) => {
+const JobCard = ({job, userId,bookmarkedJobs}) => {
     // State to manage bookmark toggle
-    const [isBookmarked, setIsBookmarked] = useState(false);
+    const [isBookmarked, setIsBookmarked] = useState(bookmarkedJobs.includes(job._id));
 
-    // Handler function for bookmark toggle
-    const handleBookmarkToggle = () => {
+    useEffect(() => {
+        setIsBookmarked(bookmarkedJobs.includes(job._id));
+    }, [bookmarkedJobs, job._id]);
+
+
+    // Handler function for bookmark togglex
+    const handleBookmarkToggle = async () => {
         setIsBookmarked(!isBookmarked);
+        try {
         if (isBookmarked) {
+            await axios.post(apiRoutes.job.removeBookmark(job._id), { userId,job });
             console.log("Bookmark Removed");
-            // Add logic to remove bookmark from user's list
         } else {
+            await axios.post(apiRoutes.job.addBookmark(job._id), { userId,job });
             console.log("Bookmark Added");
-            // Add logic to add bookmark to user's list
+        }
+        } catch (error) {
+        console.error("Error toggling bookmark:", error);
         }
     };
+
 
     // Calculate days ago
     const datePosted = new Date(job.datePosted);

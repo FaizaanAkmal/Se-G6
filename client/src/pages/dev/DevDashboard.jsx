@@ -11,19 +11,35 @@ import JobCard from "../../components/JobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
 // Routes Import
-import { apiRoutes, clientRoutes } from "../../routes.js";
+import { apiRoutes } from "../../routes.js";
 
 export default function DevDashboard() {
   const [activeTab, setActiveTab] = useState("All");
   const [loading, setLoading] = useState(false);
   const [noMoreJobs, setNoMoreJobs] = useState(true);
   const [jobs, setJobs] = useState([]);
+  const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
 
   // navigation
   const navigate = useNavigate();
 
   // state received
-  const { userId } = useLocation();
+  const location = useLocation();
+  const userId = location.state.userId
+
+  // Fetch bookmarked jobs once
+  useEffect(() => {
+    const fetchBookmarkedJobs = async () => {
+      try {
+        const response = await axios.get(apiRoutes.job.getBookmarkedJobs(userId));
+        setBookmarkedJobs(response.data);
+      } catch (error) {
+        console.error("Error fetching bookmarked jobs:", error);
+      }
+    };
+    fetchBookmarkedJobs();
+  }, [userId]);
+
 
   const fetchJobsData = async () => {
     try {
@@ -38,7 +54,6 @@ export default function DevDashboard() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchJobsData();
   }, []);
@@ -52,16 +67,33 @@ export default function DevDashboard() {
   };
 
   // Handler to change the active tab
-  const handleTabChange = (tab) => {
+  const handleTabChange = async (tab) => {
     setActiveTab(tab);
     if (tab === "Bookmarked") {
       // API call to get bookmarked jobs
+      try {
+        setLoading(true);
+        const response = await axios.get(apiRoutes.job.getDevJobs(userId));
+        setJobs(response.data);
+        setNoMoreJobs(false);
+      } catch (error) {
+        console.error("Error fetching bookmarked jobs:", error);
+      }
     }
     if (tab === "Applied") {
       // API call to get applied jobs
+      
     }
     if (tab === "All") {
       // API call to get all jobs
+      try {
+        setLoading(true);
+        const response = await axios.get(apiRoutes.job.getAll);
+        setJobs(response.data);
+        setNoMoreJobs(false);
+      } catch (error) {
+        console.error("Error fetching all jobs:", error);
+      }
     }
   };
 
@@ -144,12 +176,16 @@ export default function DevDashboard() {
           {activeTab === "All" && (
             <Stack spacing={2} mt={4}>
               {jobs.map((job) => (
-                <JobCard key={job._id} job={job} />
+               <JobCard key={job._id} job={job} userId={userId} bookmarkedJobs={bookmarkedJobs} />
               ))}
             </Stack>
           )}
           {activeTab === "Bookmarked" && (
-            <div>{/* Content for Bookmarked */}</div>
+            <Stack spacing={2} mt={4}>
+            {jobs.map((job) => (
+             <JobCard key={job._id} job={job} userId={userId} bookmarkedJobs={bookmarkedJobs} />
+            ))}
+          </Stack>
           )}
           {activeTab === "Applied" && <div>{/* Content for Applied */}</div>}
 

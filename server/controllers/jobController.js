@@ -1,5 +1,6 @@
 const JobPost = require("../models/jobpost");
 const Company = require("../models/company");
+const Developer = require("../models/dev")
 
 //creating a new job post
 const createJob = async (req, res) => {
@@ -77,4 +78,74 @@ const deleteJob = async (req, res) => {
   // TODO: remove Job with job_id in req
 };
 
-module.exports = { createJob, getJob, getAllJobs, editJob, deleteJob };
+// Adding BookMark Jobs
+const addBookmark = async (req, res) => {
+  try {
+    const { userId, job } = req.body;
+    // Find the developer based on the userId
+    const developer = await Developer.findOne({ userId });
+    // Add the job to the developer's bookmarkedJobs array
+    developer.bookmarkedJobs.push(job);
+    await developer.save();
+
+    res.status(200).json({ message: "Job bookmarked successfully" });
+  } catch (error) {
+    console.error("Error adding bookmark:", error);
+    res.status(500).json({ message: "Error adding bookmark" });
+  }
+};
+
+
+// Removing BookMark Jobs
+const removeBookmark = async (req, res) => {
+  try {
+    const { userId, job } = req.body;
+    const { _id: jobId } = job; 
+
+
+    // Find the developer based on the userId
+    const developer = await Developer.findOne({ userId });
+
+    // Remove the job from the developer's bookmarkedJobs array
+    developer.bookmarkedJobs = developer.bookmarkedJobs.filter(
+      (job) => job.toString() !== jobId
+    );
+    await developer.save();
+
+    res.status(200).json({ message: "Bookmark removed successfully" });
+  } catch (error) {
+    console.error("Error removing bookmark:", error);
+    res.status(500).json({ message: "Error removing bookmark" });
+  }
+};
+
+
+//Getting BookMarked jobs
+const getBookmarkedJobs = async (req, res) => {
+  try {
+      const { userId } = req.params;
+      const developer = await Developer.findOne({ userId });
+      const bookmarkedJobs = developer.bookmarkedJobs;
+      res.status(200).json(bookmarkedJobs);
+  } catch (error) {
+      console.error("Error fetching bookmarked jobs:", error);
+      res.status(500).json({ message: "Error fetching bookmarked jobs" });
+  }
+};
+
+
+//Getting Specific Developer Jobs
+const getDevJobs = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const developer = await Developer.findOne({ userId });
+    const bookmarkedJobs = developer.bookmarkedJobs;
+    const jobs = await JobPost.find({ _id: { $in: bookmarkedJobs } }).populate('postedBy');
+    res.status(200).json(jobs);
+  } catch (error) {
+    console.error("Error fetching bookmarked jobs:", error);
+    res.status(500).json({ message: "Error fetching bookmarked jobs" });
+  }
+};
+
+module.exports = { createJob, getJob, getAllJobs, editJob, deleteJob,addBookmark,removeBookmark,getBookmarkedJobs,getDevJobs };
