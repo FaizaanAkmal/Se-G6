@@ -22,7 +22,7 @@ export default function CompanyDashboard() {
     const navigate = useNavigate();
 
     // state received
-    const { userId } = useLocation();
+    const { userId } = useLocation().state;
 
     // Load jobs based on active tab
     const loadJobs = async () => {
@@ -49,7 +49,7 @@ export default function CompanyDashboard() {
     // Handler for "Post a Job" button
     const handlePostJob = () => {
         // Redirect to job posting page
-        navigate(clientRoutes.postAJob, {state: {userId: userId}});
+        navigate(clientRoutes.postAJob, {state: {userId: userId} });
     };
 
     return (
