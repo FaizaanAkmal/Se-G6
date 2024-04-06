@@ -3,6 +3,7 @@ const apiRoutes = {
   user: {
     register: "/user/register",
     login: "/user/login",
+    getUser: "/user/getUser"
   },
 
   // Job Routes
@@ -24,6 +25,7 @@ const apiRoutes = {
   company: {
     register: "/company/profileSetup",
     edit: "/company/profileEdit",
+    getProfile: "/company/getProfile"
   },
 };
 
@@ -38,6 +40,7 @@ const clientRoutes = {
   postAJob: "/postAJob",
   searchJobs: "/dev/search",
   devSettings: "/dev/settings",
+  companySettings: "/company/settings"
 };
 
 export { apiRoutes, clientRoutes };

@@ -89,4 +89,18 @@ const companyEdit = async (req, res) => {
   }
 };
 
-module.exports = { companyRegister, companyEdit };
+const getCompany = async (req, res) => {
+  const companyId = req.params.id;
+  try {
+    //const company = await Company.findById(companyId);
+    const company = await Company.findOne({ userId: companyId });
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found' });
+    }
+    res.status(200).json(company);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+module.exports = { companyRegister, companyEdit, getCompany };

@@ -38,8 +38,6 @@ import {
 import { apiRoutes, clientRoutes } from "../../routes.js";
 
 export default function PostAJob() {
-  const { userId } = useParams();
-  console.log("UserId Here: ", userId);
 
   // form fields state
   const [title, setTitle] = useState("");

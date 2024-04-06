@@ -4,10 +4,11 @@ const cors = require("cors");
 const {
   companyRegister,
   companyEdit,
+  getCompany
 } = require("../controllers/companyController");
 
 //Handling Company Creation and Editing Routes
 companyRouter.post("/profileSetup", companyRegister);
 companyRouter.patch("/profileEdit", companyEdit);
-
+companyRouter.get("/getProfile/:id", getCompany);
 module.exports = companyRouter;
