@@ -7,6 +7,7 @@ import { apiRoutes } from "../../routes.js";
 
 // Custom Components
 import DevNavbar from "../../components/DevNavbar.jsx";
+import DevApplyJob from "../../components/DevApplyJob.jsx";
 import Footer from "../../components/Footer.jsx";
 
 // Custom Assets
@@ -20,13 +21,8 @@ import visitWebsiteIcon from "../../assets/visitWebsiteIcon.svg";
 import {
     Typography,
     Button,
-    Input,
     Stack,
-    Select,
-    Option,
-    Autocomplete,
     Avatar,
-    Alert,
     Chip,
     IconButton,
     Grid,
@@ -50,10 +46,6 @@ export default function DevIndividualJob() {
         } catch (error) {
             console.error("Error toggling bookmark:", error);
         }
-    };
-    const handleApplyNow = () => {
-        console.log("Apply Now");
-        // TO DO: open apply now modal
     };
     const handleVisitWebsite = () => {
         console.log("Visit Website");
@@ -257,13 +249,7 @@ export default function DevIndividualJob() {
                                     </Stack>
                                 </Grid>
                                 <Grid item md={4}>
-                                    <Button
-                                        onClick={handleApplyNow}
-                                        size="lg"
-                                        fullWidth
-                                    >
-                                        Apply Now
-                                    </Button>
+                                    <DevApplyJob />
                                 </Grid>
                             </Grid>
                         </Stack>
@@ -287,13 +273,7 @@ export default function DevIndividualJob() {
                                         career? Apply now!
                                     </Typography>
                                 </Stack>
-                                <Button
-                                    onClick={handleApplyNow}
-                                    size="lg"
-                                    fullWidth
-                                >
-                                    Apply Now
-                                </Button>
+                                <DevApplyJob />
                             </Stack>
                         </Grid>
                         <Grid item mt={4}>
