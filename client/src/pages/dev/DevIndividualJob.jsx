@@ -9,6 +9,7 @@ import { apiRoutes } from "../../routes.js";
 import DevNavbar from "../../components/DevNavbar.jsx";
 import DevApplyJob from "../../components/DevApplyJob.jsx";
 import Footer from "../../components/Footer.jsx";
+import DevJobRecs from "../../components/DevJobRecs.jsx";
 
 // Custom Assets
 import companySizeIcon from "../../assets/companySizeIcon.svg";
@@ -55,7 +56,6 @@ export default function DevIndividualJob() {
     return (
         <>
             <DevNavbar />
-
             <Stack spacing={0}>
                 {/* Hero Section */}
                 <Grid
@@ -70,7 +70,7 @@ export default function DevIndividualJob() {
                     <Grid
                         item
                         xs={12}
-                        md={10}
+                        md={10.1}
                         sx={{
                             p: 6,
                             display: "flex",
@@ -143,6 +143,7 @@ export default function DevIndividualJob() {
                         </Stack>
                     </Grid>
                 </Grid>
+                {/* Details */}
                 <Grid
                     container
                     xs={12}
@@ -522,6 +523,7 @@ export default function DevIndividualJob() {
                     </Grid>
                 </Grid>
             </Stack>
+            <DevJobRecs />
             <Footer />
         </>
     );
