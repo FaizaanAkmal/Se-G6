@@ -10,6 +10,7 @@ import { apiRoutes } from "../../routes.js";
 import DevNavbar from "../../components/DevNavbar.jsx";
 import DevApplyJob from "../../components/DevApplyJob.jsx";
 import Footer from "../../components/Footer.jsx";
+import DevJobRecs from "../../components/DevJobRecs.jsx";
 
 // Custom Assets
 import companySizeIcon from "../../assets/companySizeIcon.svg";
@@ -17,6 +18,10 @@ import timePostedIcon from "../../assets/timePostedIcon.svg";
 import bookmarkActiveIcon from "../../assets/bookmarkActiveIcon.svg";
 import bookmarkInactiveIcon from "../../assets/bookmarkInactiveIcon.svg";
 import visitWebsiteIcon from "../../assets/visitWebsiteIcon.svg";
+import appliedIcon from "../../assets/appliedIcon.svg";
+import offerPendingIcon from "../../assets/offerPendingIcon.svg";
+import offerAcceptedIcon from "../../assets/offerAcceptedIcon.svg";
+import offerRejectedIcon from "../../assets/offerRejectedIcon.svg";
 
 // UI Imports
 import {
@@ -32,19 +37,23 @@ import {
 export default function DevIndividualJob() {
     const [isBookmarked, setIsBookmarked] = useState(null);
 
-    //Handling The Data Received
+    // Job Application Status
+    const [applied, setApplied] = useState(false);
+    const [pendingOffer, setPendingOffer] = useState(false);
+    const [offerAccepted, setOfferAccepted] = useState(false);
+    const [offerRejected, setOfferRejected] = useState(false);
+
+    // Handling The Data Received
     const location = useLocation();
     const userId = location.state.userId;
     const job = location.state.job;
 
     console.log("userid: ", userId);
 
-
     const datePosted = new Date(job.datePosted);
     const currentDate = new Date();
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const daysAgo = Math.round(Math.abs((currentDate - datePosted) / oneDay));
- 
 
     // Button handlers
     const handleBookmarkToggle = async () => {
@@ -64,13 +73,29 @@ export default function DevIndividualJob() {
     };
     const handleVisitWebsite = () => {
         console.log("Visit Website");
-        // TO DO: open the company website in a new tab
+        let websiteUrl = job.postedBy.website;
+        // Check if the website URL is available and prepend with 'http://' if missing
+        if (websiteUrl && !websiteUrl.startsWith("http")) {
+            websiteUrl = "http://" + websiteUrl;
+        }
+        // Open the website in a new tab
+        window.open(websiteUrl, "_blank");
+    };
+
+    // Formats compensation to USD
+    const formatCompenstation = (compensation) => {
+        let USDollar = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumSignificantDigits: 3,
+        });
+
+        return `~ ${USDollar.format(compensation)}/yr`;
     };
 
     return (
         <>
             <DevNavbar />
-
             <Stack spacing={0}>
                 {/* Hero Section */}
                 <Grid
@@ -85,7 +110,7 @@ export default function DevIndividualJob() {
                     <Grid
                         item
                         xs={12}
-                        md={10}
+                        md={10.1}
                         sx={{
                             p: 6,
                             display: "flex",
@@ -96,7 +121,7 @@ export default function DevIndividualJob() {
                             {/* Company Logo */}
                             <Avatar
                                 size="lg"
-                                alt="CompanyName"
+                                alt={job.postedBy.name}
                                 src="companyLogo"
                                 color="primary"
                             />
@@ -114,6 +139,83 @@ export default function DevIndividualJob() {
                                 <Typography level="title-lg">
                                     {job.postedBy.name}
                                 </Typography>
+
+                                {/* Applied */}
+                                {applied && (
+                                    <Typography
+                                        level="title-lg"
+                                        sx={{
+                                            color: "#6941C6",
+                                        }}
+                                        startDecorator={
+                                            <img
+                                                src={appliedIcon}
+                                                width={"24px"}
+                                                alt="Applied Icon"
+                                            ></img>
+                                        }
+                                    >
+                                        Applied
+                                    </Typography>
+                                )}
+
+                                {/* Offer Pending */}
+                                {pendingOffer && (
+                                    <Typography
+                                        level="title-lg"
+                                        sx={{
+                                            color: "#F79009",
+                                        }}
+                                        startDecorator={
+                                            <img
+                                                src={offerPendingIcon}
+                                                width={"24px"}
+                                                alt="Offer Pending Icon"
+                                            ></img>
+                                        }
+                                    >
+                                        Offered
+                                    </Typography>
+                                )}
+
+                                {/* Offer Accepted */}
+                                {offerAccepted && (
+                                    <Typography
+                                        level="title-lg"
+                                        sx={{
+                                            color: "#027A48",
+                                        }}
+                                        startDecorator={
+                                            <img
+                                                src={offerAcceptedIcon}
+                                                width={"20px"}
+                                                alt="Offer Accepted Icon"
+                                            ></img>
+                                        }
+                                    >
+                                        Offer accepted
+                                    </Typography>
+                                )}
+
+                                {/* Offer Rejected */}
+                                {offerRejected && (
+                                    <Typography
+                                        level="title-lg"
+                                        sx={{
+                                            color: "#D32F2F",
+                                        }}
+                                        startDecorator={
+                                            <img
+                                                src={offerRejectedIcon}
+                                                width={"20px"}
+                                                alt="Offer Rejected Icon"
+                                            ></img>
+                                        }
+                                    >
+                                        Offer rejected
+                                    </Typography>
+                                )}
+
                                 {/* Company Size */}
                                 <Typography
                                     level="title-lg"
@@ -141,10 +243,10 @@ export default function DevIndividualJob() {
                                     }
                                 >
                                     {daysAgo === 0
-                                    ? "Today"
-                                    : `${daysAgo} day${
-                                            daysAgo > 1 ? "s" : ""
-                                        } ago`}
+                                        ? "Today"
+                                        : `${daysAgo} day${
+                                              daysAgo > 1 ? "s" : ""
+                                          } ago`}
                                 </Typography>
                                 {/* Bookmark Button */}
                                 <IconButton onClick={handleBookmarkToggle}>
@@ -162,6 +264,7 @@ export default function DevIndividualJob() {
                         </Stack>
                     </Grid>
                 </Grid>
+                {/* Details */}
                 <Grid
                     container
                     xs={12}
@@ -178,31 +281,34 @@ export default function DevIndividualJob() {
                             <Stack spacing={2}>
                                 <Typography level="h2">Description</Typography>
                                 <Typography level="body-lg" color="neutral">
-                                   
-                                   {job.description.split('\n').map((line, index) => (
-                                        <React.Fragment key={index}>
-                                            {line}
-                                            <br />
-                                        </React.Fragment>
-                                    ))}
+                                    {job.description
+                                        .split("\n")
+                                        .map((line, index) => (
+                                            <React.Fragment key={index}>
+                                                {line}
+                                                <br />
+                                            </React.Fragment>
+                                        ))}
                                 </Typography>
                             </Stack>
                             {/* Requirements */}
                             <Stack spacing={2}>
                                 <Typography level="h2">Requirements</Typography>
                                 <Typography level="body-lg" color="neutral">
-                                    {job.requirement.split('\n').map((line, index) => (
-                                        <div key={index}>
-                                        - {line}
-                                        <br />
-                                        </div>
-                                    ))}
+                                    {job.requirement
+                                        .split("\n")
+                                        .map((line, index) => (
+                                            <React.Fragment key={index}>
+                                                - {line}
+                                                <br />
+                                            </React.Fragment>
+                                        ))}
                                 </Typography>
                             </Stack>
                             {/* About the Company */}
                             <Stack spacing={2}>
                                 <Typography level="h2">
-                                    About Ultralytics
+                                    About {job.postedBy.name}
                                 </Typography>
                                 <Typography level="body-lg" color="neutral">
                                     {job.postedBy.overview}
@@ -233,7 +339,10 @@ export default function DevIndividualJob() {
                                     </Stack>
                                 </Grid>
                                 <Grid item md={4}>
-                                    <DevApplyJob userId={userId} jobId={job._id} />
+                                    <DevApplyJob
+                                        userId={userId}
+                                        jobId={job._id}
+                                    />
                                 </Grid>
                             </Grid>
                         </Stack>
@@ -281,25 +390,31 @@ export default function DevIndividualJob() {
                                             Posted on
                                         </Typography>
                                         <Typography level="title-md">
-                                            {new Date(job.datePosted).toLocaleDateString("en-GB", {
+                                            {new Date(
+                                                job.datePosted
+                                            ).toLocaleDateString("en-GB", {
                                                 day: "numeric",
                                                 month: "long",
-                                                year: "numeric"
+                                                year: "numeric",
                                             })}
                                         </Typography>
                                     </Stack>
                                     {/* Compensation (show if given) */}
-                                    <Stack>
-                                        <Typography
-                                            level="title-md"
-                                            color="neutral"
-                                        >
-                                            Compensation
-                                        </Typography>
-                                        <Typography level="title-md">
-                                            {`$${job.compensation}/yr`}
-                                        </Typography>
-                                    </Stack>
+                                    {job.compensation && (
+                                        <Stack>
+                                            <Typography
+                                                level="title-md"
+                                                color="neutral"
+                                            >
+                                                Compensation
+                                            </Typography>
+                                            <Typography level="title-md">
+                                                {formatCompenstation(
+                                                    job.compensation
+                                                )}
+                                            </Typography>
+                                        </Stack>
+                                    )}
                                     {/* Job Logistics */}
                                     <Stack spacing={0.8}>
                                         <Typography
@@ -347,93 +462,110 @@ export default function DevIndividualJob() {
                                         </Stack>
                                     </Stack>
                                     {/* Skills */}
-                                    <Stack spacing={0.8}>
-                                        <Typography
-                                            level="title-md"
-                                            color="neutral"
-                                        >
-                                            Skills
-                                        </Typography>
-                                        <Stack
-                                            direction="row"
-                                            spacing={1}
-                                            flexWrap="wrap"
-                                            useFlexGap
-                                        >
-                                            {/* Map chips according to no. of skills specified */}
-                                            {job.preferredSkills.map((skill,index) => (
-                                                <Chip
-                                                    key={index}
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    {skill}
-                                                </Chip>
-                                            ))}
+                                    {job.preferredSkills.length > 0 && (
+                                        <Stack spacing={0.8}>
+                                            <Typography
+                                                level="title-md"
+                                                color="neutral"
+                                            >
+                                                Skills
+                                            </Typography>
+                                            <Stack
+                                                direction="row"
+                                                spacing={1}
+                                                flexWrap="wrap"
+                                                useFlexGap
+                                            >
+                                                {/* Map chips according to no. of skills specified */}
+                                                {job.preferredSkills.map(
+                                                    (skill, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            sx={{
+                                                                "--Chip-radius":
+                                                                    "6px",
+                                                                borderColor:
+                                                                    "#D0D5DD",
+                                                            }}
+                                                            variant="outlined"
+                                                        >
+                                                            {skill}
+                                                        </Chip>
+                                                    )
+                                                )}
+                                            </Stack>
                                         </Stack>
-                                    </Stack>
+                                    )}
                                     {/* Technologies */}
-                                    <Stack spacing={0.8}>
-                                        <Typography
-                                            level="title-md"
-                                            color="neutral"
-                                        >
-                                            Technologies
-                                        </Typography>
-                                        <Stack
-                                            direction="row"
-                                            spacing={1}
-                                            flexWrap="wrap"
-                                            useFlexGap
-                                        >
-                                            {/* Map chips according to no. of technologies specified */}
-                                            {job.preferredTechnologies.map((technology,index) => (
-                                                <Chip
-                                                    key={index}
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    {technology}
-                                                </Chip>
-                                            ))}
+                                    {job.preferredTechnologies.length > 0 && (
+                                        <Stack spacing={0.8}>
+                                            <Typography
+                                                level="title-md"
+                                                color="neutral"
+                                            >
+                                                Technologies
+                                            </Typography>
+                                            <Stack
+                                                direction="row"
+                                                spacing={1}
+                                                flexWrap="wrap"
+                                                useFlexGap
+                                            >
+                                                {/* Map chips according to no. of technologies specified */}
+                                                {job.preferredTechnologies.map(
+                                                    (technology, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            sx={{
+                                                                "--Chip-radius":
+                                                                    "6px",
+                                                                borderColor:
+                                                                    "#D0D5DD",
+                                                            }}
+                                                            variant="outlined"
+                                                        >
+                                                            {technology}
+                                                        </Chip>
+                                                    )
+                                                )}
+                                            </Stack>
                                         </Stack>
-                                    </Stack>
+                                    )}
                                     {/* Programming Languages */}
-                                    <Stack spacing={0.8}>
-                                        <Typography
-                                            level="title-md"
-                                            color="neutral"
-                                        >
-                                            Programming Languages
-                                        </Typography>
-                                        <Stack
-                                            direction="row"
-                                            spacing={1}
-                                            flexWrap="wrap"
-                                            useFlexGap
-                                        >
-                                            {/* Map chips according to no. of programming langs specified */}
-                                            {job.preferredLanguages.map((language,index) => (
-                                                <Chip
-                                                    key={index}
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    {language}
-                                                </Chip>
-                                            ))}
-                                            
+                                    {job.preferredLanguages.length > 0 && (
+                                        <Stack spacing={0.8}>
+                                            <Typography
+                                                level="title-md"
+                                                color="neutral"
+                                            >
+                                                Programming Languages
+                                            </Typography>
+                                            <Stack
+                                                direction="row"
+                                                spacing={1}
+                                                flexWrap="wrap"
+                                                useFlexGap
+                                            >
+                                                {/* Map chips according to no. of programming langs specified */}
+                                                {job.preferredLanguages.map(
+                                                    (language, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            sx={{
+                                                                "--Chip-radius":
+                                                                    "6px",
+                                                                borderColor:
+                                                                    "#D0D5DD",
+                                                            }}
+                                                            variant="outlined"
+                                                        >
+                                                            {language}
+                                                        </Chip>
+                                                    )
+                                                )}
+                                            </Stack>
                                         </Stack>
-                                    </Stack>
+                                    )}
                                 </Stack>
                                 {/* Visit Website Button */}
                                 <Button
@@ -457,6 +589,7 @@ export default function DevIndividualJob() {
                     </Grid>
                 </Grid>
             </Stack>
+            <DevJobRecs />
             <Footer />
         </>
     );

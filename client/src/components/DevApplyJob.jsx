@@ -13,10 +13,6 @@ import {
     Typography,
     Button,
     Stack,
-    Avatar,
-    Chip,
-    IconButton,
-    Grid,
     Modal,
     ModalDialog,
     ModalClose,
@@ -24,7 +20,6 @@ import {
     DialogContent,
     FormControl,
     FormLabel,
-    Input,
     Textarea,
     Alert,
     Snackbar,
@@ -66,27 +61,27 @@ export default function DevApplyJob(props) {
 
     const handleApplicationSubmit = async (event) => {
         event.preventDefault();
-    
+
         // Simulate loading state (remove when implemented)
         setSubmitLoading(true);
-    
+
         try {
             // Make the API call to submit the application
             const response = await axios.post(apiRoutes.dev.application, {
                 userId: props.userId,
                 jobId: props.jobId,
-                coverLetter: coverLetter
+                coverLetter: coverLetter,
             });
 
-            console.log("Response Received: ",response)
-    
+            console.log("Response Received: ", response);
+
             // Simulate successful submission
             setOpenSnackbar(true); // Open the snackbar
             setOpen(false); // Close the modal
             setSubmitLoading(false);
             setSubmitted(true);
         } catch (error) {
-            console.log("Error: ",error)
+            console.log("Error: ", error);
             // Handle error
             setError(error.response.data.message);
             setSubmitLoading(false);
@@ -99,9 +94,24 @@ export default function DevApplyJob(props) {
 
     return (
         <>
-            <Button onClick={handleOpen} size="lg" fullWidth>
+            <Button
+                onClick={handleOpen}
+                size="lg"
+                fullWidth
+                disabled={submitted}
+            >
                 Apply Now
             </Button>
+            {submitted && (
+                <Typography
+                    level="body-xs"
+                    color="neutral"
+                    align="center"
+                    mt={1}
+                >
+                    You have already applied for this job.
+                </Typography>
+            )}
             <Modal open={open} onClose={handleClose}>
                 <ModalDialog
                     color="neutral"
@@ -143,7 +153,7 @@ export default function DevApplyJob(props) {
                                     value={coverLetter}
                                     onChange={handleCoverLetterChange}
                                     minRows={10}
-                                    maxRows={16}
+                                    maxRows={12}
                                     slotProps={{
                                         textarea: { maxLength: 5000 },
                                     }}
@@ -179,8 +189,8 @@ export default function DevApplyJob(props) {
                 size="lg"
                 onClose={closeSnackbar}
                 anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
+                    vertical: "top",
+                    horizontal: "center",
                 }}
                 endDecorator={
                     <Button
