@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"; // Ensure useState is imported
 import axios from "axios";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 // UI Imports
 import {
     Box,
@@ -32,27 +32,55 @@ import offerRejectedIcon from "../assets/offerRejectedIcon.svg";
 import offerPendingIcon from "../assets/offerPendingIcon.svg";
 import acceptIcon from "../assets/acceptIcon.svg";
 import rejectIcon from "../assets/rejectIcon.svg";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 // Routes Import
 import { apiRoutes } from "../routes.js";
 
-const JobCard = ({ job, userId, setBookmarkedJobs, bookmarkedJobs, appliedJobs, offeredJobs }) => {
+const JobCard = ({
+    job,
+    userId,
+    setBookmarkedJobs,
+    bookmarkedJobs,
+    appliedJobs,
+    offeredJobs,
+}) => {
     // To Navigate
     const navigate = useNavigate();
 
     // Application Status
-    const [applied, setApplied] = useState(appliedJobs.some((appliedJob) => appliedJob._id === job._id));
-    const [pendingOffer, setPendingOffer] = useState(offeredJobs.some((offeredJob) => offeredJob._id === job._id && !offeredJob.offerAccepted && !offeredJob.offerRejected));
-    const [offerAccepted, setOfferAccepted] = useState(offeredJobs.some((offeredJob) => offeredJob._id === job._id && offeredJob.offerAccepted));
-    const [offerRejected, setOfferRejected] = useState(offeredJobs.some((offeredJob) => offeredJob._id === job._id && offeredJob.offerRejected));
+    const [applied, setApplied] = useState(
+        appliedJobs.some((appliedJob) => appliedJob._id === job._id)
+    );
+    const [pendingOffer, setPendingOffer] = useState(
+        offeredJobs.some(
+            (offeredJob) =>
+                offeredJob._id === job._id &&
+                !offeredJob.offerAccepted &&
+                !offeredJob.offerRejected
+        )
+    );
+    const [offerAccepted, setOfferAccepted] = useState(
+        offeredJobs.some(
+            (offeredJob) =>
+                offeredJob._id === job._id && offeredJob.offerAccepted
+        )
+    );
+    const [offerRejected, setOfferRejected] = useState(
+        offeredJobs.some(
+            (offeredJob) =>
+                offeredJob._id === job._id && offeredJob.offerRejected
+        )
+    );
 
     // Modal State
     const [openRejectModal, setOpenRejectModal] = useState(false);
     const [openAcceptModal, setOpenAcceptModal] = useState(false);
 
     // State to manage bookmark toggle
-    const [isBookmarked, setIsBookmarked] = useState(bookmarkedJobs.some(bJob => bJob._id === job._id));
+    const [isBookmarked, setIsBookmarked] = useState(
+        bookmarkedJobs.some((bJob) => bJob._id === job._id)
+    );
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -60,15 +88,17 @@ const JobCard = ({ job, userId, setBookmarkedJobs, bookmarkedJobs, appliedJobs, 
     // Hadnling Bookmarks
     const handleBookmarkToggle = async () => {
         // Use the functional form of setState to ensure the correct value is used
-        setIsBookmarked(prevIsBookmarked => !prevIsBookmarked);
+        setIsBookmarked((prevIsBookmarked) => !prevIsBookmarked);
         setBookmarkedJobs((prevBookmarkedJobs) => {
             if (!prevBookmarkedJobs.some((bJob) => bJob._id === job._id)) {
                 return [...prevBookmarkedJobs, job];
             } else {
-                return prevBookmarkedJobs.filter((bJob) => bJob._id !== job._id);
+                return prevBookmarkedJobs.filter(
+                    (bJob) => bJob._id !== job._id
+                );
             }
         });
-        
+
         try {
             const response = await axios.put(apiRoutes.job.updateBookmarks, {
                 userId,
@@ -83,7 +113,6 @@ const JobCard = ({ job, userId, setBookmarkedJobs, bookmarkedJobs, appliedJobs, 
     useEffect(() => {
         setIsBookmarked(bookmarkedJobs.some((bJob) => bJob._id === job._id));
     }, [bookmarkedJobs, job._id]);
-
 
     const handleRejectOffer = async () => {
         // API call to reject offer
@@ -142,9 +171,9 @@ const JobCard = ({ job, userId, setBookmarkedJobs, bookmarkedJobs, appliedJobs, 
         job: PropTypes.object.isRequired,
         userId: PropTypes.string.isRequired,
         setBookmarkedJobs: PropTypes.func.isRequired,
-        bookmarkedJobs :PropTypes.array.isRequired,
-        appliedJobs :PropTypes.array.isRequired,
-        offeredJobs :PropTypes.array.isRequired,
+        bookmarkedJobs: PropTypes.array.isRequired,
+        appliedJobs: PropTypes.array.isRequired,
+        offeredJobs: PropTypes.array.isRequired,
     };
 
     return (
@@ -168,7 +197,7 @@ const JobCard = ({ job, userId, setBookmarkedJobs, bookmarkedJobs, appliedJobs, 
                         {/* Company Logo */}
                         <Avatar
                             size="lg"
-                            alt="CompanyName"
+                            alt={job.postedBy.name}
                             src="companyLogo"
                             color="primary"
                         />
