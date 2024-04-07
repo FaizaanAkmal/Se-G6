@@ -18,6 +18,10 @@ import timePostedIcon from "../../assets/timePostedIcon.svg";
 import bookmarkActiveIcon from "../../assets/bookmarkActiveIcon.svg";
 import bookmarkInactiveIcon from "../../assets/bookmarkInactiveIcon.svg";
 import visitWebsiteIcon from "../../assets/visitWebsiteIcon.svg";
+import appliedIcon from "../../assets/appliedIcon.svg";
+import offerPendingIcon from "../../assets/offerPendingIcon.svg";
+import offerAcceptedIcon from "../../assets/offerAcceptedIcon.svg";
+import offerRejectedIcon from "../../assets/offerRejectedIcon.svg";
 
 // UI Imports
 import {
@@ -33,7 +37,13 @@ import {
 export default function DevIndividualJob() {
     const [isBookmarked, setIsBookmarked] = useState(null);
 
-    //Handling The Data Received
+    // Job Application Status
+    const [applied, setApplied] = useState(false);
+    const [pendingOffer, setPendingOffer] = useState(false);
+    const [offerAccepted, setOfferAccepted] = useState(false);
+    const [offerRejected, setOfferRejected] = useState(false);
+
+    // Handling The Data Received
     const location = useLocation();
     const userId = location.state.userId;
     const job = location.state.job;
@@ -129,6 +139,83 @@ export default function DevIndividualJob() {
                                 <Typography level="title-lg">
                                     {job.postedBy.name}
                                 </Typography>
+
+                                {/* Applied */}
+                                {applied && (
+                                    <Typography
+                                        level="title-lg"
+                                        sx={{
+                                            color: "#6941C6",
+                                        }}
+                                        startDecorator={
+                                            <img
+                                                src={appliedIcon}
+                                                width={"24px"}
+                                                alt="Applied Icon"
+                                            ></img>
+                                        }
+                                    >
+                                        Applied
+                                    </Typography>
+                                )}
+
+                                {/* Offer Pending */}
+                                {pendingOffer && (
+                                    <Typography
+                                        level="title-lg"
+                                        sx={{
+                                            color: "#F79009",
+                                        }}
+                                        startDecorator={
+                                            <img
+                                                src={offerPendingIcon}
+                                                width={"24px"}
+                                                alt="Offer Pending Icon"
+                                            ></img>
+                                        }
+                                    >
+                                        Offered
+                                    </Typography>
+                                )}
+
+                                {/* Offer Accepted */}
+                                {offerAccepted && (
+                                    <Typography
+                                        level="title-lg"
+                                        sx={{
+                                            color: "#027A48",
+                                        }}
+                                        startDecorator={
+                                            <img
+                                                src={offerAcceptedIcon}
+                                                width={"20px"}
+                                                alt="Offer Accepted Icon"
+                                            ></img>
+                                        }
+                                    >
+                                        Offer accepted
+                                    </Typography>
+                                )}
+
+                                {/* Offer Rejected */}
+                                {offerRejected && (
+                                    <Typography
+                                        level="title-lg"
+                                        sx={{
+                                            color: "#D32F2F",
+                                        }}
+                                        startDecorator={
+                                            <img
+                                                src={offerRejectedIcon}
+                                                width={"20px"}
+                                                alt="Offer Rejected Icon"
+                                            ></img>
+                                        }
+                                    >
+                                        Offer rejected
+                                    </Typography>
+                                )}
+
                                 {/* Company Size */}
                                 <Typography
                                     level="title-lg"
