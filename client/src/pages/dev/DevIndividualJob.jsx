@@ -40,12 +40,10 @@ export default function DevIndividualJob() {
 
     console.log("userid: ", userId);
 
-
     const datePosted = new Date(job.datePosted);
     const currentDate = new Date();
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const daysAgo = Math.round(Math.abs((currentDate - datePosted) / oneDay));
- 
 
     // Button handlers
     const handleBookmarkToggle = async () => {
@@ -65,7 +63,13 @@ export default function DevIndividualJob() {
     };
     const handleVisitWebsite = () => {
         console.log("Visit Website");
-        // TO DO: open the company website in a new tab
+        let websiteUrl = job.postedBy.website;
+        // Check if the website URL is available and prepend with 'http://' if missing
+        if (websiteUrl && !websiteUrl.startsWith("http")) {
+            websiteUrl = "http://" + websiteUrl;
+        }
+        // Open the website in a new tab
+        window.open(websiteUrl, "_blank");
     };
 
     return (
@@ -96,7 +100,7 @@ export default function DevIndividualJob() {
                             {/* Company Logo */}
                             <Avatar
                                 size="lg"
-                                alt="CompanyName"
+                                alt={job.postedBy.name}
                                 src="companyLogo"
                                 color="primary"
                             />
@@ -141,10 +145,10 @@ export default function DevIndividualJob() {
                                     }
                                 >
                                     {daysAgo === 0
-                                    ? "Today"
-                                    : `${daysAgo} day${
-                                            daysAgo > 1 ? "s" : ""
-                                        } ago`}
+                                        ? "Today"
+                                        : `${daysAgo} day${
+                                              daysAgo > 1 ? "s" : ""
+                                          } ago`}
                                 </Typography>
                                 {/* Bookmark Button */}
                                 <IconButton onClick={handleBookmarkToggle}>
@@ -179,31 +183,34 @@ export default function DevIndividualJob() {
                             <Stack spacing={2}>
                                 <Typography level="h2">Description</Typography>
                                 <Typography level="body-lg" color="neutral">
-                                   
-                                   {job.description.split('\n').map((line, index) => (
-                                        <React.Fragment key={index}>
-                                            {line}
-                                            <br />
-                                        </React.Fragment>
-                                    ))}
+                                    {job.description
+                                        .split("\n")
+                                        .map((line, index) => (
+                                            <React.Fragment key={index}>
+                                                {line}
+                                                <br />
+                                            </React.Fragment>
+                                        ))}
                                 </Typography>
                             </Stack>
                             {/* Requirements */}
                             <Stack spacing={2}>
                                 <Typography level="h2">Requirements</Typography>
                                 <Typography level="body-lg" color="neutral">
-                                    {job.requirement.split('\n').map((line, index) => (
-                                        <div key={index}>
-                                        - {line}
-                                        <br />
-                                        </div>
-                                    ))}
+                                    {job.requirement
+                                        .split("\n")
+                                        .map((line, index) => (
+                                            <React.Fragment key={index}>
+                                                - {line}
+                                                <br />
+                                            </React.Fragment>
+                                        ))}
                                 </Typography>
                             </Stack>
                             {/* About the Company */}
                             <Stack spacing={2}>
                                 <Typography level="h2">
-                                    About Ultralytics
+                                    About {job.postedBy.name}
                                 </Typography>
                                 <Typography level="body-lg" color="neutral">
                                     {job.postedBy.overview}
@@ -234,7 +241,10 @@ export default function DevIndividualJob() {
                                     </Stack>
                                 </Grid>
                                 <Grid item md={4}>
-                                    <DevApplyJob userId={userId} jobId={job._id} />
+                                    <DevApplyJob
+                                        userId={userId}
+                                        jobId={job._id}
+                                    />
                                 </Grid>
                             </Grid>
                         </Stack>
@@ -282,10 +292,12 @@ export default function DevIndividualJob() {
                                             Posted on
                                         </Typography>
                                         <Typography level="title-md">
-                                            {new Date(job.datePosted).toLocaleDateString("en-GB", {
+                                            {new Date(
+                                                job.datePosted
+                                            ).toLocaleDateString("en-GB", {
                                                 day: "numeric",
                                                 month: "long",
-                                                year: "numeric"
+                                                year: "numeric",
                                             })}
                                         </Typography>
                                     </Stack>
@@ -362,18 +374,22 @@ export default function DevIndividualJob() {
                                             useFlexGap
                                         >
                                             {/* Map chips according to no. of skills specified */}
-                                            {job.preferredSkills.map((skill,index) => (
-                                                <Chip
-                                                    key={index}
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    {skill}
-                                                </Chip>
-                                            ))}
+                                            {job.preferredSkills.map(
+                                                (skill, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        sx={{
+                                                            "--Chip-radius":
+                                                                "6px",
+                                                            borderColor:
+                                                                "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {skill}
+                                                    </Chip>
+                                                )
+                                            )}
                                         </Stack>
                                     </Stack>
                                     {/* Technologies */}
@@ -391,18 +407,22 @@ export default function DevIndividualJob() {
                                             useFlexGap
                                         >
                                             {/* Map chips according to no. of technologies specified */}
-                                            {job.preferredTechnologies.map((technology,index) => (
-                                                <Chip
-                                                    key={index}
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    {technology}
-                                                </Chip>
-                                            ))}
+                                            {job.preferredTechnologies.map(
+                                                (technology, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        sx={{
+                                                            "--Chip-radius":
+                                                                "6px",
+                                                            borderColor:
+                                                                "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {technology}
+                                                    </Chip>
+                                                )
+                                            )}
                                         </Stack>
                                     </Stack>
                                     {/* Programming Languages */}
@@ -420,19 +440,22 @@ export default function DevIndividualJob() {
                                             useFlexGap
                                         >
                                             {/* Map chips according to no. of programming langs specified */}
-                                            {job.preferredLanguages.map((language,index) => (
-                                                <Chip
-                                                    key={index}
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    {language}
-                                                </Chip>
-                                            ))}
-                                            
+                                            {job.preferredLanguages.map(
+                                                (language, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        sx={{
+                                                            "--Chip-radius":
+                                                                "6px",
+                                                            borderColor:
+                                                                "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {language}
+                                                    </Chip>
+                                                )
+                                            )}
                                         </Stack>
                                     </Stack>
                                 </Stack>
