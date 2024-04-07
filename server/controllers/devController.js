@@ -97,6 +97,8 @@ const devEdit = async (req, res) => {
 //Handling The Developer Application
 const devApplication = async (req, res) => {
   const { userId, jobId, coverLetter } = req.body;
+  console.log("In here")
+  console.log("JobId recieved: ",jobId)
 
   try {
     const dev = await Dev.findOne({ userId });
@@ -116,26 +118,24 @@ const devApplication = async (req, res) => {
         isApplied: true,
         coverLetter: coverLetter,
       });
-    } else {
+    } 
+    else 
+    {
       // Job found in developer's list, handle according to status
+      console.log("This particular job: ",dev.myJobs[jobIndex])
+      console.log("This particular job status: ",dev.myJobs[jobIndex].isApplied)
       if (dev.myJobs[jobIndex].isAcceptedOffer) {
         return res.status(400).json({ success: false, message: "Application already accepted." });
-      } else if (dev.myJobs[jobIndex].isRejectedOffer) {
+      } 
+      else if (dev.myJobs[jobIndex].isRejectedOffer) {
         return res.status(400).json({ success: false, message: "Your application is rejected." });
-      } else if (dev.myJobs[jobIndex].isOffer) {
-        // Update isAcceptedOffer to true if offer has been made and not rejected
-        dev.myJobs[jobIndex].isApplied = true;
-        dev.myJobs[jobIndex].isAcceptedOffer = true;
-        dev.myJobs[jobIndex].coverLetter = coverLetter;
-      } else if (dev.myJobs[jobIndex].isBookmarked) {
-        // Update isApplied to true if job is bookmarked
-        dev.myJobs[jobIndex].isApplied = true;
-        dev.myJobs[jobIndex].coverLetter = coverLetter;
-      } else if (dev.myJobs[jobIndex].isApplied) {
+      }
+      else if (dev.myJobs[jobIndex].isApplied) {
         // Applicant has already applied, cannot apply again
         return res.status(400).json({ success: false, message: "You have already applied for this job." });
-      } else {
-        // Update isApplied to true if job is not bookmarked
+      } 
+      else 
+      {
         dev.myJobs[jobIndex].isApplied = true;
         dev.myJobs[jobIndex].coverLetter = coverLetter;
       }

@@ -13,6 +13,7 @@ const apiRoutes = {
     edit: "/job/edit",
     delete: "/job/delete",
     updateBookmarks: "/job/updateBookmarks",
+    individualBookmarks:"/job/individualBookmarks"
   },
 
   // Developer Routes

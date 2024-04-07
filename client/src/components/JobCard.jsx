@@ -134,7 +134,7 @@ const JobCard = ({ job, userId, setBookmarkedJobs, bookmarkedJobs, appliedJobs, 
     const handleCardClick = () => {
         console.log("Card Clicked");
         // navigate to job details page
-        navigate(`/dev/job`, { state: { userId, job } });
+        navigate(`/dev/job`, { state: { userId, job, applied, pendingOffer, offerAccepted, offerRejected , isBookmarked } });
     };
 
     //Validating Props
@@ -352,7 +352,7 @@ const JobCard = ({ job, userId, setBookmarkedJobs, bookmarkedJobs, appliedJobs, 
                                         }}
                                         variant="outlined"
                                     >
-                                        {job.preferredTechnologies}
+                                       {job.preferredTechnologies[0]}
                                     </Chip>
                                     <Chip
                                         sx={{
