@@ -72,6 +72,17 @@ export default function DevIndividualJob() {
         window.open(websiteUrl, "_blank");
     };
 
+    // Formats compensation to USD
+    const formatCompenstation = (compensation) => {
+        let USDollar = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumSignificantDigits: 3,
+        });
+
+        return `~ ${USDollar.format(compensation)}/yr`;
+    };
+
     return (
         <>
             <DevNavbar />
@@ -302,17 +313,21 @@ export default function DevIndividualJob() {
                                         </Typography>
                                     </Stack>
                                     {/* Compensation (show if given) */}
-                                    <Stack>
-                                        <Typography
-                                            level="title-md"
-                                            color="neutral"
-                                        >
-                                            Compensation
-                                        </Typography>
-                                        <Typography level="title-md">
-                                            {`$${job.compensation}/yr`}
-                                        </Typography>
-                                    </Stack>
+                                    {job.compensation && (
+                                        <Stack>
+                                            <Typography
+                                                level="title-md"
+                                                color="neutral"
+                                            >
+                                                Compensation
+                                            </Typography>
+                                            <Typography level="title-md">
+                                                {formatCompenstation(
+                                                    job.compensation
+                                                )}
+                                            </Typography>
+                                        </Stack>
+                                    )}
                                     {/* Job Logistics */}
                                     <Stack spacing={0.8}>
                                         <Typography
@@ -360,104 +375,110 @@ export default function DevIndividualJob() {
                                         </Stack>
                                     </Stack>
                                     {/* Skills */}
-                                    <Stack spacing={0.8}>
-                                        <Typography
-                                            level="title-md"
-                                            color="neutral"
-                                        >
-                                            Skills
-                                        </Typography>
-                                        <Stack
-                                            direction="row"
-                                            spacing={1}
-                                            flexWrap="wrap"
-                                            useFlexGap
-                                        >
-                                            {/* Map chips according to no. of skills specified */}
-                                            {job.preferredSkills.map(
-                                                (skill, index) => (
-                                                    <Chip
-                                                        key={index}
-                                                        sx={{
-                                                            "--Chip-radius":
-                                                                "6px",
-                                                            borderColor:
-                                                                "#D0D5DD",
-                                                        }}
-                                                        variant="outlined"
-                                                    >
-                                                        {skill}
-                                                    </Chip>
-                                                )
-                                            )}
+                                    {job.preferredSkills.length > 0 && (
+                                        <Stack spacing={0.8}>
+                                            <Typography
+                                                level="title-md"
+                                                color="neutral"
+                                            >
+                                                Skills
+                                            </Typography>
+                                            <Stack
+                                                direction="row"
+                                                spacing={1}
+                                                flexWrap="wrap"
+                                                useFlexGap
+                                            >
+                                                {/* Map chips according to no. of skills specified */}
+                                                {job.preferredSkills.map(
+                                                    (skill, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            sx={{
+                                                                "--Chip-radius":
+                                                                    "6px",
+                                                                borderColor:
+                                                                    "#D0D5DD",
+                                                            }}
+                                                            variant="outlined"
+                                                        >
+                                                            {skill}
+                                                        </Chip>
+                                                    )
+                                                )}
+                                            </Stack>
                                         </Stack>
-                                    </Stack>
+                                    )}
                                     {/* Technologies */}
-                                    <Stack spacing={0.8}>
-                                        <Typography
-                                            level="title-md"
-                                            color="neutral"
-                                        >
-                                            Technologies
-                                        </Typography>
-                                        <Stack
-                                            direction="row"
-                                            spacing={1}
-                                            flexWrap="wrap"
-                                            useFlexGap
-                                        >
-                                            {/* Map chips according to no. of technologies specified */}
-                                            {job.preferredTechnologies.map(
-                                                (technology, index) => (
-                                                    <Chip
-                                                        key={index}
-                                                        sx={{
-                                                            "--Chip-radius":
-                                                                "6px",
-                                                            borderColor:
-                                                                "#D0D5DD",
-                                                        }}
-                                                        variant="outlined"
-                                                    >
-                                                        {technology}
-                                                    </Chip>
-                                                )
-                                            )}
+                                    {job.preferredTechnologies.length > 0 && (
+                                        <Stack spacing={0.8}>
+                                            <Typography
+                                                level="title-md"
+                                                color="neutral"
+                                            >
+                                                Technologies
+                                            </Typography>
+                                            <Stack
+                                                direction="row"
+                                                spacing={1}
+                                                flexWrap="wrap"
+                                                useFlexGap
+                                            >
+                                                {/* Map chips according to no. of technologies specified */}
+                                                {job.preferredTechnologies.map(
+                                                    (technology, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            sx={{
+                                                                "--Chip-radius":
+                                                                    "6px",
+                                                                borderColor:
+                                                                    "#D0D5DD",
+                                                            }}
+                                                            variant="outlined"
+                                                        >
+                                                            {technology}
+                                                        </Chip>
+                                                    )
+                                                )}
+                                            </Stack>
                                         </Stack>
-                                    </Stack>
+                                    )}
                                     {/* Programming Languages */}
-                                    <Stack spacing={0.8}>
-                                        <Typography
-                                            level="title-md"
-                                            color="neutral"
-                                        >
-                                            Programming Languages
-                                        </Typography>
-                                        <Stack
-                                            direction="row"
-                                            spacing={1}
-                                            flexWrap="wrap"
-                                            useFlexGap
-                                        >
-                                            {/* Map chips according to no. of programming langs specified */}
-                                            {job.preferredLanguages.map(
-                                                (language, index) => (
-                                                    <Chip
-                                                        key={index}
-                                                        sx={{
-                                                            "--Chip-radius":
-                                                                "6px",
-                                                            borderColor:
-                                                                "#D0D5DD",
-                                                        }}
-                                                        variant="outlined"
-                                                    >
-                                                        {language}
-                                                    </Chip>
-                                                )
-                                            )}
+                                    {job.preferredLanguages.length > 0 && (
+                                        <Stack spacing={0.8}>
+                                            <Typography
+                                                level="title-md"
+                                                color="neutral"
+                                            >
+                                                Programming Languages
+                                            </Typography>
+                                            <Stack
+                                                direction="row"
+                                                spacing={1}
+                                                flexWrap="wrap"
+                                                useFlexGap
+                                            >
+                                                {/* Map chips according to no. of programming langs specified */}
+                                                {job.preferredLanguages.map(
+                                                    (language, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            sx={{
+                                                                "--Chip-radius":
+                                                                    "6px",
+                                                                borderColor:
+                                                                    "#D0D5DD",
+                                                            }}
+                                                            variant="outlined"
+                                                        >
+                                                            {language}
+                                                        </Chip>
+                                                    )
+                                                )}
+                                            </Stack>
                                         </Stack>
-                                    </Stack>
+                                    )}
                                 </Stack>
                                 {/* Visit Website Button */}
                                 <Button
