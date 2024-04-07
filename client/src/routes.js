@@ -12,16 +12,14 @@ const apiRoutes = {
     getAll: "/job/all",
     edit: "/job/edit",
     delete: "/job/delete",
-    addBookmark: (jobId,userId) => `/job/addBookmark/${jobId}/${userId}`,
-    removeBookmark: (jobId,userId) => `/job/removeBookmark/${jobId}/${userId}`,
-    getBookmarkedJobs: (userId) => `/job/getBookmarkedJobs/${userId}`,
-    getDevJobs: (userId) => `/job/getDevJobs/${userId}`,
+    updateBookmarks: "/job/updateBookmarks",
   },
 
   // Developer Routes
   dev: {
     register: "/dev/profileSetup",
     edit: "/dev/profileEdit",
+    application: "/dev/application"
   },
 
   // Company Routes
@@ -42,6 +40,7 @@ const clientRoutes = {
   postAJob: "/postAJob",
   searchJobs: "/dev/search",
   devSettings: "/dev/settings",
+  devIndividualJob: "/dev/job",
 };
 
 export { apiRoutes, clientRoutes };

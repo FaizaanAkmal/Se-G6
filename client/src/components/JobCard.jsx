@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"; // Ensure useState is imported
 import axios from "axios";
+import {useNavigate} from "react-router-dom"
 // UI Imports
 import {
     Box,
@@ -31,54 +32,58 @@ import offerRejectedIcon from "../assets/offerRejectedIcon.svg";
 import offerPendingIcon from "../assets/offerPendingIcon.svg";
 import acceptIcon from "../assets/acceptIcon.svg";
 import rejectIcon from "../assets/rejectIcon.svg";
+import PropTypes from 'prop-types';
 
 // Routes Import
 import { apiRoutes } from "../routes.js";
 
-const JobCard = ({ job, userId, bookmarkedJobs }) => {
-    // State to manage bookmark toggle
-    const [isBookmarked, setIsBookmarked] = useState(
-        bookmarkedJobs.includes(job._id)
-    );
+const JobCard = ({ job, userId, setBookmarkedJobs, bookmarkedJobs, appliedJobs, offeredJobs }) => {
+    // To Navigate
+    const navigate = useNavigate();
 
     // Application Status
-    const [applied, setApplied] = useState(false);
-    const [pendingOffer, setPendingOffer] = useState(false);
-    const [offerAccepted, setOfferAccepted] = useState(false);
-    const [offerRejected, setOfferRejected] = useState(false);
+    const [applied, setApplied] = useState(appliedJobs.some((appliedJob) => appliedJob._id === job._id));
+    const [pendingOffer, setPendingOffer] = useState(offeredJobs.some((offeredJob) => offeredJob._id === job._id && !offeredJob.offerAccepted && !offeredJob.offerRejected));
+    const [offerAccepted, setOfferAccepted] = useState(offeredJobs.some((offeredJob) => offeredJob._id === job._id && offeredJob.offerAccepted));
+    const [offerRejected, setOfferRejected] = useState(offeredJobs.some((offeredJob) => offeredJob._id === job._id && offeredJob.offerRejected));
 
     // Modal State
     const [openRejectModal, setOpenRejectModal] = useState(false);
     const [openAcceptModal, setOpenAcceptModal] = useState(false);
 
+    // State to manage bookmark toggle
+    const [isBookmarked, setIsBookmarked] = useState(bookmarkedJobs.some(bJob => bJob._id === job._id));
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        setIsBookmarked(bookmarkedJobs.includes(job._id));
-    }, [bookmarkedJobs, job._id]);
-
-    // Handler function for bookmark togglex
+    // Hadnling Bookmarks
     const handleBookmarkToggle = async () => {
-        setIsBookmarked(!isBookmarked);
-        try {
-            if (isBookmarked) {
-                await axios.post(apiRoutes.job.removeBookmark(job._id), {
-                    userId,
-                    job,
-                });
-                console.log("Bookmark Removed");
+        // Use the functional form of setState to ensure the correct value is used
+        setIsBookmarked(prevIsBookmarked => !prevIsBookmarked);
+        setBookmarkedJobs((prevBookmarkedJobs) => {
+            if (!prevBookmarkedJobs.some((bJob) => bJob._id === job._id)) {
+                return [...prevBookmarkedJobs, job];
             } else {
-                await axios.post(apiRoutes.job.addBookmark(job._id), {
-                    userId,
-                    job,
-                });
-                console.log("Bookmark Added");
+                return prevBookmarkedJobs.filter((bJob) => bJob._id !== job._id);
             }
+        });
+        
+        try {
+            const response = await axios.put(apiRoutes.job.updateBookmarks, {
+                userId,
+                jobId: job._id, // Ensure that job._id is correctly assigned here
+                isBookmarked,
+            });
+            console.log("Bookmark updated successfully:", response.data);
         } catch (error) {
-            console.error("Error toggling bookmark:", error);
+            console.error("Error updating bookmark:", error);
         }
     };
+    useEffect(() => {
+        setIsBookmarked(bookmarkedJobs.some((bJob) => bJob._id === job._id));
+    }, [bookmarkedJobs, job._id]);
+
 
     const handleRejectOffer = async () => {
         // API call to reject offer
@@ -129,6 +134,17 @@ const JobCard = ({ job, userId, bookmarkedJobs }) => {
     const handleCardClick = () => {
         console.log("Card Clicked");
         // navigate to job details page
+        navigate(`/dev/job`, { state: { userId, job } });
+    };
+
+    //Validating Props
+    JobCard.propTypes = {
+        job: PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        setBookmarkedJobs: PropTypes.func.isRequired,
+        bookmarkedJobs :PropTypes.array.isRequired,
+        appliedJobs :PropTypes.array.isRequired,
+        offeredJobs :PropTypes.array.isRequired,
     };
 
     return (
@@ -328,6 +344,33 @@ const JobCard = ({ job, userId, bookmarkedJobs }) => {
                                         variant="outlined"
                                     >
                                         {job.jobType}
+                                    </Chip>
+                                    <Chip
+                                        sx={{
+                                            "--Chip-radius": "6px",
+                                            borderColor: "#D0D5DD",
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        {job.preferredTechnologies}
+                                    </Chip>
+                                    <Chip
+                                        sx={{
+                                            "--Chip-radius": "6px",
+                                            borderColor: "#D0D5DD",
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        {job.experience}
+                                    </Chip>
+                                    <Chip
+                                        sx={{
+                                            "--Chip-radius": "6px",
+                                            borderColor: "#D0D5DD",
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        {job.environment}
                                     </Chip>
                                     {/* Add more chips as needed */}
                                 </Stack>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import React from "react";
 
 // Routes
 import { apiRoutes } from "../../routes.js";
@@ -31,6 +32,20 @@ import {
 
 export default function DevIndividualJob() {
     const [isBookmarked, setIsBookmarked] = useState(null);
+
+    //Handling The Data Received
+    const location = useLocation();
+    const userId = location.state.userId;
+    const job = location.state.job;
+
+    console.log("userid: ", userId);
+
+
+    const datePosted = new Date(job.datePosted);
+    const currentDate = new Date();
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const daysAgo = Math.round(Math.abs((currentDate - datePosted) / oneDay));
+ 
 
     // Button handlers
     const handleBookmarkToggle = async () => {
@@ -87,7 +102,7 @@ export default function DevIndividualJob() {
                             />
                             {/* Job Title */}
                             <Typography level="h1" sx={{ width: "100%" }}>
-                                Junior Software Developer
+                                {job.title}
                             </Typography>
                             {/* Key Facts */}
                             <Stack
@@ -97,7 +112,7 @@ export default function DevIndividualJob() {
                             >
                                 {/* Company Name */}
                                 <Typography level="title-lg">
-                                    Ultralytics
+                                    {job.postedBy.name}
                                 </Typography>
                                 {/* Company Size */}
                                 <Typography
@@ -111,7 +126,7 @@ export default function DevIndividualJob() {
                                         ></img>
                                     }
                                 >
-                                    100+
+                                    {job.postedBy.size}
                                 </Typography>
                                 {/* Time Posted */}
                                 <Typography
@@ -125,7 +140,11 @@ export default function DevIndividualJob() {
                                         ></img>
                                     }
                                 >
-                                    10 hours ago
+                                    {daysAgo === 0
+                                    ? "Today"
+                                    : `${daysAgo} day${
+                                            daysAgo > 1 ? "s" : ""
+                                        } ago`}
                                 </Typography>
                                 {/* Bookmark Button */}
                                 <IconButton onClick={handleBookmarkToggle}>
@@ -160,51 +179,25 @@ export default function DevIndividualJob() {
                             <Stack spacing={2}>
                                 <Typography level="h2">Description</Typography>
                                 <Typography level="body-lg" color="neutral">
-                                    Ultralytics is looking for a Junior Software
-                                    Developer to join our team. The ideal
-                                    candidate will have a strong foundation in
-                                    computer science and experience in software
-                                    development. You will work closely with our
-                                    team to develop and maintain software
-                                    applications and systems. You will also be
-                                    responsible for writing clean, maintainable,
-                                    and efficient code which meets the needs of
-                                    our clients and customers.
-                                    <br /> <br />
-                                    If you are passionate about software
-                                    development and are looking to take the next
-                                    step in your career, we want to hear from
-                                    you!
-                                    <br /> <br />
-                                    To be successful in this role, you should
-                                    have a Bachelor's degree in Computer Science
-                                    or related field and 1+ years of experience
-                                    in software development. You should also
-                                    have strong knowledge of programming
-                                    languages such as Python, Java, or C++, and
-                                    experience with web development frameworks
-                                    such as React, Angular, or Vue. Excellent
-                                    problem-solving and communication skills are
-                                    also required.
+                                   
+                                   {job.description.split('\n').map((line, index) => (
+                                        <React.Fragment key={index}>
+                                            {line}
+                                            <br />
+                                        </React.Fragment>
+                                    ))}
                                 </Typography>
                             </Stack>
                             {/* Requirements */}
                             <Stack spacing={2}>
                                 <Typography level="h2">Requirements</Typography>
                                 <Typography level="body-lg" color="neutral">
-                                    - Bachelor's degree in Computer Science or
-                                    related field
-                                    <br />
-                                    - 1+ years of experience in software
-                                    development
-                                    <br />
-                                    - Strong knowledge of programming languages
-                                    such as Python, Java, or C++
-                                    <br />
-                                    - Experience with web development frameworks
-                                    such as React, Angular, or Vue
-                                    <br />- Excellent problem-solving and
-                                    communication skills
+                                    {job.requirement.split('\n').map((line, index) => (
+                                        <div key={index}>
+                                        - {line}
+                                        <br />
+                                        </div>
+                                    ))}
                                 </Typography>
                             </Stack>
                             {/* About the Company */}
@@ -213,16 +206,7 @@ export default function DevIndividualJob() {
                                     About Ultralytics
                                 </Typography>
                                 <Typography level="body-lg" color="neutral">
-                                    Ultralytics is a leading software
-                                    development company that specializes in
-                                    building innovative software solutions for
-                                    businesses of all sizes. We are a team of
-                                    passionate developers, designers, and
-                                    engineers who are dedicated to creating
-                                    high-quality software. At Ultralytics, we
-                                    believe in using the latest technologies and
-                                    best practices to deliver exceptional
-                                    results.
+                                    {job.postedBy.overview}
                                 </Typography>
                             </Stack>
                             {/* Apply Section */}
@@ -250,7 +234,7 @@ export default function DevIndividualJob() {
                                     </Stack>
                                 </Grid>
                                 <Grid item md={4}>
-                                    <DevApplyJob />
+                                    <DevApplyJob userId={userId} jobId={job._id} />
                                 </Grid>
                             </Grid>
                         </Stack>
@@ -298,7 +282,11 @@ export default function DevIndividualJob() {
                                             Posted on
                                         </Typography>
                                         <Typography level="title-md">
-                                            24 March 2024
+                                            {new Date(job.datePosted).toLocaleDateString("en-GB", {
+                                                day: "numeric",
+                                                month: "long",
+                                                year: "numeric"
+                                            })}
                                         </Typography>
                                     </Stack>
                                     {/* Compensation (show if given) */}
@@ -310,7 +298,7 @@ export default function DevIndividualJob() {
                                             Compensation
                                         </Typography>
                                         <Typography level="title-md">
-                                            $100k/yr - $120k/yr
+                                            {`$${job.compensation}/yr`}
                                         </Typography>
                                     </Stack>
                                     {/* Job Logistics */}
@@ -335,7 +323,7 @@ export default function DevIndividualJob() {
                                                 }}
                                                 variant="outlined"
                                             >
-                                                Full-time
+                                                {job.jobType}
                                             </Chip>
                                             {/* Job Environment */}
                                             <Chip
@@ -345,7 +333,7 @@ export default function DevIndividualJob() {
                                                 }}
                                                 variant="outlined"
                                             >
-                                                Remote
+                                                {job.environment}
                                             </Chip>
                                             {/* Experience Level */}
                                             <Chip
@@ -355,7 +343,7 @@ export default function DevIndividualJob() {
                                                 }}
                                                 variant="outlined"
                                             >
-                                                Entry-level
+                                                {job.experience}
                                             </Chip>
                                         </Stack>
                                     </Stack>
@@ -374,33 +362,18 @@ export default function DevIndividualJob() {
                                             useFlexGap
                                         >
                                             {/* Map chips according to no. of skills specified */}
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                Agile Development
-                                            </Chip>
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                Systems Architecture
-                                            </Chip>
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                Backend
-                                            </Chip>
+                                            {job.preferredSkills.map((skill,index) => (
+                                                <Chip
+                                                    key={index}
+                                                    sx={{
+                                                        "--Chip-radius": "6px",
+                                                        borderColor: "#D0D5DD",
+                                                    }}
+                                                    variant="outlined"
+                                                >
+                                                    {skill}
+                                                </Chip>
+                                            ))}
                                         </Stack>
                                     </Stack>
                                     {/* Technologies */}
@@ -418,51 +391,18 @@ export default function DevIndividualJob() {
                                             useFlexGap
                                         >
                                             {/* Map chips according to no. of technologies specified */}
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                Ruby On Rails
-                                            </Chip>
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                GraphQL
-                                            </Chip>
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                Kubernetes
-                                            </Chip>
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                ASP.NET
-                                            </Chip>
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                OpenAI APIs
-                                            </Chip>
+                                            {job.preferredTechnologies.map((technology,index) => (
+                                                <Chip
+                                                    key={index}
+                                                    sx={{
+                                                        "--Chip-radius": "6px",
+                                                        borderColor: "#D0D5DD",
+                                                    }}
+                                                    variant="outlined"
+                                                >
+                                                    {technology}
+                                                </Chip>
+                                            ))}
                                         </Stack>
                                     </Stack>
                                     {/* Programming Languages */}
@@ -480,24 +420,19 @@ export default function DevIndividualJob() {
                                             useFlexGap
                                         >
                                             {/* Map chips according to no. of programming langs specified */}
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                Ruby
-                                            </Chip>
-                                            <Chip
-                                                sx={{
-                                                    "--Chip-radius": "6px",
-                                                    borderColor: "#D0D5DD",
-                                                }}
-                                                variant="outlined"
-                                            >
-                                                TypeScript
-                                            </Chip>
+                                            {job.preferredLanguages.map((language,index) => (
+                                                <Chip
+                                                    key={index}
+                                                    sx={{
+                                                        "--Chip-radius": "6px",
+                                                        borderColor: "#D0D5DD",
+                                                    }}
+                                                    variant="outlined"
+                                                >
+                                                    {language}
+                                                </Chip>
+                                            ))}
+                                            
                                         </Stack>
                                     </Stack>
                                 </Stack>

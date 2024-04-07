@@ -19,7 +19,9 @@ export default function DevDashboard() {
     const [noMoreJobs, setNoMoreJobs] = useState(true);
     const [jobs, setJobs] = useState([]);
     const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
-
+    const [appliedJobs, setAppliedJobs] = useState([]);
+    const [offeredJobs, setOfferedJobs] = useState([]);
+    const [allJobs, setAllJobs] = useState([]);
     // navigation
     const navigate = useNavigate();
 
@@ -27,27 +29,22 @@ export default function DevDashboard() {
     const location = useLocation();
     const userId = location.state.userId;
 
-    // Fetch bookmarked jobs once
-    useEffect(() => {
-        const fetchBookmarkedJobs = async () => {
-            try {
-                const response = await axios.get(
-                    apiRoutes.job.getBookmarkedJobs(userId)
-                );
-                setBookmarkedJobs(response.data);
-            } catch (error) {
-                console.error("Error fetching bookmarked jobs:", error);
-            }
-        };
-        fetchBookmarkedJobs();
-    }, [userId]);
-
+    //Fetching All Jobs Together
     const fetchJobsData = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(apiRoutes.job.getAll);
-            console.log("Response data,", response);
-            setJobs(response.data);
+            const response = await axios.get(apiRoutes.job.getAll, {
+                params: { userId }
+            });
+            console.log("Response data,", response.data);
+
+            const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } = response.data;
+            setAllJobs(allJobs);
+            setJobs(allJobs);
+            setBookmarkedJobs(bookmarkedJobs);
+            setAppliedJobs(appliedJobs);
+            setOfferedJobs(offeredJobs);
+
             setNoMoreJobs(false);
         } catch (error) {
             console.error("Error fetching jobs:", error);
@@ -70,36 +67,21 @@ export default function DevDashboard() {
     // Handler to change the active tab
     const handleTabChange = async (tab) => {
         setActiveTab(tab);
-        if (tab === "Bookmarked") {
-            // API call to get bookmarked jobs
-            try {
-                setLoading(true);
-                const response = await axios.get(
-                    apiRoutes.job.getDevJobs(userId)
-                );
-                setJobs(response.data);
-                setNoMoreJobs(false);
-            } catch (error) {
-                console.error("Error fetching bookmarked jobs:", error);
-            }
-        }
-        if (tab === "Applied") {
-            // API call to get applied jobs
-        }
-        if (tab === "All") {
-            // API call to get all jobs
-            try {
-                setLoading(true);
-                const response = await axios.get(apiRoutes.job.getAll);
-                setJobs(response.data);
-                setNoMoreJobs(false);
-            } catch (error) {
-                console.error("Error fetching all jobs:", error);
-            }
-        }
-
-        if (tab === "Job Offers") {
-            // API call to get job offers
+        switch (tab) {
+            case "All":
+                setJobs(allJobs);
+                break;
+            case "Bookmarked":
+                setJobs(bookmarkedJobs);
+                break;
+            case "Applied":
+                setJobs(appliedJobs);
+                break;
+            case "Job Offers":
+                setJobs(offeredJobs);
+                break;
+            default:
+                break;
         }
     };
 
@@ -210,7 +192,11 @@ export default function DevDashboard() {
                                     key={job._id}
                                     job={job}
                                     userId={userId}
+                                    setBookmarkedJobs={setBookmarkedJobs}
                                     bookmarkedJobs={bookmarkedJobs}
+                                    appliedJobs={appliedJobs}
+                                    offeredJobs={offeredJobs}
+                                    
                                 />
                             ))}
                         </Stack>
@@ -222,17 +208,47 @@ export default function DevDashboard() {
                                     key={job._id}
                                     job={job}
                                     userId={userId}
+                                    setBookmarkedJobs={setBookmarkedJobs}
                                     bookmarkedJobs={bookmarkedJobs}
+                                    appliedJobs={appliedJobs}
+                                    offeredJobs={offeredJobs}
+                                    
                                 />
                             ))}
                         </Stack>
                     )}
                     {activeTab === "Applied" && (
-                        <div>{/* Content for Applied */}</div>
+                        <Stack spacing={2} mt={4}>
+                            {jobs.map((job) => (
+                                <JobCard
+                                    key={job._id}
+                                    job={job}
+                                    userId={userId}
+                                    setBookmarkedJobs={setBookmarkedJobs}
+                                    bookmarkedJobs={bookmarkedJobs}
+                                    appliedJobs={appliedJobs}
+                                    offeredJobs={offeredJobs}
+                                    
+                                />
+                            ))}
+                        </Stack>
                     )}
 
                     {activeTab === "Job Offers" && (
-                        <div>{/* Content for Job Offers */}</div>
+                        <Stack spacing={2} mt={4}>
+                            {jobs.map((job) => (
+                                <JobCard
+                                    key={job._id}
+                                    job={job}
+                                    userId={userId}
+                                    setBookmarkedJobs={setBookmarkedJobs}
+                                    bookmarkedJobs={bookmarkedJobs}
+                                    appliedJobs={appliedJobs}
+                                    offeredJobs={offeredJobs}
+                                    
+                                />
+                            ))}
+                        </Stack>
                     )}
 
                     {/* Pagination */}

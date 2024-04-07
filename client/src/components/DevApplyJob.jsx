@@ -25,7 +25,7 @@ import {
     Snackbar,
 } from "@mui/joy";
 
-export default function DevApplyJob() {
+export default function DevApplyJob(props) {
     const [open, setOpen] = useState(false);
     const [coverLetter, setCoverLetter] = useState("");
     const [submitLoading, setSubmitLoading] = useState(false);
@@ -61,17 +61,31 @@ export default function DevApplyJob() {
 
     const handleApplicationSubmit = async (event) => {
         event.preventDefault();
-
+    
         // Simulate loading state (remove when implemented)
         setSubmitLoading(true);
-        // Simulate API call
-        setTimeout(() => {
+    
+        try {
+            // Make the API call to submit the application
+            const response = await axios.post(apiRoutes.dev.application, {
+                userId: props.userId,
+                jobId: props.jobId,
+                coverLetter: coverLetter
+            });
+
+            console.log("Response Received: ",response)
+    
             // Simulate successful submission
             setOpenSnackbar(true); // Open the snackbar
             setOpen(false); // Close the modal
             setSubmitLoading(false);
             setSubmitted(true);
-        }, 2000);
+        } catch (error) {
+            console.log("Error: ",error)
+            // Handle error
+            setError(error.response.data.message);
+            setSubmitLoading(false);
+        }
     };
 
     const closeSnackbar = () => {
