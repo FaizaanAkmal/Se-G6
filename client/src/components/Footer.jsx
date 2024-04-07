@@ -10,7 +10,7 @@ const Footer = () => {
             p={1}
             flexDirection={"column"}
         >
-            <Typography level="body-sm">
+            <Typography level="body-sm" mt={1}>
                 {"© "}
                 {new Date().getFullYear()} {"DevLink"}
             </Typography>

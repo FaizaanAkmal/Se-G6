@@ -48,7 +48,6 @@ export default function DevIndividualJob() {
     const [offerRejected, setOfferRejected] = useState(location.state.offerRejected || false);
     const [isBookmarked, setIsBookmarked] = useState(location.state.isBookmarked || null);
 
-
     const datePosted = new Date(job.datePosted);
     const currentDate = new Date();
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
