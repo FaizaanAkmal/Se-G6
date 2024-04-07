@@ -401,7 +401,7 @@ export default function CompanySettings() {
                             },
                           }}
                         >
-                          Submit
+                          Save
                         </Button>
                       </Grid>
                     </Grid>
