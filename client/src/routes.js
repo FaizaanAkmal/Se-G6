@@ -3,7 +3,7 @@ const apiRoutes = {
   user: {
     register: "/user/register",
     login: "/user/login",
-    getUser: "/user/getUser"
+    getUser: "/user/getUser/:id"
   },
 
   // Job Routes
@@ -24,7 +24,7 @@ const apiRoutes = {
   // Company Routes
   company: {
     register: "/company/profileSetup",
-    edit: "/company/profileEdit",
+    edit: "/company/profileEdit/:id",
     getProfile: "/company/getProfile"
   },
 };

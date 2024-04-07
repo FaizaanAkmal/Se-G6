@@ -13,6 +13,11 @@ const port = process.env.PORT || 8000;
 
 // Middleware
 // Using Middlewares
+const corsConfig = {
+  credentials: true,
+  origin: true,
+};
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(cookieParser());
 app.use(

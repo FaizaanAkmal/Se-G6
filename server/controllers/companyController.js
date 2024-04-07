@@ -63,17 +63,17 @@ const companyEdit = async (req, res) => {
   const { id } = req.params;
   try {
     const updatedCompany = await Company.findOneAndUpdate(
-      { _id: id }, // Filter: Find the company by its ID
+      { userId: id }, // Filter: Find the company by its ID
       {
-        companyName,
+        name: companyName,
         website,
-        companyType,
+        type: companyType,
         country,
         industry,
-        companySize,
-        companyOverview,
-        companyWorkCulture,
-        companyBenefits,
+        size: companySize,
+        overview: companyOverview,
+        workCulture: companyWorkCulture,
+        benefits: companyBenefits
       }, // Update
       { new: true } // Options: Return the updated document
     );

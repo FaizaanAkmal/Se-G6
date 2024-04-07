@@ -9,6 +9,6 @@ const {
 
 //Handling Company Creation and Editing Routes
 companyRouter.post("/profileSetup", companyRegister);
-companyRouter.patch("/profileEdit", companyEdit);
+companyRouter.patch("/profileEdit/:id", companyEdit);
 companyRouter.get("/getProfile/:id", getCompany);
 module.exports = companyRouter;

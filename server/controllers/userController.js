@@ -171,4 +171,35 @@ const getUser = async (req, res) => {
   }
 }
 
-module.exports = { registerUser, loginUser, getUser };
+// update user info 
+const editUser = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email
+  } = req.body;
+
+  const { id } = req.params;
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id }, // Filter: Find the user by its ID
+      {
+        firstName,
+        lastName,
+        email
+      }, // Update
+      { new: true } // Options: Return the updated document
+    );
+
+    // If the company doesn't exist, return 404
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { registerUser, loginUser, getUser, editUser };
