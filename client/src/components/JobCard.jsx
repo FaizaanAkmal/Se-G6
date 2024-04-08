@@ -1,37 +1,156 @@
-import React, { useState } from "react"; // Ensure useState is imported
-
+import { useState, useEffect } from "react"; // Ensure useState is imported
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 // UI Imports
 import {
-    Box,Card,
+    Box,
+    Card,
     CardContent,
     Chip,
     IconButton,
     Link,
     Typography,
     Stack,
-    Avatar
+    Avatar,
+    Grid,
+    Button,
+    Modal,
+    ModalDialog,
+    ModalClose,
+    DialogTitle,
+    DialogContent,
+    Alert,
 } from "@mui/joy";
-
 // Assets Imports
 import companySizeIcon from "../assets/companySizeIcon.svg";
 import timePostedIcon from "../assets/timePostedIcon.svg";
 import bookmarkActiveIcon from "../assets/bookmarkActiveIcon.svg";
 import bookmarkInactiveIcon from "../assets/bookmarkInactiveIcon.svg";
+import appliedIcon from "../assets/appliedIcon.svg";
+import offerAcceptedIcon from "../assets/offerAcceptedIcon.svg";
+import offerRejectedIcon from "../assets/offerRejectedIcon.svg";
+import offerPendingIcon from "../assets/offerPendingIcon.svg";
+import acceptIcon from "../assets/acceptIcon.svg";
+import rejectIcon from "../assets/rejectIcon.svg";
+import PropTypes from "prop-types";
 
-const JobCard = ({job}) => {
+// Routes Import
+import { apiRoutes } from "../routes.js";
+
+const JobCard = ({
+    job,
+    userId,
+    setBookmarkedJobs,
+    bookmarkedJobs,
+    appliedJobs,
+    offeredJobs,
+}) => {
+    // To Navigate
+    const navigate = useNavigate();
+
+    // Application Status
+    const [applied, setApplied] = useState(
+        appliedJobs.some((appliedJob) => appliedJob._id === job._id)
+    );
+    const [pendingOffer, setPendingOffer] = useState(
+        offeredJobs.some(
+            (offeredJob) =>
+                offeredJob._id === job._id &&
+                !offeredJob.offerAccepted &&
+                !offeredJob.offerRejected
+        )
+    );
+    const [offerAccepted, setOfferAccepted] = useState(
+        offeredJobs.some(
+            (offeredJob) =>
+                offeredJob._id === job._id && offeredJob.offerAccepted
+        )
+    );
+    const [offerRejected, setOfferRejected] = useState(
+        offeredJobs.some(
+            (offeredJob) =>
+                offeredJob._id === job._id && offeredJob.offerRejected
+        )
+    );
+
+    // Modal State
+    const [openRejectModal, setOpenRejectModal] = useState(false);
+    const [openAcceptModal, setOpenAcceptModal] = useState(false);
+
     // State to manage bookmark toggle
-    const [isBookmarked, setIsBookmarked] = useState(false);
+    const [isBookmarked, setIsBookmarked] = useState(
+        bookmarkedJobs.some((bJob) => bJob._id === job._id)
+    );
 
-    // Handler function for bookmark toggle
-    const handleBookmarkToggle = () => {
-        setIsBookmarked(!isBookmarked);
-        if (isBookmarked) {
-            console.log("Bookmark Removed");
-            // Add logic to remove bookmark from user's list
-        } else {
-            console.log("Bookmark Added");
-            // Add logic to add bookmark to user's list
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // Hadnling Bookmarks
+    const handleBookmarkToggle = async () => {
+        // Use the functional form of setState to ensure the correct value is used
+        setIsBookmarked((prevIsBookmarked) => !prevIsBookmarked);
+        setBookmarkedJobs((prevBookmarkedJobs) => {
+            if (!prevBookmarkedJobs.some((bJob) => bJob._id === job._id)) {
+                return [...prevBookmarkedJobs, job];
+            } else {
+                return prevBookmarkedJobs.filter(
+                    (bJob) => bJob._id !== job._id
+                );
+            }
+        });
+
+        try {
+            const response = await axios.put(apiRoutes.job.updateBookmarks, {
+                userId,
+                jobId: job._id, // Ensure that job._id is correctly assigned here
+                isBookmarked,
+            });
+            console.log("Bookmark updated successfully:", response.data);
+        } catch (error) {
+            console.error("Error updating bookmark:", error);
         }
+    };
+    useEffect(() => {
+        setIsBookmarked(bookmarkedJobs.some((bJob) => bJob._id === job._id));
+    }, [bookmarkedJobs, job._id]);
+
+    const handleRejectOffer = async () => {
+        // API call to reject offer
+
+        // simulate loading state (replace with API call)
+        setLoading(true);
+        setTimeout(() => {
+            // Update state
+            setOfferRejected(true);
+            setOfferAccepted(false);
+            setPendingOffer(false);
+            setLoading(false);
+            closeRejectModal();
+        }, 2000);
+
+        console.log("Offer Rejected");
+    };
+
+    const closeRejectModal = () => {
+        if (loading) return;
+        setOpenRejectModal(false);
+    };
+
+    const handleAcceptOffer = async () => {
+        // API call to accept offer
+
+        // simulate loading state (replace with API call)
+        setLoading(true);
+        setTimeout(() => {
+            // Update state
+            setOfferAccepted(true);
+            setOfferRejected(false);
+            setPendingOffer(false);
+            setLoading(false);
+            setOpenAcceptModal(false);
+        }, 2000);
+
+        console.log("Offer Accepted");
     };
 
     // Calculate days ago
@@ -44,6 +163,17 @@ const JobCard = ({job}) => {
     const handleCardClick = () => {
         console.log("Card Clicked");
         // navigate to job details page
+        navigate(`/dev/job`, { state: { userId, job, applied, pendingOffer, offerAccepted, offerRejected , isBookmarked } });
+    };
+
+    //Validating Props
+    JobCard.propTypes = {
+        job: PropTypes.object.isRequired,
+        userId: PropTypes.string.isRequired,
+        setBookmarkedJobs: PropTypes.func.isRequired,
+        bookmarkedJobs: PropTypes.array.isRequired,
+        appliedJobs: PropTypes.array.isRequired,
+        offeredJobs: PropTypes.array.isRequired,
     };
 
     return (
@@ -67,7 +197,7 @@ const JobCard = ({job}) => {
                         {/* Company Logo */}
                         <Avatar
                             size="lg"
-                            alt="CompanyName"
+                            alt={job.postedBy.name}
                             src="companyLogo"
                             color="primary"
                         />
@@ -89,7 +219,6 @@ const JobCard = ({job}) => {
                                         sx={{ cursor: "pointer" }}
                                     >
                                         {/* Job Title */}
-                                        {/* make the title change color to primary on hover */}
                                         <Link
                                             level="h3"
                                             color="primary"
@@ -100,13 +229,89 @@ const JobCard = ({job}) => {
                                         {/* Key facts */}
                                         <Stack
                                             direction="row"
-                                            spacing={2.5}
+                                            spacing={2}
                                             alignItems={"center"}
                                         >
                                             {/* Company Name */}
                                             <Typography level="title-md">
                                                 {job.postedBy.name}
                                             </Typography>
+
+                                            {/* Applied */}
+                                            {applied &&
+                                                !pendingOffer &&
+                                                !offerAccepted &&
+                                                !offerRejected && (
+                                                    <Typography
+                                                        level="body-md"
+                                                        sx={{
+                                                            color: "#6941C6",
+                                                        }}
+                                                        startDecorator={
+                                                            <img
+                                                                src={
+                                                                    appliedIcon
+                                                                }
+                                                                width={"20px"}
+                                                            />
+                                                        }
+                                                    >
+                                                        Applied
+                                                    </Typography>
+                                                )}
+                                            {/* Pending Offer */}
+                                            {pendingOffer && (
+                                                <Typography
+                                                    level="body-md"
+                                                    sx={{ color: "#F79009" }}
+                                                    startDecorator={
+                                                        <img
+                                                            src={
+                                                                offerPendingIcon
+                                                            }
+                                                            width={"20px"}
+                                                        />
+                                                    }
+                                                >
+                                                    Offered
+                                                </Typography>
+                                            )}
+                                            {/* Offer Accepted */}
+                                            {offerAccepted && (
+                                                <Typography
+                                                    level="body-md"
+                                                    sx={{ color: "#027A48" }}
+                                                    startDecorator={
+                                                        <img
+                                                            src={
+                                                                offerAcceptedIcon
+                                                            }
+                                                            width={"16px"}
+                                                            alt="Company Size"
+                                                        />
+                                                    }
+                                                >
+                                                    Offer accepted
+                                                </Typography>
+                                            )}
+                                            {/* Offer Rejected */}
+                                            {offerRejected && (
+                                                <Typography
+                                                    level="body-md"
+                                                    sx={{ color: "#D32F2F" }}
+                                                    startDecorator={
+                                                        <img
+                                                            src={
+                                                                offerRejectedIcon
+                                                            }
+                                                            width={"16px"}
+                                                            alt="Company Size"
+                                                        />
+                                                    }
+                                                >
+                                                    Offer rejected
+                                                </Typography>
+                                            )}
                                             {/* Company Size */}
                                             <Typography
                                                 level="body-md"
@@ -118,7 +323,7 @@ const JobCard = ({job}) => {
                                                     />
                                                 }
                                             >
-                                                 {job.postedBy.size}
+                                                {job.postedBy.size}
                                             </Typography>
                                             {/* Time Posted */}
                                             <Typography
@@ -132,9 +337,9 @@ const JobCard = ({job}) => {
                                                 }
                                             >
                                                 {daysAgo === 0
-                                                    ? 'Today'
+                                                    ? "Today"
                                                     : `${daysAgo} day${
-                                                          daysAgo > 1 ? 's' : ''
+                                                          daysAgo > 1 ? "s" : ""
                                                       } ago`}
                                             </Typography>
                                         </Stack>
@@ -169,13 +374,177 @@ const JobCard = ({job}) => {
                                     >
                                         {job.jobType}
                                     </Chip>
+                                    <Chip
+                                        sx={{
+                                            "--Chip-radius": "6px",
+                                            borderColor: "#D0D5DD",
+                                        }}
+                                        variant="outlined"
+                                    >
+                                       {job.preferredTechnologies[0]}
+                                    </Chip>
+                                    <Chip
+                                        sx={{
+                                            "--Chip-radius": "6px",
+                                            borderColor: "#D0D5DD",
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        {job.experience}
+                                    </Chip>
+                                    <Chip
+                                        sx={{
+                                            "--Chip-radius": "6px",
+                                            borderColor: "#D0D5DD",
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        {job.environment}
+                                    </Chip>
                                     {/* Add more chips as needed */}
                                 </Stack>
+                                {/* Accept/Reject Buttons (only shown if offer is pending) */}
+                                {pendingOffer && (
+                                    <Grid
+                                        container
+                                        direction="row"
+                                        justifyContent="flex-start"
+                                        alignItems="center"
+                                        gap={2}
+                                    >
+                                        {/* Reject Button */}
+                                        <Grid item xs={2.5}>
+                                            <Button
+                                                variant="outlined"
+                                                fullWidth
+                                                startDecorator={
+                                                    <img
+                                                        src={rejectIcon}
+                                                        width={"20px"}
+                                                        alt="Reject Offer"
+                                                    />
+                                                }
+                                                color="neutral"
+                                                sx={{ "--Button-gap": "4px" }}
+                                                onClick={() =>
+                                                    setOpenRejectModal(true)
+                                                }
+                                            >
+                                                Reject
+                                            </Button>
+                                        </Grid>
+                                        {/* Accept Button */}
+                                        <Grid item xs={2.5}>
+                                            <Button
+                                                variant="soft"
+                                                fullWidth
+                                                startDecorator={
+                                                    <img
+                                                        src={acceptIcon}
+                                                        width={"18px"}
+                                                        alt="Accept Offer"
+                                                    />
+                                                }
+                                                sx={{ "--Button-gap": "4px" }}
+                                                onClick={() =>
+                                                    setOpenAcceptModal(true)
+                                                }
+                                            >
+                                                Accept
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                )}
                             </Stack>
                         </Box>
                     </Stack>
                 </CardContent>
             </Card>
+
+            {/* Reject Popup */}
+            <Modal open={openRejectModal} onClose={closeRejectModal}>
+                <ModalDialog
+                    color="neutral"
+                    layout="center"
+                    size="lg"
+                    variant="plain"
+                >
+                    <ModalClose />
+                    <DialogTitle>Reject Offer</DialogTitle>
+                    <DialogContent>
+                        {" "}
+                        Are you sure you want to reject this offer?
+                    </DialogContent>
+                    <Stack direction="row" justifyContent="flex-start" gap={2}>
+                        <Button
+                            onClick={closeRejectModal}
+                            variant="outlined"
+                            color="neutral"
+                            disabled={loading}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleRejectOffer}
+                            variant="soft"
+                            color="danger"
+                            loading={loading}
+                        >
+                            Reject
+                        </Button>
+                    </Stack>
+                    {error && (
+                        <Alert variant="soft" color="danger">
+                            {error}
+                        </Alert>
+                    )}
+                </ModalDialog>
+            </Modal>
+            {/* Accept Popup */}
+            <Modal
+                open={openAcceptModal}
+                onClose={() => {
+                    if (!loading) setOpenAcceptModal(false);
+                }}
+            >
+                <ModalDialog
+                    color="neutral"
+                    layout="center"
+                    size="lg"
+                    variant="plain"
+                >
+                    <ModalClose />
+                    <DialogTitle>Accept Offer</DialogTitle>
+                    <DialogContent>
+                        Are you sure you want to accept this offer?
+                    </DialogContent>
+                    <Stack direction="row" justifyContent="flex-start" gap={2}>
+                        <Button
+                            onClick={() => {
+                                if (!loading) setOpenAcceptModal(false);
+                            }}
+                            variant="outlined"
+                            color="neutral"
+                            disabled={loading}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleAcceptOffer}
+                            variant="soft"
+                            color="success"
+                            loading={loading}
+                        >
+                            Accept
+                        </Button>
+                    </Stack>
+                    {error && (
+                        <Alert variant="soft" color="danger">
+                            {error}
+                        </Alert>
+                    )}
+                </ModalDialog>
+            </Modal>
         </>
     );
 };

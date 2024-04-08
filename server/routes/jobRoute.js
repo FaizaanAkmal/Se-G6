@@ -7,12 +7,16 @@ const {
   getAllJobs,
   editJob,
   deleteJob,
+  updateBookmarks,
+  individualBookmarks,
+  
 } = require("../controllers/jobController");
 
 jobRouter.post("/create", createJob);
-jobRouter.get("/", getJob);
 jobRouter.get("/all", getAllJobs);
 jobRouter.patch("/edit", editJob);
 jobRouter.delete("/delete", deleteJob);
+jobRouter.put("/updateBookmarks",updateBookmarks)
+jobRouter.put("/individualBookmarks",individualBookmarks)
 
 module.exports = jobRouter;

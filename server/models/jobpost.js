@@ -57,8 +57,13 @@ const JobPostSchema = new Schema({
     required: true
   },
   applicants: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Dev',
+    applicant: {
+      type: Schema.Types.ObjectId,
+      ref: 'Dev',
+    },
+    coverLetter: {
+      type: String,
+    },
   }],
   shortlisted: [{
     type: Schema.Types.ObjectId,
