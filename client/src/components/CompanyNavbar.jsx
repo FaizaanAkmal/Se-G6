@@ -1,8 +1,10 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Asset imports
 import logo from "../assets/logo.png";
+
+import { clientRoutes } from "../routes.js";
 
 // UI imports
 import {
@@ -13,16 +15,15 @@ import {
     MenuButton,
     MenuItem,
     Stack,
-    Avatar
+    Avatar,
 } from "@mui/joy";
 
 // Route imports
 import { clientRoutes } from "../routes.js";
 
-export default function CompanyNavbar({ currentPage, userId }) {
-    // navigation
+export default function CompanyNavbar({ currentPage }) {
     const navigate = useNavigate();
-
+    const location = useLocation();
     // Logout handler
     const handleLogout = () => {
         navigate(clientRoutes.login);
@@ -33,10 +34,23 @@ export default function CompanyNavbar({ currentPage, userId }) {
         return currentPage === pageName ? "primary" : "neutral";
     };
 
-    // Handler for "Post a Job" button
-    const handlePostJob = () => {
-        // Redirect to job posting page
-        navigate(clientRoutes.postAJob, {state: {userId: userId} });
+    const handleLogoClick = () => {
+        // navigate to (/company/dashboard)
+        navigate(clientRoutes.companyDashboard, { state: location.state });
+    };
+
+    const handleTabChange = (tab) => {
+        if (tab === "dashboard") {
+            // navigate to (/company/dashboard)
+            navigate(clientRoutes.companyDashboard, { state: location.state });
+        }
+        if (tab === "postJob") {
+            // navigate to (/postAJob)
+            navigate(clientRoutes.postAJob, { state: location.state });
+        }
+        if (tab === "settings") {
+            // TODO:  navigate to (/company/settings)
+        }
     };
 
     return (
@@ -52,7 +66,13 @@ export default function CompanyNavbar({ currentPage, userId }) {
                 backgroundColor: "#fff", // Adjust the background color as needed
             }}
         >
-            <img src={logo} alt="logo" width="100" />
+            <img
+                src={logo}
+                alt="logo"
+                width="100"
+                onClick={handleLogoClick}
+                style={{ cursor: "pointer" }}
+            />
             <Stack direction="row" spacing={2} alignItems="center">
                 <Button variant="plain" color={getButtonColor("dashboard")}>
                     Dashboard

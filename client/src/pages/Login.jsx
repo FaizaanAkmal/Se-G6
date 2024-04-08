@@ -41,10 +41,12 @@ export default function Login() {
 
         if (userType === "Developer") {
           console.log("Developer");
-          navigate(clientRoutes.devDashboard, {state: { userId: userId } });
+          navigate(clientRoutes.devDashboard, { state: { userId: userId } });
         } else if (userType === "Company") {
           console.log("Company");
-          navigate(clientRoutes.companyDashboard, {state: { userId: userId } });
+          navigate(clientRoutes.companyDashboard, {
+            state: { userId: userId },
+          });
         } else {
           // Handle unknown userType
           console.log("Unknown userType:", userType);

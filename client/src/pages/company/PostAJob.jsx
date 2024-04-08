@@ -32,6 +32,7 @@ import {
   Textarea,
   Autocomplete,
   Alert,
+  FormHelperText,
 } from "@mui/joy";
 
 // Routes Import
@@ -50,11 +51,13 @@ export default function PostAJob() {
   const [environment, setEnvironment] = useState("");
   const [compensation, setCompensation] = useState("");
 
-  // navigation
-  const navigate = useNavigate();
+  const [validCompensation, setValidCompensation] = useState(true);
 
   // state received
   const { userId } = useLocation().state;
+
+  // navigation
+  const navigate = useNavigate();
 
   // form validation
   const [loading, setLoading] = useState(false);
@@ -135,6 +138,15 @@ export default function PostAJob() {
     setLoading(true);
     setError("");
 
+    // validate compensation if it is not empty
+    if (compensation) {
+      if (compensation < 1000 || compensation > 1000000) {
+        setValidCompensation(false);
+        setLoading(false);
+        return;
+      }
+    }
+
     // create a data object to send in the request
     const requestData = {
       title,
@@ -147,18 +159,18 @@ export default function PostAJob() {
       jobType,
       environment,
       compensation,
-      userId
+      userId,
     };
 
-    // console.log("Request data before sending:", requestData);
+    console.log("Request data before sending:", requestData);
     try {
       // Send a POST request to the server
       const response = await axios.post(apiRoutes.job.create, requestData);
 
       console.log("Response:", response.data);
 
-      // Navigate to the dashboard (go back)
-      navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
+      // Navigate to the dashboard or handle the response accordingly
+      navigate(clientRoutes.companyDashboard, { userId: userId });
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle error state or display error message
@@ -402,7 +414,11 @@ export default function PostAJob() {
                         onChange={handleCompensationChange}
                         value={compensation}
                         startDecorator="$"
+                        error={!validCompensation}
                       />
+                      <FormHelperText>
+                        Please enter a number between 1,000 and 1,000,000
+                      </FormHelperText>
                     </FormControl>
                     {/* Back + Submit Button */}
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>

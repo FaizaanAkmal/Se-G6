@@ -1,9 +1,9 @@
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // UI Imports
-import { Grid, Typography, Button, Stack } from "@mui/joy";
+import { Grid, Typography, Button, Stack, Badge, Alert } from "@mui/joy";
 
 // Custom Components Imports
 import DevNavbar from "../../components/DevNavbar.jsx";
@@ -16,54 +16,75 @@ import { apiRoutes, clientRoutes } from "../../routes.js";
 export default function DevDashboard() {
   const [activeTab, setActiveTab] = useState("All");
   const [loading, setLoading] = useState(false);
-  const [noMoreJobs, setNoMoreJobs] = useState(true);
   const [jobs, setJobs] = useState([]);
-
+  const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  const [offeredJobs, setOfferedJobs] = useState([]);
+  const [allJobs, setAllJobs] = useState([]);
   // navigation
   const navigate = useNavigate();
 
   // state received
   const { userId } = useLocation().state;
-
+  //Fetching All Jobs Together
   const fetchJobsData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(apiRoutes.job.getAll);
-      console.log("Response data,",response)
-      setJobs(response.data);
-      setNoMoreJobs(false);
+      const response = await axios.get(apiRoutes.job.getAll, {
+        params: { userId },
+      });
+      console.log("Response data,", response.data);
+
+      setAllJobs(response.data.allJobs);
+      setJobs(response.data.allJobs);
+      setBookmarkedJobs(response.data.bookmarkedJobs);
+      setAppliedJobs(response.data.appliedJobs);
+      setOfferedJobs(response.data.offeredJobs);
     } catch (error) {
       console.error("Error fetching jobs:", error);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchJobsData();
   }, []);
 
-  const loadMoreJobs = async () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setNoMoreJobs(false);
-    }, 2000);
+  const viewMoreJobs = async () => {
+    // scroll to top
+    window.scrollTo(0, 0);
+
+    // navigate to (/dev/searchjobs)
+    navigate(clientRoutes.searchJobs, { state: location.state });
   };
 
   // Handler to change the active tab
-  const handleTabChange = (tab) => {
+  const handleTabChange = async (tab) => {
     setActiveTab(tab);
-    if (tab === "Bookmarked") {
-      // API call to get bookmarked jobs
-    }
-    if (tab === "Applied") {
-      // API call to get applied jobs
-    }
-    if (tab === "All") {
-      // API call to get all jobs
+    switch (tab) {
+      case "All":
+        setJobs(allJobs);
+        break;
+      case "Bookmarked":
+        setJobs(bookmarkedJobs);
+        break;
+      case "Applied":
+        setJobs(appliedJobs);
+        break;
+      case "Job Offers":
+        setJobs(offeredJobs);
+        break;
+      default:
+        break;
     }
   };
+
+  // Effect to update the jobs displayed when bookmarkedJobs changes
+  useEffect(() => {
+    if (activeTab === "Bookmarked") {
+      setJobs(bookmarkedJobs);
+    }
+  }, [bookmarkedJobs.length, activeTab]);
 
   return (
     <>
@@ -103,6 +124,7 @@ export default function DevDashboard() {
             }}
           >
             {/* Tabs with active state handling */}
+            {/* All */}
             <Button
               variant={activeTab === "All" ? "outlined" : "plain"}
               color="neutral"
@@ -115,6 +137,7 @@ export default function DevDashboard() {
             >
               All
             </Button>
+            {/* Bookmarked */}
             <Button
               variant={activeTab === "Bookmarked" ? "outlined" : "plain"}
               size="lg"
@@ -127,6 +150,7 @@ export default function DevDashboard() {
             >
               Bookmarked
             </Button>
+            {/* Applied */}
             <Button
               variant={activeTab === "Applied" ? "outlined" : "plain"}
               size="lg"
@@ -139,30 +163,150 @@ export default function DevDashboard() {
             >
               Applied
             </Button>
+            {/* Job offers */}
+            <Badge color="primary" badgeContent={offeredJobs.length} size="sm">
+              <Button
+                variant={activeTab === "Job Offers" ? "outlined" : "plain"}
+                size="lg"
+                color="neutral"
+                onClick={() => handleTabChange("Job Offers")}
+                sx={{
+                  borderRadius: 6,
+                  bgcolor: activeTab === "Job Offers" ? "white" : "",
+                }}
+              >
+                Job Offers
+              </Button>
+            </Badge>
           </Stack>
           {/* Content based on active tab */}
           {activeTab === "All" && (
             <Stack spacing={2} mt={4}>
               {jobs.map((job) => (
-                <JobCard key={job._id} job={job} />
+                <JobCard
+                  key={job._id}
+                  job={job}
+                  userId={userId}
+                  setBookmarkedJobs={setBookmarkedJobs}
+                  bookmarkedJobs={bookmarkedJobs}
+                  appliedJobs={appliedJobs}
+                  offeredJobs={offeredJobs}
+                />
               ))}
             </Stack>
           )}
           {activeTab === "Bookmarked" && (
-            <div>{/* Content for Bookmarked */}</div>
+            <Stack spacing={2} mt={4}>
+              {jobs.map((job) => (
+                <JobCard
+                  key={job._id}
+                  job={job}
+                  userId={userId}
+                  setBookmarkedJobs={setBookmarkedJobs}
+                  bookmarkedJobs={bookmarkedJobs}
+                  appliedJobs={appliedJobs}
+                  offeredJobs={offeredJobs}
+                />
+              ))}
+            </Stack>
           )}
-          {activeTab === "Applied" && <div>{/* Content for Applied */}</div>}
+          {activeTab === "Applied" && (
+            <Stack spacing={2} mt={4}>
+              {jobs.map((job) => (
+                <JobCard
+                  key={job._id}
+                  job={job}
+                  userId={userId}
+                  setBookmarkedJobs={setBookmarkedJobs}
+                  bookmarkedJobs={bookmarkedJobs}
+                  appliedJobs={appliedJobs}
+                  offeredJobs={offeredJobs}
+                />
+              ))}
+            </Stack>
+          )}
 
-          {/* Pagination */}
-          {noMoreJobs && (
+          {activeTab === "Job Offers" && (
+            <Stack spacing={2} mt={4}>
+              {jobs.map((job) => (
+                <JobCard
+                  key={job._id}
+                  job={job}
+                  userId={userId}
+                  setBookmarkedJobs={setBookmarkedJobs}
+                  bookmarkedJobs={bookmarkedJobs}
+                  appliedJobs={appliedJobs}
+                  offeredJobs={offeredJobs}
+                />
+              ))}
+            </Stack>
+          )}
+
+          {/* NoJobs / Loading Jobs */}
+          {activeTab === "All" && allJobs.length === 0 && (
+            <Alert
+              size="lg"
+              sx={{
+                background: "#F9F9FB",
+                border: "1px solid #F2F4F7",
+              }}
+            >
+              {" "}
+              Hang tight! We're picking the best jobs for you! ✨{" "}
+            </Alert>
+          )}
+          {/* No Bookmarked Jobs */}
+          {activeTab === "Bookmarked" && bookmarkedJobs.length === 0 && (
+            <Alert
+              size="lg"
+              sx={{
+                background: "#F9F9FB",
+                border: "1px solid #F2F4F7",
+              }}
+            >
+              {" "}
+              You haven't bookmarked any jobs yet. Start bookmarking to apply
+              later! 📌{" "}
+            </Alert>
+          )}
+          {/* No Applied Jobs */}
+          {activeTab === "Applied" && appliedJobs.length === 0 && (
+            <Alert
+              size="lg"
+              sx={{
+                background: "#F9F9FB",
+                border: "1px solid #F2F4F7",
+              }}
+            >
+              {" "}
+              You haven't applied to any jobs yet. Get started today! 🚀{" "}
+            </Alert>
+          )}
+          {/* No Job Offers */}
+          {activeTab === "Job Offers" && offeredJobs.length === 0 && (
+            <Alert
+              size="lg"
+              sx={{
+                background: "#F9F9FB",
+                border: "1px solid #F2F4F7",
+              }}
+            >
+              {" "}
+              You don't have any job offers yet. Don't give up, keep applying!
+              💪{" "}
+            </Alert>
+          )}
+
+          {/*  View More Jobs */}
+          {activeTab === "All" && allJobs.length > 0 && (
             <Button
               variant="soft"
               color="primary"
               sx={{ borderRadius: 8, mt: 6 }}
               loading={loading}
-              onClick={loadMoreJobs}
+              onClick={viewMoreJobs}
             >
-              Load More
+              View More Jobs
             </Button>
           )}
         </Grid>
