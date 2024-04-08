@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // UI Imports
-import { Grid, Typography, Button, Stack } from "@mui/joy";
+import { Grid, Typography, Button, Stack, Badge, Alert } from "@mui/joy";
 
 // Custom Components Imports
 import DevNavbar from "../../components/DevNavbar.jsx";
@@ -34,11 +34,12 @@ export default function DevDashboard() {
         try {
             setLoading(true);
             const response = await axios.get(apiRoutes.job.getAll, {
-                params: { userId }
+                params: { userId },
             });
             console.log("Response data,", response.data);
 
-            const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } = response.data;
+            const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } =
+                response.data;
             setAllJobs(allJobs);
             setJobs(allJobs);
             setBookmarkedJobs(bookmarkedJobs);
@@ -85,6 +86,13 @@ export default function DevDashboard() {
         }
     };
 
+    // Effect to update the jobs displayed when bookmarkedJobs changes
+    useEffect(() => {
+        if (activeTab === "Bookmarked") {
+            setJobs(bookmarkedJobs);
+        }
+    }, [bookmarkedJobs.length, activeTab]);
+
     return (
         <>
             <DevNavbar currentPage="dashboard" />
@@ -123,6 +131,7 @@ export default function DevDashboard() {
                         }}
                     >
                         {/* Tabs with active state handling */}
+                        {/* All */}
                         <Button
                             variant={activeTab === "All" ? "outlined" : "plain"}
                             color="neutral"
@@ -135,6 +144,7 @@ export default function DevDashboard() {
                         >
                             All
                         </Button>
+                        {/* Bookmarked */}
                         <Button
                             variant={
                                 activeTab === "Bookmarked"
@@ -152,6 +162,7 @@ export default function DevDashboard() {
                         >
                             Bookmarked
                         </Button>
+                        {/* Applied */}
                         <Button
                             variant={
                                 activeTab === "Applied" ? "outlined" : "plain"
@@ -166,23 +177,32 @@ export default function DevDashboard() {
                         >
                             Applied
                         </Button>
-                        <Button
-                            variant={
-                                activeTab === "Job Offers"
-                                    ? "outlined"
-                                    : "plain"
-                            }
-                            size="lg"
-                            color="neutral"
-                            onClick={() => handleTabChange("Job Offers")}
-                            sx={{
-                                borderRadius: 6,
-                                bgcolor:
-                                    activeTab === "Job Offers" ? "white" : "",
-                            }}
+                        {/* Job offers */}
+                        <Badge
+                            color="primary"
+                            badgeContent={offeredJobs.length}
+                            size="sm"
                         >
-                            Job Offers
-                        </Button>
+                            <Button
+                                variant={
+                                    activeTab === "Job Offers"
+                                        ? "outlined"
+                                        : "plain"
+                                }
+                                size="lg"
+                                color="neutral"
+                                onClick={() => handleTabChange("Job Offers")}
+                                sx={{
+                                    borderRadius: 6,
+                                    bgcolor:
+                                        activeTab === "Job Offers"
+                                            ? "white"
+                                            : "",
+                                }}
+                            >
+                                Job Offers
+                            </Button>
+                        </Badge>
                     </Stack>
                     {/* Content based on active tab */}
                     {activeTab === "All" && (
@@ -196,7 +216,6 @@ export default function DevDashboard() {
                                     bookmarkedJobs={bookmarkedJobs}
                                     appliedJobs={appliedJobs}
                                     offeredJobs={offeredJobs}
-                                    
                                 />
                             ))}
                         </Stack>
@@ -212,7 +231,6 @@ export default function DevDashboard() {
                                     bookmarkedJobs={bookmarkedJobs}
                                     appliedJobs={appliedJobs}
                                     offeredJobs={offeredJobs}
-                                    
                                 />
                             ))}
                         </Stack>
@@ -228,7 +246,6 @@ export default function DevDashboard() {
                                     bookmarkedJobs={bookmarkedJobs}
                                     appliedJobs={appliedJobs}
                                     offeredJobs={offeredJobs}
-                                    
                                 />
                             ))}
                         </Stack>
@@ -245,10 +262,66 @@ export default function DevDashboard() {
                                     bookmarkedJobs={bookmarkedJobs}
                                     appliedJobs={appliedJobs}
                                     offeredJobs={offeredJobs}
-                                    
                                 />
                             ))}
                         </Stack>
+                    )}
+
+                    {/* NoJobs / Loading Jobs */}
+                    {activeTab === "All" && allJobs.length === 0 && (
+                        <Alert
+                            size="lg"
+                            sx={{
+                                background: "#F9F9FB",
+                                border: "1px solid #F2F4F7",
+                            }}
+                        >
+                            {" "}
+                            Hang tight! We're picking the best jobs for you! ✨{" "}
+                        </Alert>
+                    )}
+                    {/* No Bookmarked Jobs */}
+                    {activeTab === "Bookmarked" &&
+                        bookmarkedJobs.length === 0 && (
+                            <Alert
+                                size="lg"
+                                sx={{
+                                    background: "#F9F9FB",
+                                    border: "1px solid #F2F4F7",
+                                }}
+                            >
+                                {" "}
+                                You haven't bookmarked any jobs yet. Start
+                                bookmarking to apply later! 📌{" "}
+                            </Alert>
+                        )}
+                    {/* No Applied Jobs */}
+                    {activeTab === "Applied" && appliedJobs.length === 0 && (
+                        <Alert
+                            size="lg"
+                            sx={{
+                                background: "#F9F9FB",
+                                border: "1px solid #F2F4F7",
+                            }}
+                        >
+                            {" "}
+                            You haven't applied to any jobs yet. Get started
+                            today! 🚀{" "}
+                        </Alert>
+                    )}
+                    {/* No Job Offers */}
+                    {activeTab === "Job Offers" && offeredJobs.length === 0 && (
+                        <Alert
+                            size="lg"
+                            sx={{
+                                background: "#F9F9FB",
+                                border: "1px solid #F2F4F7",
+                            }}
+                        >
+                            {" "}
+                            You don't have any job offers yet. Don't give up,
+                            keep applying! 💪{" "}
+                        </Alert>
                     )}
 
                     {/* Pagination */}
