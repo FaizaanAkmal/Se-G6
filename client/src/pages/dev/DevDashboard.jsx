@@ -11,12 +11,11 @@ import JobCard from "../../components/JobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
 // Routes Import
-import { apiRoutes } from "../../routes.js";
+import { apiRoutes, clientRoutes } from "../../routes.js";
 
 export default function DevDashboard() {
     const [activeTab, setActiveTab] = useState("All");
     const [loading, setLoading] = useState(false);
-    const [noMoreJobs, setNoMoreJobs] = useState(true);
     const [jobs, setJobs] = useState([]);
     const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
     const [appliedJobs, setAppliedJobs] = useState([]);
@@ -45,8 +44,6 @@ export default function DevDashboard() {
             setBookmarkedJobs(bookmarkedJobs);
             setAppliedJobs(appliedJobs);
             setOfferedJobs(offeredJobs);
-
-            setNoMoreJobs(false);
         } catch (error) {
             console.error("Error fetching jobs:", error);
         } finally {
@@ -57,12 +54,12 @@ export default function DevDashboard() {
         fetchJobsData();
     }, []);
 
-    const loadMoreJobs = async () => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-            setNoMoreJobs(false);
-        }, 2000);
+    const viewMoreJobs = async () => {
+        // scroll to top
+        window.scrollTo(0, 0);
+
+        // navigate to (/dev/searchjobs)
+        navigate(clientRoutes.searchJobs, { state: location.state });
     };
 
     // Handler to change the active tab
@@ -324,16 +321,16 @@ export default function DevDashboard() {
                         </Alert>
                     )}
 
-                    {/* Pagination */}
-                    {noMoreJobs && (
+                    {/*  View More Jobs */}
+                    {activeTab === "All" && allJobs.length > 0 && (
                         <Button
                             variant="soft"
                             color="primary"
                             sx={{ borderRadius: 8, mt: 6 }}
                             loading={loading}
-                            onClick={loadMoreJobs}
+                            onClick={viewMoreJobs}
                         >
-                            Load More
+                            View More Jobs
                         </Button>
                     )}
                 </Grid>
