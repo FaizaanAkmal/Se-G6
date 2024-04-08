@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // Routes
-import { clientRoutes } from "../routes";
+import { apiRoutes, clientRoutes } from "../routes";
 
 // Custom Assets
 import arrowLeftIcon from "../assets/arrowLeftIcon.svg";
@@ -35,23 +35,76 @@ import {
 
 export default function DevJobRecs() {
     // View All Jobs Handler
-
     const navigate = useNavigate();
+    const location = useLocation()
+    const jobId = location.state.job._id
+    const userId = location.state.userId
+    const [isBookmarked, setIsBookmarked] = useState(false);
+    const [jobs, setJobs] = useState([]);
+    
+    
 
     const viewAllJobsHandler = () => {
         // Navigate to the search jobs page
-        navigate(clientRoutes.searchJobs);
-    };
-
-    const [isBookmarked, setIsBookmarked] = useState(false);
-
-    const handleBookmarkToggle = () => {
-        setIsBookmarked(!isBookmarked);
+        navigate(clientRoutes.devDashboard, { state: location.state });
     };
 
     const handleCardClick = () => {
         // Redirect to job details page
     };
+
+    //Fetching Related Jobs
+
+    const fetchRelatedJobs = async () => {
+        try {
+            const response = await axios.get(apiRoutes.job.getRelatedJobs, {
+                params: { userId, jobId},
+            });
+            console.log(response.data)
+            // Calculate days ago for each job
+            const jobsWithDaysAgo = response.data.jobsToSend.map((job) => {
+                const datePosted = new Date(job.datePosted);
+                const currentDate = new Date();
+                const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+                const daysAgo = Math.round(Math.abs((currentDate - datePosted) / oneDay));
+                return { ...job, daysAgo };
+            });
+
+            setJobs(jobsWithDaysAgo);
+        } catch (error) {
+            console.error("Error fetching related jobs:", error);
+        }
+    };
+
+
+    const handleBookmarkToggle = async (jobToUpdate) => {
+        try {
+            const updatedJobs = jobs.map(job => {
+                if (job._id === jobToUpdate._id) {
+                    return { ...job, isBookmarked: !job.isBookmarked };
+                }
+                return job;
+            });
+    
+            // Update the state with the new jobs array
+            setJobs(updatedJobs);
+    
+            // Send the update to the backend
+           const response= await axios.put(apiRoutes.job.individualBookmarks, {
+                userId,
+                jobId: jobToUpdate._id,
+                isBookmarked: !jobToUpdate.isBookmarked,
+            });
+
+            console.log("Respone: ",response)
+        } catch (error) {
+            console.error("Error toggling bookmark:", error);
+        }
+    };
+    useEffect(() => {
+        fetchRelatedJobs();
+    }, []);
+
 
     return (
         <>
@@ -94,369 +147,133 @@ export default function DevJobRecs() {
                         </Stack>
                         {/* Job Recommendations - Only 3 Recs */}
                         <Grid container spacing={2}>
-                            <Grid item md={4}>
-                                <Card
-                                    variant="outlined"
-                                    size="lg"
-                                    sx={{
-                                        borderRadius: "12px",
-                                        border: "1px solid #D0D5DD",
-                                        boxShadow: "none",
-                                        backgroundColor: "#fff",
-                                    }}
-                                >
-                                    <CardContent>
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="flex-start"
-                                            spacing={2}
-                                            mb={2}
-                                        >
-                                            {/* Company Logo */}
-                                            <Avatar
-                                                size="lg"
-                                                alt="CompanyLogo"
-                                                src="companyLogo"
-                                                color="primary"
-                                            />
-                                            {/* Bookmark Button */}
-                                            <IconButton
-                                                onClick={handleBookmarkToggle}
-                                            >
-                                                <img
-                                                    src={
-                                                        isBookmarked
-                                                            ? bookmarkActiveIcon
-                                                            : bookmarkInactiveIcon
-                                                    }
-                                                    width={"24px"}
-                                                    alt="Bookmark"
-                                                />
-                                            </IconButton>
-                                        </Stack>
-
-                                        <Stack spacing={0}>
-                                            {/* Job Title */}
-                                            <Link
-                                                level="h4"
-                                                color="primary"
-                                                sx={{ color: "#101828" }}
-                                                mb={1}
-                                            >
-                                                Junior Software Developer
-                                            </Link>
-
-                                            {/* Key Facts */}
+                            {jobs.map((job) => (
+                                <Grid item md={4} key={job._id}>
+                                    <Card
+                                        variant="outlined"
+                                        size="lg"
+                                        sx={{
+                                            borderRadius: "12px",
+                                            border: "1px solid #D0D5DD",
+                                            boxShadow: "none",
+                                            backgroundColor: "#fff",
+                                        }}
+                                    >
+                                        <CardContent>
                                             <Stack
                                                 direction="row"
+                                                justifyContent="space-between"
+                                                alignItems="flex-start"
                                                 spacing={2}
-                                                alignItems={"center"}
-                                                flexWrap="wrap"
-                                                useFlexGap
-                                                mb={1}
+                                                mb={2}
                                             >
-                                                {/* Company Name */}
-                                                <Typography level="title-md">
-                                                    Ultralytics
-                                                </Typography>
-                                                {/* Time Posted */}
-                                                <Typography
-                                                    level="body-md"
-                                                    startDecorator={
-                                                        <img
-                                                            src={timePostedIcon}
-                                                            width={"18px"}
-                                                            alt="Time Posted"
-                                                        />
-                                                    }
-                                                >
-                                                    1 day ago
-                                                </Typography>
-                                            </Stack>
-
-                                            {/* Chips - Display max of 4 chips */}
-                                            <Stack
-                                                direction="row"
-                                                spacing={1}
-                                                flexWrap="wrap"
-                                                useFlexGap
-                                            >
-                                                {/* Example Chips */}
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    C/C++
-                                                </Chip>
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    Contract
-                                                </Chip>
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    Junior-level
-                                                </Chip>
-                                            </Stack>
-                                        </Stack>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            <Grid item md={4}>
-                                <Card
-                                    variant="outlined"
-                                    size="lg"
-                                    sx={{
-                                        borderRadius: "12px",
-                                        border: "1px solid #D0D5DD",
-                                        boxShadow: "none",
-                                        backgroundColor: "#fff",
-                                    }}
-                                >
-                                    <CardContent>
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="flex-start"
-                                            spacing={2}
-                                            mb={2}
-                                        >
-                                            {/* Company Logo */}
-                                            <Avatar
-                                                size="lg"
-                                                alt="CompanyLogo"
-                                                src="companyLogo"
-                                                color="primary"
-                                            />
-                                            {/* Bookmark Button */}
-                                            <IconButton
-                                                onClick={handleBookmarkToggle}
-                                            >
-                                                <img
-                                                    src={
-                                                        isBookmarked
-                                                            ? bookmarkActiveIcon
-                                                            : bookmarkInactiveIcon
-                                                    }
-                                                    width={"24px"}
-                                                    alt="Bookmark"
+                                                {/* Company Logo */}
+                                                <Avatar
+                                                    size="lg"
+                                                    alt="CompanyLogo"
+                                                    src="companyLogo"
+                                                    color="primary"
                                                 />
-                                            </IconButton>
-                                        </Stack>
-
-                                        <Stack spacing={0}>
-                                            {/* Job Title */}
-                                            <Link
-                                                level="h4"
-                                                color="primary"
-                                                sx={{ color: "#101828" }}
-                                                mb={1}
-                                            >
-                                                Junior Software Developer
-                                            </Link>
-
-                                            {/* Key Facts */}
-                                            <Stack
-                                                direction="row"
-                                                spacing={2}
-                                                alignItems={"center"}
-                                                flexWrap="wrap"
-                                                useFlexGap
-                                                mb={1}
-                                            >
-                                                {/* Company Name */}
-                                                <Typography level="title-md">
-                                                    Ultralytics
-                                                </Typography>
-                                                {/* Time Posted */}
-                                                <Typography
-                                                    level="body-md"
-                                                    startDecorator={
-                                                        <img
-                                                            src={timePostedIcon}
-                                                            width={"18px"}
-                                                            alt="Time Posted"
-                                                        />
-                                                    }
+                                                {/* Bookmark Button */}
+                                                <IconButton
+                                                    onClick={() => handleBookmarkToggle(job)}
                                                 >
-                                                    1 day ago
-                                                </Typography>
+                                                    <img
+                                                        src={
+                                                                job.isBookmarked
+                                                                ? bookmarkActiveIcon
+                                                                : bookmarkInactiveIcon
+                                                        }
+                                                        width={"24px"}
+                                                        alt="Bookmark"
+                                                    />
+                                                </IconButton>
                                             </Stack>
-
-                                            {/* Chips - Display max of 4 chips */}
-                                            <Stack
-                                                direction="row"
-                                                spacing={1}
-                                                flexWrap="wrap"
-                                                useFlexGap
-                                            >
-                                                {/* Example Chips */}
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
+    
+                                            <Stack spacing={0}>
+                                                {/* Job Title */}
+                                                <Link
+                                                    level="h4"
+                                                    color="primary"
+                                                    sx={{ color: "#101828" }}
+                                                    mb={1}
                                                 >
-                                                    C/C++
-                                                </Chip>
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
+                                                    {job.title}
+                                                </Link>
+    
+                                                {/* Key Facts */}
+                                                <Stack
+                                                    direction="row"
+                                                    spacing={2}
+                                                    alignItems={"center"}
+                                                    flexWrap="wrap"
+                                                    useFlexGap
+                                                    mb={1}
                                                 >
-                                                    Contract
-                                                </Chip>
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
+                                                    {/* Company Name */}
+                                                    <Typography level="title-md">
+                                                        {job.postedBy.name}
+                                                    </Typography>
+                                                    {/* Time Posted */}
+                                                    <Typography
+                                                        level="body-md"
+                                                        startDecorator={
+                                                            <img
+                                                                src={timePostedIcon}
+                                                                width={"18px"}
+                                                                alt="Time Posted"
+                                                            />
+                                                        }
+                                                    >  
+                                                        {job.daysAgo === 0
+                                                        ? "Today"
+                                                        : `${job.daysAgo} day${
+                                                            job.daysAgo > 1 ? "s" : ""
+                                                        } ago`}
+                                                    </Typography>
+                                                </Stack>
+    
+                                                {/* Chips - Display max of 4 chips */}
+                                                <Stack
+                                                    direction="row"
+                                                    spacing={1}
+                                                    flexWrap="wrap"
+                                                    useFlexGap
                                                 >
-                                                    Junior-level
-                                                </Chip>
+                                                    {/* Example Chips */}
+                                                    <Chip
+                                                        sx={{
+                                                            "--Chip-radius": "6px",
+                                                            borderColor: "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {job.preferredLanguages[0]}
+                                                    </Chip>
+                                                    <Chip
+                                                        sx={{
+                                                            "--Chip-radius": "6px",
+                                                            borderColor: "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {job.jobType}
+                                                    </Chip>
+                                                    <Chip
+                                                        sx={{
+                                                            "--Chip-radius": "6px",
+                                                            borderColor: "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {job.experience}
+                                                    </Chip>
+                                                </Stack>
                                             </Stack>
-                                        </Stack>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            <Grid item md={4}>
-                                <Card
-                                    variant="outlined"
-                                    size="lg"
-                                    sx={{
-                                        borderRadius: "12px",
-                                        border: "1px solid #D0D5DD",
-                                        boxShadow: "none",
-                                        backgroundColor: "#fff",
-                                    }}
-                                >
-                                    <CardContent>
-                                        <Stack
-                                            direction="row"
-                                            justifyContent="space-between"
-                                            alignItems="flex-start"
-                                            spacing={2}
-                                            mb={2}
-                                        >
-                                            {/* Company Logo */}
-                                            <Avatar
-                                                size="lg"
-                                                alt="CompanyLogo"
-                                                src="companyLogo"
-                                                color="primary"
-                                            />
-                                            {/* Bookmark Button */}
-                                            <IconButton
-                                                onClick={handleBookmarkToggle}
-                                            >
-                                                <img
-                                                    src={
-                                                        isBookmarked
-                                                            ? bookmarkActiveIcon
-                                                            : bookmarkInactiveIcon
-                                                    }
-                                                    width={"24px"}
-                                                    alt="Bookmark"
-                                                />
-                                            </IconButton>
-                                        </Stack>
-
-                                        <Stack spacing={0}>
-                                            {/* Job Title */}
-                                            <Link
-                                                level="h4"
-                                                color="primary"
-                                                sx={{ color: "#101828" }}
-                                                mb={1}
-                                            >
-                                                Junior Software Developer
-                                            </Link>
-
-                                            {/* Key Facts */}
-                                            <Stack
-                                                direction="row"
-                                                spacing={2}
-                                                alignItems={"center"}
-                                                flexWrap="wrap"
-                                                useFlexGap
-                                                mb={1}
-                                            >
-                                                {/* Company Name */}
-                                                <Typography level="title-md">
-                                                    Ultralytics
-                                                </Typography>
-                                                {/* Time Posted */}
-                                                <Typography
-                                                    level="body-md"
-                                                    startDecorator={
-                                                        <img
-                                                            src={timePostedIcon}
-                                                            width={"18px"}
-                                                            alt="Time Posted"
-                                                        />
-                                                    }
-                                                >
-                                                    1 day ago
-                                                </Typography>
-                                            </Stack>
-
-                                            {/* Chips - Display max of 4 chips */}
-                                            <Stack
-                                                direction="row"
-                                                spacing={1}
-                                                flexWrap="wrap"
-                                                useFlexGap
-                                            >
-                                                {/* Example Chips */}
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    C/C++
-                                                </Chip>
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    Contract
-                                                </Chip>
-                                                <Chip
-                                                    sx={{
-                                                        "--Chip-radius": "6px",
-                                                        borderColor: "#D0D5DD",
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    Junior-level
-                                                </Chip>
-                                            </Stack>
-                                        </Stack>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            ))}
                         </Grid>
                     </Stack>
                 </Grid>

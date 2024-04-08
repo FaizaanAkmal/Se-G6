@@ -35,20 +35,18 @@ import {
 } from "@mui/joy";
 
 export default function DevIndividualJob() {
-    const [isBookmarked, setIsBookmarked] = useState(null);
-
-    // Job Application Status
-    const [applied, setApplied] = useState(false);
-    const [pendingOffer, setPendingOffer] = useState(false);
-    const [offerAccepted, setOfferAccepted] = useState(false);
-    const [offerRejected, setOfferRejected] = useState(false);
 
     // Handling The Data Received
     const location = useLocation();
     const userId = location.state.userId;
     const job = location.state.job;
-
-    console.log("userid: ", userId);
+    
+    // Job Application Status
+    const [applied, setApplied] = useState(location.state.applied || false);
+    const [pendingOffer, setPendingOffer] = useState(location.state.pendingOffer || false);
+    const [offerAccepted, setOfferAccepted] = useState(location.state.offerAccepted || false);
+    const [offerRejected, setOfferRejected] = useState(location.state.offerRejected || false);
+    const [isBookmarked, setIsBookmarked] = useState(location.state.isBookmarked || null);
 
     const datePosted = new Date(job.datePosted);
     const currentDate = new Date();
@@ -57,20 +55,22 @@ export default function DevIndividualJob() {
 
     // Button handlers
     const handleBookmarkToggle = async () => {
-        setIsBookmarked(!isBookmarked);
-
+        // Use the functional form of setState to ensure the correct value is used
+        setIsBookmarked(prevIsBookmarked => !prevIsBookmarked);
+        
         try {
-            if (isBookmarked) {
-                // TO DO: api call to remove bookmark
-                console.log("Bookmark Removed");
-            } else {
-                // TO DO:  api call to add bookmark
-                console.log("Bookmark Added");
-            }
+            const response = await axios.put(apiRoutes.job.individualBookmarks, {
+                userId,
+                jobId: job._id,
+                isBookmarked: !isBookmarked, // Toggle the bookmark status
+            });
+            console.log("Bookmark updated successfully:", response.data);
         } catch (error) {
-            console.error("Error toggling bookmark:", error);
+            console.error("Error updating bookmark:", error);
         }
     };
+
+
     const handleVisitWebsite = () => {
         console.log("Visit Website");
         let websiteUrl = job.postedBy.website;
@@ -342,6 +342,7 @@ export default function DevIndividualJob() {
                                     <DevApplyJob
                                         userId={userId}
                                         jobId={job._id}
+                                        applied={applied}
                                     />
                                 </Grid>
                             </Grid>
@@ -366,7 +367,11 @@ export default function DevIndividualJob() {
                                         career? Apply now!
                                     </Typography>
                                 </Stack>
-                                <DevApplyJob />
+                                <DevApplyJob
+                                    userId={userId}
+                                    jobId={job._id}
+                                    applied={applied}
+                                />
                             </Stack>
                         </Grid>
                         <Grid item mt={4}>

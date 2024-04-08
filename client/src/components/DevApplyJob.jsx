@@ -31,7 +31,8 @@ export default function DevApplyJob(props) {
     const [submitLoading, setSubmitLoading] = useState(false);
     const [generateLoading, setGenerateLoading] = useState(false);
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
+    const [submitted, setSubmitted] = useState(props.applied);
+
 
     const [error, setError] = useState(null);
 
@@ -91,6 +92,8 @@ export default function DevApplyJob(props) {
     const closeSnackbar = () => {
         setOpenSnackbar(false);
     };
+
+
 
     return (
         <>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation } from "react-router-dom";
 import axios from "axios";
 
 // Global Constants
@@ -52,14 +52,37 @@ export default function SearchJobs() {
   const [noMoreJobs, setNoMoreJobs] = useState(true);
   const [error, setError] = useState(null);
   const [jobs, setJobs] = useState([]);
+  const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  const [offeredJobs, setOfferedJobs] = useState([]);
+
+  const navigate = useNavigate();
+
+  // state received
+  const location = useLocation();
+  const userId = location.state.userId;
 
 
   // Function to fetch jobs based on search criteria
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      let response = await axios.get(apiRoutes.job.getAll);
-      let filteredJobs = response.data.slice(); 
+      let response = await axios.get(apiRoutes.job.getAll, {
+        params: { userId }
+      });
+
+      console.log("Response: ",response)
+
+      // Destructure the response data
+      const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } = response.data;
+
+      // Update the state variables
+      setJobs(allJobs);
+      setBookmarkedJobs(bookmarkedJobs);
+      setAppliedJobs(appliedJobs);
+      setOfferedJobs(offeredJobs);
+
+      let filteredJobs = allJobs.slice();
 
       // Apply filters
       if (searchQuery) {
@@ -410,7 +433,15 @@ export default function SearchJobs() {
             {/* Job Cards */}
             <Stack spacing={2}>
             {jobs.map((job) => (
-              <JobCard key={job.id} job={job} />
+              <JobCard 
+                key={job.id} 
+                job={job}
+                userId={userId}
+                setBookmarkedJobs={setBookmarkedJobs}
+                bookmarkedJobs={bookmarkedJobs}
+                appliedJobs={appliedJobs}
+                offeredJobs={offeredJobs} 
+              />
             ))}
             </Stack>
             {/* Pagination */}
