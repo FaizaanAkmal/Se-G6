@@ -12,7 +12,7 @@ import {
   
 // Custom components
 import CompanyNavbar from "../../components/CompanyNavbar.jsx";
-import Footer from "../../components/Footer";
+import Footer from "../../components/Footer.jsx";
 
 // UI imports
 import {
