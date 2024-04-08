@@ -22,9 +22,10 @@ import { clientRoutes } from "../routes.js";
 export default function DevNavbar({ currentPage }) {
     // navigation
     const navigate = useNavigate();
+    const location = useLocation()
 
     // state received
-    const { userId } = useLocation();
+    const  userId  = location.state.userId;
 
     // Logout handler
     const handleLogout = () => {
@@ -40,15 +41,15 @@ export default function DevNavbar({ currentPage }) {
     const handleTabChange = (tab) => {
         if (tab === "dashboard") {
             // navigate to (/dev)
-            navigate(clientRoutes.devDashboard, { userId: userId });
+            navigate(clientRoutes.devDashboard, { state: location.state });
         }
         if (tab === "search") {
             // navigate to (/dev/searchjobs)
-            navigate(clientRoutes.searchJobs, { userId: userId });
+            navigate(clientRoutes.searchJobs,{ state: location.state });
         }
         if (tab === "settings") {
             // navigate to (/dev/settings)
-            navigate(clientRoutes.devSettings, { userId: userId });
+            navigate(clientRoutes.devSettings, { state: location.state });
         }
     };
 

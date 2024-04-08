@@ -55,6 +55,7 @@ const createJob = async (req, res) => {
 
 // Getting All Jobs Data
 const getAllJobs = async (req, res) => {
+
   const { userId } = req.query;
 
   try {
@@ -100,6 +101,113 @@ const getAllJobs = async (req, res) => {
   }
 };
 
+//Getting Related Jobs Data
+const getRelatedJobs = async (req, res) => {
+  const { userId, jobId } = req.query;
+  
+  try {
+    // Find the dev based on userId
+    const dev = await Developer.findOne({ userId });
+    if (!dev) {
+      return res.status(404).json({ message: "Developer not found." });
+    }
+
+    // Fetch all jobs
+    const allJobs = await JobPost.find({ _id: { $ne: jobId }, status: "open" }).populate('postedBy');
+
+    // Extract applicant IDs from applicants array for each job
+    const jobApplicantIds = allJobs.map(job => job.applicants.map(applicant => applicant.applicant.toString()));
+
+    // Get the developer's ID as a string
+    const devIdString = dev._id.toString();
+
+    // Calculate matching score for each job
+    const jobsWithScore = allJobs.map((job, index) => {
+      let score = 0;
+
+      // Check if the developer has already applied to this job
+      if (jobApplicantIds[index].includes(devIdString)) {
+        // Skip this job if the developer has already applied
+        return null;
+      }
+
+      // Match based on experience
+      if (dev.experience >= job.experience) {
+        score += 1;
+      }
+
+      // Match based on skills
+      dev.skills.forEach(skill => {
+        if (job.preferredSkills.includes(skill)) {
+          score += 1;
+        }
+      });
+
+      // Match based on languages
+      dev.languages.forEach(language => {
+        if (job.preferredLanguages.includes(language)) {
+          score += 1;
+        }
+      });
+
+      // Match based on technologies
+      dev.technologies.forEach(tech => {
+        if (job.preferredTechnologies.includes(tech)) {
+          score += 1;
+        }
+      });
+
+      // Match based on job type
+      if (dev.interestedJobType === job.jobType) {
+        score += 1;
+      }
+
+      // Match based on environment preference
+      if (dev.environmentPreference === job.environment) {
+        score += 1;
+      }
+
+      return {
+        ...job.toObject(),
+        score
+      };
+    });
+
+    // Filter out null values (jobs that were skipped)
+    const filteredJobsWithScore = jobsWithScore.filter(job => job !== null);
+
+    // Sort the filtered jobs by score in descending order
+    const sortedJobs = filteredJobsWithScore.sort((a, b) => b.score - a.score);
+
+    let topJobs = sortedJobs;
+
+    // If no matching jobs were found, send the first three jobs that the developer has not applied to
+    if (sortedJobs.length === 0) {
+        topJobs = allJobs.filter(job => !jobApplicantIds.flat().includes(devIdString));
+    }
+
+    // Send the top three jobs or all sorted jobs if there are fewer than three
+    const numJobsToSend = Math.min(topJobs.length, 3);
+    const jobsToSend = topJobs.slice(0, numJobsToSend).map(job => {
+      // Check if the job is in the developer's myJobs array
+      const devJob = dev.myJobs.find(myJob => myJob.job.toString() === job._id.toString());
+      const isBookmarked = devJob ? devJob.isBookmarked : false;
+    
+      return { ...job, isBookmarked };
+    });
+
+    res.status(200).json({
+      jobsToSend
+    });
+  } 
+  catch (error) 
+  {
+    console.error("Error fetching jobs:", error);
+    res.status(500).json({ message: "Error fetching jobs" });
+  }
+};
+
+
 // Updating Bookmarks Dashboard
 const updateBookmarks = async (req, res) => {
   const { userId, jobId, isBookmarked } = req.body;
@@ -144,6 +252,7 @@ const updateBookmarks = async (req, res) => {
 //Individual Bookmark
 const individualBookmarks = async (req, res) => {
   const { userId, jobId, isBookmarked } = req.body;
+  
   try {
     // Find the developer based on userId
     const developer = await Developer.findOne({ userId });
@@ -185,4 +294,4 @@ const deleteJob = async (req, res) => {
 };
 
 
-module.exports = { createJob, getAllJobs, editJob, deleteJob,updateBookmarks,individualBookmarks};
+module.exports = { createJob, getAllJobs, editJob, deleteJob,updateBookmarks,individualBookmarks,getRelatedJobs};

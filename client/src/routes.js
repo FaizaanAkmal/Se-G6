@@ -8,8 +8,8 @@ const apiRoutes = {
   // Job Routes
   job: {
     create: "/job/create",
-    get: "/job/",
     getAll: "/job/all",
+    getRelatedJobs: "/job/related",
     edit: "/job/edit",
     delete: "/job/delete",
     updateBookmarks: "/job/updateBookmarks",
