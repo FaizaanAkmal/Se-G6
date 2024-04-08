@@ -11,7 +11,7 @@ const apiRoutes = {
     get: "/job/",
     getAll: "/job/all",
     edit: "/job/edit",
-    delete: "/job/delete",
+    close: "/job/close",
   },
 
   // Developer Routes
@@ -24,6 +24,8 @@ const apiRoutes = {
   company: {
     register: "/company/profileSetup",
     edit: "/company/profileEdit",
+    getMyJobs: (userId) => `/company/myJobs/${userId}`,
+    updateBookmark: "/company/bookmark",
   },
 };
 

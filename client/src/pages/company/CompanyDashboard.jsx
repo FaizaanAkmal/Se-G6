@@ -3,137 +3,158 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // UI Imports
-import { Grid, Typography, Button, Stack } from "@mui/joy";
+import { Grid, Typography, Button, Stack, Divider } from "@mui/joy";
 
 // Custom Components Imports
 import CompanyNavbar from "../../components/CompanyNavbar";
 import JobCard from "../../components/JobCard";
 import Footer from "../../components/Footer";
 
+// Routes Import
 import { apiRoutes, clientRoutes } from "../../routes.js";
 
 export default function CompanyDashboard() {
-    // State to keep track of the active tab
-    const [activeTab, setActiveTab] = useState("Active");
-    const [jobs, setJobs] = useState([]);
-    const [loading, setLoading] = useState(false);
-    
-    // navigation
-    const navigate = useNavigate();
+  // navigation
+  const navigate = useNavigate();
 
-    // state received
-    const { userId } = useLocation().state;
+  // state received
+  const { userId } = useLocation().state;
 
-    // Load jobs based on active tab
-    const loadJobs = async () => {
-        setLoading(true);
-        try {
-            // Simulating API call
-            const response = await axios.get(apiRoutes.job.getAll);
-            setJobs(response.data);
-        } catch (error) {
-            console.error("Error fetching jobs:", error);
-        }
-        setLoading(false);
-    };
+  // State to keep track of the active tab
+  const [activeTab, setActiveTab] = useState("open");
+  const [loading, setLoading] = useState(false);
+  const [openPinnedJobs, setOpenPinnedJobs] = useState([]);
+  const [openJobs, setOpenJobs] = useState([]);
+  const [closedJobs, setClosedJobs] = useState([]);
 
-    useEffect(() => {
-        loadJobs();
-    }, [activeTab]); // Reload jobs when activeTab changes
+  // Load jobs of this company
+  const loadMyJobs = async () => {
+    setLoading(true);
+    try {
+      // API call
+      const response = await axios.get(apiRoutes.company.getMyJobs(userId));
+      setOpenPinnedJobs(response.data.openPinnedJobs);
+      setOpenJobs(response.data.openJobs);
+      setClosedJobs(response.data.closedJobs);
+      // console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    }
+    setLoading(false);
+  };
 
-    // Handler to change the active tab
-    const handleTabChange = (tab) => {
-        setActiveTab(tab);
-    };
+  useEffect(() => {
+    loadMyJobs();
+  }, []);
 
-    // Handler for "Post a Job" button
-    const handlePostJob = () => {
-        // Redirect to job posting page
-        navigate(clientRoutes.postAJob, {state: {userId: userId} });
-    };
+  // Handler to change the active tab
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
-    return (
-        <>
-            <CompanyNavbar currentPage="dashboard" />
-            <Grid
-                container
-                sx={{
-                    flexGrow: 1,
-                    justifyContent: "center",
-                    minHeight: "80vh",
-                }}
+  return (
+    <>
+      <CompanyNavbar currentPage="dashboard" userId={userId} />
+      <Grid
+        container
+        sx={{
+          flexGrow: 1,
+          justifyContent: "center",
+          minHeight: "80vh",
+        }}
+      >
+        <Grid
+          item
+          xs={12}
+          md={8}
+          sx={{
+            p: 4,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Page Title */}
+          <Typography level="h1" sx={{ width: "100%" }} mb={4}>
+            My Jobs
+          </Typography>
+          {/* Tabs */}
+          <Stack
+            direction="row"
+            spacing={1}
+            p={1.2}
+            bgcolor={"#F9F9FB"}
+            sx={{
+              width: "fit-content",
+              borderRadius: 8,
+              border: "1px solid #F2F4F7",
+            }}
+          >
+            {/* Tabs with active state handling */}
+            <Button
+              variant={activeTab === "open" ? "outlined" : "plain"}
+              color="neutral"
+              size="lg"
+              sx={{
+                borderRadius: 6,
+                bgcolor: activeTab === "open" ? "white" : "",
+              }}
+              onClick={() => handleTabChange("open")}
             >
-                <Grid
-                    item
-                    xs={12}
-                    md={8}
-                    sx={{
-                        p: 4,
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
-                >
-                    {/* Page Title */}
-                    <Typography level="h1" sx={{ width: "100%" }} mb={4}>
-                        {activeTab === "Active" ? "Active Jobs" : "All Jobs"}
-                    </Typography>
-                    {/* Tabs */}
-                    <Stack
-                        direction="row"
-                        spacing={1}
-                        p={1.2}
-                        bgcolor={"#F9F9FB"}
-                        sx={{
-                            width: "fit-content",
-                            borderRadius: 8,
-                            border: "1px solid #F2F4F7",
-                        }}
-                    >
-                        {/* Tabs with active state handling */}
-                        <Button
-                            variant={activeTab === "Active" ? "outlined" : "plain"}
-                            color="neutral"
-                            size="lg"
-                            sx={{
-                                borderRadius: 6,
-                                bgcolor: activeTab === "Active" ? "white" : "",
-                            }}
-                            onClick={() => handleTabChange("Active")}
-                        >
-                            Active
-                        </Button>
-                        <Button
-                            variant={activeTab === "All" ? "outlined" : "plain"}
-                            size="lg"
-                            color="neutral"
-                            onClick={() => handleTabChange("All")}
-                            sx={{
-                                borderRadius: 6,
-                                bgcolor: activeTab === "All" ? "white" : "",
-                            }}
-                        >
-                            All
-                        </Button>
-                    </Stack>
-                    {/* Jobs */}
-                    <Stack spacing={2} mt={4}>
-                        {jobs.map((job) => (
-                            <JobCard key={job.id} job={job} />
-                        ))}
-                    </Stack>
-                    {/* Post a Job Button */}
-                    <Button
-                        variant="soft"
-                        color="primary"
-                        sx={{ borderRadius: 8, mt: 6 }}
-                        loading={loading}
-                        onClick={handlePostJob}
-                    >
-                        Post a Job
-                    </Button>
-                </Grid>
-            </Grid>
-            <Footer />
-        </>
-    );
+              Open ({openPinnedJobs.length + openJobs.length})
+            </Button>
+            <Button
+              variant={activeTab === "closed" ? "outlined" : "plain"}
+              size="lg"
+              color="neutral"
+              onClick={() => handleTabChange("closed")}
+              sx={{
+                borderRadius: 6,
+                bgcolor: activeTab === "closed" ? "white" : "",
+              }}
+            >
+              Closed ({closedJobs.length})
+            </Button>
+          </Stack>
+          {/* MyJobs */}
+          {activeTab === "open" && (
+            <>
+              <Stack spacing={2} mt={4}>
+                {openPinnedJobs.map((myJob, index) => (
+                  <JobCard
+                    key={index}
+                    userId={userId}
+                    myJob={myJob}
+                    setOpenPinnedJobs={setOpenPinnedJobs}
+                    setOpenJobs={setOpenJobs}
+                    setClosedJobs={setClosedJobs}
+                  />
+                ))}
+                <Divider />
+              </Stack>
+              <Stack spacing={2} mt={4}>
+                {openJobs.map((myJob, index) => (
+                  <JobCard
+                    key={index}
+                    userId={userId}
+                    myJob={myJob}
+                    setOpenPinnedJobs={setOpenPinnedJobs}
+                    setOpenJobs={setOpenJobs}
+                    setClosedJobs={setClosedJobs}
+                  />
+                ))}
+              </Stack>
+            </>
+          )}
+          {activeTab === "closed" && (
+            <Stack spacing={2} mt={4}>
+              {closedJobs.map((myJob, index) => (
+                <JobCard key={index} myJob={myJob} />
+              ))}
+            </Stack>
+          )}
+        </Grid>
+      </Grid>
+      <Footer />
+    </>
+  );
 }

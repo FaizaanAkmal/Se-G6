@@ -6,13 +6,13 @@ const {
   getJob,
   getAllJobs,
   editJob,
-  deleteJob,
+  closeJob,
 } = require("../controllers/jobController");
 
 jobRouter.post("/create", createJob);
 jobRouter.get("/", getJob);
 jobRouter.get("/all", getAllJobs);
 jobRouter.patch("/edit", editJob);
-jobRouter.delete("/delete", deleteJob);
+jobRouter.patch("/close", closeJob);
 
 module.exports = jobRouter;

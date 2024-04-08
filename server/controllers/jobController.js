@@ -40,6 +40,10 @@ const createJob = async (req, res) => {
     // Save the new job post to the database
     const savedJobPost = await newJobPost.save();
 
+    // Save the new job in company's myJobs
+    company.myJobs.push({ job: savedJobPost._id });
+    await company.save();
+
     // Send a success response with the ObjectId of the created job post
     res.status(201).json({
       message: "Job post created successfully",
@@ -59,7 +63,7 @@ const getJob = async (req, res) => {
 const getAllJobs = async (req, res) => {
   // TODO: return all Jobs matching query in req
   try {
-    const jobs = await JobPost.find({ status: "open" }).populate('postedBy'); // Populate the 'postedBy' field with the entire Company object
+    const jobs = await JobPost.find({ status: "open" }).populate("postedBy"); // Populate the 'postedBy' field with the entire Company object
     // console.log("Jobs",jobs)
 
     res.status(200).json(jobs);
@@ -73,8 +77,34 @@ const editJob = async (req, res) => {
   // TODO: update Job info with job_id in req
 };
 
-const deleteJob = async (req, res) => {
-  // TODO: remove Job with job_id in req
+const closeJob = async (req, res) => {
+  // TODO: change the Job status with job_id in req to "closed" and set isPinned=False, pinnedAt=null in company's myJobs array
+  try {
+    const { userId, myJobId, jobId } = req.body;
+    const company = await Company.findOne({ userId: userId });
+    const job = await JobPost.findOne({ _id: jobId });
+    // console.log(req.body);
+    // Check if company and job are found
+    if (!company || !job) {
+      console.log(company, job);
+      return res.status(404).json({ message: "Company or job not found" });
+    }
+
+    // Change the Job status to "closed"
+    job.status = "closed";
+    await job.save();
+
+    // Remove the job from company's myJobs
+    company.myJobs = company.myJobs.filter(
+      (job) => job._id.toString() !== myJobId
+    );
+    await company.save();
+
+    res.status(200).json({ message: "Job closed successfully" });
+  } catch (error) {
+    console.error("Error closing job:", error);
+    res.status(500).json({ message: "Error closing job" });
+  }
 };
 
-module.exports = { createJob, getJob, getAllJobs, editJob, deleteJob };
+module.exports = { createJob, getJob, getAllJobs, editJob, closeJob };

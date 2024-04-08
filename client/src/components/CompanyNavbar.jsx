@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 
 // Asset imports
 import logo from "../assets/logo.png";
@@ -15,15 +16,27 @@ import {
     Avatar
 } from "@mui/joy";
 
-export default function CompanyNavbar({ currentPage }) {
+// Route imports
+import { clientRoutes } from "../routes.js";
+
+export default function CompanyNavbar({ currentPage, userId }) {
+    // navigation
+    const navigate = useNavigate();
+
     // Logout handler
     const handleLogout = () => {
-        console.log("Logging out...");
+        navigate(clientRoutes.login);
     };
 
     // Helper function to determine button color based on the current page
     const getButtonColor = (pageName) => {
         return currentPage === pageName ? "primary" : "neutral";
+    };
+
+    // Handler for "Post a Job" button
+    const handlePostJob = () => {
+        // Redirect to job posting page
+        navigate(clientRoutes.postAJob, {state: {userId: userId} });
     };
 
     return (
@@ -44,7 +57,7 @@ export default function CompanyNavbar({ currentPage }) {
                 <Button variant="plain" color={getButtonColor("dashboard")}>
                     Dashboard
                 </Button>
-                <Button variant="plain" color={getButtonColor("postJob")}>
+                <Button variant="plain" color={getButtonColor("postJob")} onClick={handlePostJob}>
                     Post a Job
                 </Button>
                 <Button variant="plain" color={getButtonColor("settings")}>
