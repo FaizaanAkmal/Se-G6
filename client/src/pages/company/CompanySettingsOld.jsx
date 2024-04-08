@@ -12,7 +12,7 @@ import {
   
 // Custom components
 import CompanyNavbar from "../../components/CompanyNavbar.jsx";
-import Footer from "../../components/Footer.jsx";
+import Footer from "../../components/Footer";
 
 // UI imports
 import {
@@ -29,10 +29,6 @@ Option,
 Textarea,
 Autocomplete,
 Alert,
-Tab,
-Tabs,
-TabList,
-TabPanel
 } from "@mui/joy";
 
 // Routes Import
@@ -41,13 +37,11 @@ import { apiRoutes, clientRoutes } from "../../routes.js";
 export default function CompanySettings() {
     // state received
   const {userId} = useLocation();
-  //userId = location.state.userId
   console.log("USER ID:", {userId})
     // Form fields state
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
     const [companyName, setCompanyName] = useState("");
     const [website, setWebsite] = useState("");
     const [companyType, setCompanyType] = useState("");
@@ -57,42 +51,53 @@ export default function CompanySettings() {
     const [companyOverview, setCompanyOverview] = useState("");
     const [companyWorkCulture, setCompanyWorkCulture] = useState("");
     const [companyBenefits, setCompanyBenefits] = useState("");
-    const [passwordCheck, setPasswordCheck] = useState("")
-    const [newPassword, setNewPassword] = useState("")
-    // State to control the visibility of form sections
-    const [currentTab, setCurrentTab] = useState(1);
-    const getData = async () => {
-        try {
-          //TODO: Get Using Actual User Id 
-          const response1 = await axios.get("/company/getProfile/660822c3908e5f1de1c036ec"); //Using Sample User Id
-          const response2 = await axios.get("/user/getUser/6614607726c9ef8fec028762");
-  
-          setCompanyName(response1.data.name);
-          setWebsite(response1.data.website);
-          setCompanyType(response1.data.type);
-          setCountry(response1.data.country);
-          setIndustry(response1.data.industry);
-          setCompanySize(response1.data.size);
-          setCompanyOverview(response1.data.overview);
-          setCompanyWorkCulture(response1.data.workCulture);
-          setCompanyBenefits(response1.data.benefits);
-          setFirstName(response2.data.firstName);
-          setLastName(response2.data.lastName);
-          setEmail(response2.data.email);
-          setPassword(response2.data.password)
-        } catch (error) {
-          console.error("Error getting data:", error);
-          // Handle error state or display error message
-        }
-      };
-  
+
     useEffect(() => {
+        const getData = async () => {
+          try {
+            //TODO: Get Using Actual User Id 
+            const response1 = await axios.get("/company/getProfile/6612546160a9b8b84d723328"); //Using Sample User Id
+            const response2 = await axios.get("/user/getUser/66123f51544cddd3181997cf");
+    
+            setCompanyName(response1.data.name);
+            setWebsite(response1.data.website);
+            setCompanyType(response1.data.type);
+            setCountry(response1.data.country);
+            setIndustry(response1.data.industry);
+            setCompanySize(response1.data.size);
+            setCompanyOverview(response1.data.overview);
+            setCompanyWorkCulture(response1.data.workCulture);
+            setCompanyBenefits(response1.data.benefits);
+            setFirstName(response2.data.firstName);
+            setLastName(response2.data.lastName);
+            setEmail(response2.data.email);
+          } catch (error) {
+            console.error("Error getting data:", error);
+            // Handle error state or display error message
+          }
+        };
+    
         getData();
-      }, [currentTab]);
+      }, []);
   // navigation
   const navigate = useNavigate();
   // Error handling state
   const [error, setError] = useState(null);
+  // State to control the visibility of form sections
+  const [currentStep, setCurrentStep] = useState(1);
+  // Navigate to the next form section
+  const handleNext = () => {
+    if (!firstName || !lastName || !email) {
+        setError("Please fill in all the required fields");
+        return;
+      }
+    setError(null);
+    setCurrentStep(currentStep + 1);
+  }
+    // Navigate to the previous form section
+  const handleBack = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
   // Function to handle cancel
   const handleCancel = () => {
     // Navigate to the dashboard without sending any patch requests
@@ -113,7 +118,7 @@ export default function CompanySettings() {
       console.log("Request data before sending:", requestData1);
   
       try {
-        const response = await axios.patch("/user/editUser/6614607726c9ef8fec028762", requestData1);
+        const response = await axios.patch("/user/editUser/66123f51544cddd3181997cf", requestData1);
   
         console.log(response.data);
       } catch (error) {
@@ -136,7 +141,7 @@ export default function CompanySettings() {
     console.log("Request data before sending:", requestData2);
 
     try {
-      const response = await axios.patch("/company/profileEdit/660822c3908e5f1de1c036ec", requestData2);
+      const response = await axios.patch("/company/profileEdit/6612546160a9b8b84d723328", requestData2);
 
       console.log(response.data);
       navigate(clientRoutes.companyDashboard, { userId: userId });
@@ -144,29 +149,6 @@ export default function CompanySettings() {
       console.error("Error Submitting Form", error);
     }
   };
-
-  const handleTabChange = (event, newValue) => {
-    setCurrentTab(newValue);
-  };
-
-  const handlePasswordChange = async (event) => {
-    event.preventDefault();
-    const requestData = {
-        passwordCheck,
-        password,
-        newPassword
-    }
-    const response = await axios.patch("/user/changePassword/6614607726c9ef8fec028762", requestData);
-    console.log(response.data)
-    if (response.data.success==false){
-        setError(response.data.message)
-    }
-    else {
-        console.log("Success")
-        setError(null)
-        getData()
-    }
-  }
 
   return (
     <>
@@ -176,34 +158,13 @@ export default function CompanySettings() {
         sx={{
           flexGrow: 1,
           minHeight: "90vh",
-          justifyContent: "left",
+          justifyContent: "center",
         }}
       >
-        <Tabs 
-      aria-label="Basic tabs" 
-      orientation = "vertical" 
-      value={currentTab}
-      onChange={handleTabChange}
-      >
-        <TabList>
-            <Tab value={1}> Account Settings </Tab>
-            <Tab value={2}> Profile Settings </Tab>
-            <Tab value={3}> Change Password </Tab>
-        </TabList>
-        <TabPanel value={1}>
-            Edit your account information
-        </TabPanel>
-        <TabPanel value={2}>
-            Edit your profile information
-        </TabPanel>
-        <TabPanel value={3}>
-            Change your password
-        </TabPanel>
-        </Tabs>
         <Grid
           //item
-          xs={10}
-          md={5}
+          xs={12}
+          md={6}
           sx={{
             p: 4,
             display: "flex",
@@ -220,7 +181,7 @@ export default function CompanySettings() {
           <Box sx={{ width: "75%" }}>
           <form onSubmit={handleSubmit}>
               <Stack gap={4}>
-              {currentTab === 1 && (
+              {currentStep === 1 && (
                 <>
                 <Typography level="body-lg" sx={{ textAlign: "center", mb: 4, width: "100%" }}>
                 Edit Your Account Information Here
@@ -255,41 +216,22 @@ export default function CompanySettings() {
                     onChange={(e) => setEmail(e.target.value)}
                     />
                 </FormControl>
-                <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-
-                      <Grid item xs={4}>
-                        <Button
-                        fullWidth
-                        onClick={handleCancel}
+                {currentStep < 3 && (
+                      <Button
+                        onClick={handleNext}
                         sx={{
-                            backgroundColor: "#FF0000",
-                            color: "white",
-                            "&:hover": {
-                            backgroundColor: "#CC0000",
-                            },
+                          backgroundColor: "#F9F5FF",
+                          color: "#6941C6",
+                          "&:hover": {
+                            backgroundColor: "#e3dcf7",
+                          },
                         }}
-                        >
-                        Cancel
-                        </Button>
-                    </Grid>
-                      <Grid item xs={8}>
-                        <Button
-                          fullWidth
-                          type="submit"
-                          sx={{
-                            backgroundColor: "#7F56D9",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: "#6941C6",
-                            },
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </Grid>
-                    </Grid>
+                      >
+                        Next
+                      </Button>
+                    )}
                 </>)}
-                {currentTab === 2 && (
+                {currentStep === 2 && (
                   <>
                   <Typography level="body-lg" sx={{ textAlign: "center", mb: 4, width: "100%" }}>
                     Edit Your Profile Information Here
@@ -417,6 +359,23 @@ export default function CompanySettings() {
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                       <Grid item xs={4}>
                         <Button
+                          fullWidth
+                          onClick={handleBack}
+                          sx={{
+                            backgroundColor: "#FFFFFF",
+                            color: "#344054",
+                            border: "1px solid #D0D5DD",
+                            "&:hover": {
+                              backgroundColor: "#fafafa",
+                              borderColor: "#bfc4ca",
+                            },
+                          }}
+                        >
+                          Back
+                        </Button>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <Button
                         fullWidth
                         onClick={handleCancel}
                         sx={{
@@ -430,7 +389,7 @@ export default function CompanySettings() {
                         Cancel
                         </Button>
                     </Grid>
-                      <Grid item xs={8}>
+                      <Grid item xs={12}>
                         <Button
                           fullWidth
                           type="submit"
@@ -447,75 +406,13 @@ export default function CompanySettings() {
                       </Grid>
                     </Grid>
                   </>)}
-                  </Stack>
-                </form>
-                  <form onSubmit={handlePasswordChange}>
-                    <Stack gap={4}>
-                  {currentTab === 3 && (
-                  <>
-                  <Typography level="body-lg" sx={{ textAlign: "center", mb: 4, width: "100%" }}>
-                    Change Your Password Here
-                  </Typography>
-                  <FormControl required>
-                      <FormLabel>Enter Current Password</FormLabel>
-                      <Input
-                        type="text"
-                        name="cpassword"
-                        placeholder="Current Password"
-                        value={passwordCheck}
-                        onChange={(e) => setPasswordCheck(e.target.value)}
-                      />
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>Enter New Password</FormLabel>
-                      <Input
-                        type="text"
-                        name="npassword"
-                        placeholder="Enter new password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                      />
-                    </FormControl>
-                    <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                      <Grid item xs={4}>
-                        <Button
-                        fullWidth
-                        onClick={handleCancel}
-                        sx={{
-                            backgroundColor: "#FF0000",
-                            color: "white",
-                            "&:hover": {
-                            backgroundColor: "#CC0000",
-                            },
-                        }}
-                        >
-                        Cancel
-                        </Button>
-                    </Grid>
-                      <Grid item xs={8}>
-                        <Button
-                          fullWidth
-                          type="handlePasswordChange"
-                          sx={{
-                            backgroundColor: "#7F56D9",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: "#6941C6",
-                            },
-                          }}
-                        >
-                          Change Password
-                        </Button>
-                      </Grid>
-                    </Grid>
-                    {error && (
+                  {error && (
                   <Alert variant="soft" color="danger">
                     {error}
                   </Alert>
                 )}
-                  </>)}
-                  </Stack>
-                </form>
+            </Stack>
+          </form>
           </Box>
         </Grid>
         </Grid>

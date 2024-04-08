@@ -3,7 +3,8 @@ const apiRoutes = {
   user: {
     register: "/user/register",
     login: "/user/login",
-    getUser: "/user/getUser/:id"
+    getUser: "/user/getUser/:id",
+    changePassword: "/user/changePassword/:id"
   },
 
   // Job Routes

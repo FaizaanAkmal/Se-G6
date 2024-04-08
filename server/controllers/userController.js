@@ -202,4 +202,88 @@ const editUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, getUser, editUser };
+const changePassword = async (req, res) => {
+  const {passwordCheck, password, newPassword} = req.body;
+  // Function to compare passwords
+  const comparePasswords = (passwordCheck, password) => {
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(passwordCheck, password, function(err, result) {
+        if (err) {
+          // Handle error
+          reject(err);
+          return;
+        }
+        if (result) {
+          // Passwords match
+          resolve(true);
+        } else {
+          // Passwords don't match
+          resolve(false);
+        }
+      });
+    });
+  };
+  const passwordsMatch = await comparePasswords(passwordCheck, password);
+  if(passwordsMatch===false) {
+    return res.json({
+      success: false,
+      field: "password",
+      message: "Entered password does not match current password",
+    });
+  }
+  if (newPassword===passwordCheck) {
+    return res.json({
+      success: false,
+      field: "password",
+      message: "New password must be different from old password"
+    });
+  }
+  // Regular expression for password validation
+  const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  // Validate password
+  if (!passwordRegex.test(newPassword)) {
+  let errorMessage = "Password must ";
+  if (newPassword.length < 8) {
+    errorMessage += "be at least 8 characters long ";
+  }
+  if (!/(?=.*[a-z])/.test(newPassword)) {
+    errorMessage += "contain at least one lowercase letter ";
+  }
+  if (!/(?=.*[A-Z])/.test(newPassword)) {
+    errorMessage += "contain at least one uppercase letter ";
+  }
+  if (!/(?=.*\d)/.test(newPassword)) {
+    errorMessage += "contain at least one number ";
+  }
+  if (!/(?=.*[@$!%*#?&])/.test(newPassword)) {
+    errorMessage += "contain at least one special character ";
+  }
+  return res.json({
+    success: false,
+    field: "password",
+    message: errorMessage.trim(),
+  });
+  }
+  //Hashing and Bycrypting the password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const { id } = req.params;
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id }, // Filter: Find the user by its ID
+      {password: hashedPassword}, // Update
+      { new: true } // Options: Return the updated document
+    );
+
+    // If the company doesn't exist, return 404
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+module.exports = { registerUser, loginUser, getUser, editUser, changePassword };

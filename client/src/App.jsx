@@ -11,7 +11,7 @@ import CompanyDashboard from "./pages/company/CompanyDashboard.jsx";
 import DevDashboard from "./pages/dev/DevDashboard.jsx";
 import PostAJob from "./pages/company/PostAJob.jsx";
 import SearchJobs from "./pages/SearchJobs.jsx";
-import CompanySettings from "./pages/company/CompanySettings.jsx"
+import CompanySettings from "./pages/company/CompanySettings1.jsx"
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
