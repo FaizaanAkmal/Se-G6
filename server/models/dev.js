@@ -48,18 +48,35 @@ const devSchema = new Schema({
     type: String,
     required: true,
   },
-  jobHistory: [
-    {
+  myJobs : [{
+    job: {
       type: Schema.Types.ObjectId,
-      ref: "JobPost",
+      ref: 'JobPost'
     },
-  ],
-  bookmarkedJobs: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "JobPost",
+    isBookmarked: {
+      type: Boolean,
+      default: false
     },
-  ],
+    isOffer: {
+      type: Boolean,
+      default: false
+    },
+    isAcceptedOffer: {
+      type: Boolean,
+      default: false
+    },
+    isRejectedOffer: {
+      type: Boolean,
+      default: false
+    },
+    isApplied: {
+      type: Boolean,
+      default: false
+    },
+    coverLetter: {
+      type: String,
+    },
+  }],
 });
 
 const devModel = mongoose.model("Dev", devSchema);

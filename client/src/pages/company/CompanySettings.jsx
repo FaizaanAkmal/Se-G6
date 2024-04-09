@@ -2,523 +2,134 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// Global constants
-import {
-    companySizes,
-    companyTypes,
-    industryTypes,
-    countryNames,
-  } from "../../globalConstants.js";
-  
-// Custom components
-import CompanyNavbar from "../../components/CompanyNavbar.jsx";
-import Footer from "../../components/Footer.jsx";
-
-// UI imports
-import {
-Grid,
-Box,
-Typography,
-Button,
-FormControl,
-FormLabel,
-Input,
-Stack,
-Select,
-Option,
-Textarea,
-Autocomplete,
-Alert,
-Tab,
-Tabs,
-TabList,
-TabPanel
-} from "@mui/joy";
-
 // Routes Import
 import { apiRoutes, clientRoutes } from "../../routes.js";
 
+// Components Import
+import CompanyNavbar from "../../components/CompanyNavbar.jsx";
+import CompanyProfileSettings from "../../components/CompanyProfileSettings.jsx";
+import ChangePassword from "../../components/ChangePassword.jsx";
+import DeleteAccount from "../../components/DeleteAccount.jsx";
+import Footer from "../../components/Footer.jsx";
+
+// UI Imports
+import { Typography, Button, Stack, Grid } from "@mui/joy";
+
 export default function CompanySettings() {
-    // state received
-  const {userId} = useLocation();
-  //userId = location.state.userId
-  console.log("USER ID:", {userId})
-    // Form fields state
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [companyName, setCompanyName] = useState("");
-    const [website, setWebsite] = useState("");
-    const [companyType, setCompanyType] = useState("");
-    const [country, setCountry] = useState("");
-    const [industry, setIndustry] = useState("");
-    const [companySize, setCompanySize] = useState("");
-    const [companyOverview, setCompanyOverview] = useState("");
-    const [companyWorkCulture, setCompanyWorkCulture] = useState("");
-    const [companyBenefits, setCompanyBenefits] = useState("");
-    const [passwordCheck, setPasswordCheck] = useState("")
-    const [newPassword, setNewPassword] = useState("")
-    // State to control the visibility of form sections
-    const [currentTab, setCurrentTab] = useState(1);
-    const getData = async () => {
-        try {
-          //TODO: Get Using Actual User Id 
-          const response1 = await axios.get("/company/getProfile/660822c3908e5f1de1c036ec"); //Using Sample User Id
-          const response2 = await axios.get("/user/getUser/6614607726c9ef8fec028762");
-  
-          setCompanyName(response1.data.name);
-          setWebsite(response1.data.website);
-          setCompanyType(response1.data.type);
-          setCountry(response1.data.country);
-          setIndustry(response1.data.industry);
-          setCompanySize(response1.data.size);
-          setCompanyOverview(response1.data.overview);
-          setCompanyWorkCulture(response1.data.workCulture);
-          setCompanyBenefits(response1.data.benefits);
-          setFirstName(response2.data.firstName);
-          setLastName(response2.data.lastName);
-          setEmail(response2.data.email);
-          setPassword(response2.data.password)
-        } catch (error) {
-          console.error("Error getting data:", error);
-          // Handle error state or display error message
-        }
-      };
-  
-    useEffect(() => {
-        getData();
-      }, [currentTab]);
-  // navigation
-  const navigate = useNavigate();
-  // Error handling state
-  const [error, setError] = useState(null);
-  // Function to handle cancel
-  const handleCancel = () => {
-    // Navigate to the dashboard without sending any patch requests
-    navigate(clientRoutes.companyDashboard, { userId: userId });
-  };
+    const [activeTab, setActiveTab] = useState("Profile");
 
-  // Handle form submission
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // create a new FormData object with the state data
-    const requestData1 = {
-        firstName,
-        lastName,
-        email
-      };
-  
-      console.log("Request data before sending:", requestData1);
-  
-      try {
-        const response = await axios.patch("/user/editUser/6614607726c9ef8fec028762", requestData1);
-  
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error Submitting Form", error);
-      }
-
-    // create a new FormData object with the state data
-    const requestData2 = {
-      companyName,
-      website,
-      companyType,
-      country,
-      industry,
-      companySize,
-      companyOverview,
-      companyWorkCulture,
-      companyBenefits,
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
     };
 
-    console.log("Request data before sending:", requestData2);
-
-    try {
-      const response = await axios.patch("/company/profileEdit/660822c3908e5f1de1c036ec", requestData2);
-
-      console.log(response.data);
-      navigate(clientRoutes.companyDashboard, { userId: userId });
-    } catch (error) {
-      console.error("Error Submitting Form", error);
-    }
-  };
-
-  const handleTabChange = (event, newValue) => {
-    setCurrentTab(newValue);
-  };
-
-  const handlePasswordChange = async (event) => {
-    event.preventDefault();
-    const requestData = {
-        passwordCheck,
-        password,
-        newPassword
-    }
-    const response = await axios.patch("/user/changePassword/6614607726c9ef8fec028762", requestData);
-    console.log(response.data)
-    if (response.data.success==false){
-        setError(response.data.message)
-    }
-    else {
-        console.log("Success")
-        setError(null)
-        getData()
-    }
-  }
-
-  return (
-    <>
-      <CompanyNavbar currentPage="settings" />
-      <Grid
-        container
-        sx={{
-          flexGrow: 1,
-          minHeight: "90vh",
-          justifyContent: "left",
-        }}
-      >
-        <Tabs 
-      aria-label="Basic tabs" 
-      orientation = "vertical" 
-      value={currentTab}
-      onChange={handleTabChange}
-      >
-        <TabList>
-            <Tab value={1}> Account Settings </Tab>
-            <Tab value={2}> Profile Settings </Tab>
-            <Tab value={3}> Change Password </Tab>
-        </TabList>
-        <TabPanel value={1}>
-            Edit your account information
-        </TabPanel>
-        <TabPanel value={2}>
-            Edit your profile information
-        </TabPanel>
-        <TabPanel value={3}>
-            Change your password
-        </TabPanel>
-        </Tabs>
-        <Grid
-          //item
-          xs={10}
-          md={5}
-          sx={{
-            p: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            level="h1"
-            sx={{ mb: 2, textAlign: "center", width: "100%" }}
-          >
-            Settings
-          </Typography>
-          <Box sx={{ width: "75%" }}>
-          <form onSubmit={handleSubmit}>
-              <Stack gap={4}>
-              {currentTab === 1 && (
-                <>
-                <Typography level="body-lg" sx={{ textAlign: "center", mb: 4, width: "100%" }}>
-                Edit Your Account Information Here
-                </Typography>
-                <FormControl required>
-                    <FormLabel>First Name</FormLabel>
-                    <Input
-                    type="text"
-                    name="fname"
-                    placeholder="Enter first name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    />
-                </FormControl>
-                <FormControl required>
-                    <FormLabel>Last Name</FormLabel>
-                    <Input
-                    type="text"
-                    name="lname"
-                    placeholder="Enter last name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    />
-                </FormControl>
-                <FormControl required>
-                    <FormLabel>Email</FormLabel>
-                    <Input
-                    type="text"
-                    name="email"
-                    placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    />
-                </FormControl>
-                <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-
-                      <Grid item xs={4}>
-                        <Button
-                        fullWidth
-                        onClick={handleCancel}
+    return (
+        <>
+            <CompanyNavbar currentPage={"settings"} />
+            <Grid
+                container
+                xs={12}
+                sx={{
+                    flexGrow: 1,
+                    justifyContent: "center",
+                }}
+                p={4}
+                minHeight="82vh"
+            >
+                {/* Sidebar */}
+                <Grid item md={3} paddingRight={12}>
+                    <Stack
+                        spacing={2}
+                        p={2}
+                        bgcolor={"#F9F9FB"}
                         sx={{
-                            backgroundColor: "#FF0000",
-                            color: "white",
-                            "&:hover": {
-                            backgroundColor: "#CC0000",
-                            },
+                            borderRadius: 8,
+                            border: "1px solid #F2F4F7",
                         }}
-                        >
-                        Cancel
-                        </Button>
-                    </Grid>
-                      <Grid item xs={8}>
-                        <Button
-                          fullWidth
-                          type="submit"
-                          sx={{
-                            backgroundColor: "#7F56D9",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: "#6941C6",
-                            },
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </Grid>
-                    </Grid>
-                </>)}
-                {currentTab === 2 && (
-                  <>
-                  <Typography level="body-lg" sx={{ textAlign: "center", mb: 4, width: "100%" }}>
-                    Edit Your Profile Information Here
-                  </Typography>
-                  <FormControl required>
-                      <FormLabel>Company Name</FormLabel>
-                      <Input
-                        type="text"
-                        name="cname"
-                        placeholder="Enter company name"
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
-                      />
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>Website</FormLabel>
-                      <Input
-                        type="url"
-                        name="website"
-                        placeholder="https://example.com"
-                        value={website}
-                        onChange={(e) => setWebsite(e.target.value)}
-                      />
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>Company Type</FormLabel>
-                      <Select
-                        name="companyType"
-                        placeholder="Select company type"
-                        onChange={(e, value) => {
-                          setCompanyType(value);
-                        }}
-                        value={companyType}
-                      >
-                        {companyTypes.map((type) => (
-                          <Option key={type} value={type}>
-                            {type}
-                          </Option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>Location</FormLabel>
-                      <Autocomplete
-                        options={countryNames}
-                        placeholder="Select country"
-                        onChange={(e, value) => setCountry(value)}
-                        value={country}
-                      />
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>
-                        Company Industry
-                      </FormLabel>
-                      <Select
-                        name="industry"
-                        placeholder="Select industry"
-                        onChange={(e, value) => setIndustry(value)}
-                        value={industry}
-                      >
-                        {industryTypes.map((industry) => (
-                          <Option key={industry} value={industry}>
-                            {industry}
-                          </Option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>Company Size</FormLabel>
-                      <Select
-                        name="companySize"
-                        placeholder="Select company size (no. of employees)"
-                        onChange={(e, value) => setCompanySize(value)}
-                        value={companySize}
-                      >
-                        {companySizes.map((size) => (
-                          <Option key={size} value={size}>
-                            {size}
-                          </Option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>
-                        Company Overview
-                      </FormLabel>
-                      <Textarea
-                        name="companyOverview"
-                        onChange={(e) => {
-                          setCompanyOverview(e.target.value);
-                        }}
-                        minRows={3}
-                        maxRows={6}
-                        value={companyOverview}
-                      />
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>
-                        Company Work Culture
-                      </FormLabel>
-                      <Textarea
-                        name="companyWorkCulture"
-                        onChange={(e) => {
-                          setCompanyWorkCulture(e.target.value);
-                        }}
-                        minRows={3}
-                        maxRows={6}
-                        value={companyWorkCulture}
-                      />
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>
-                        Company Benefits
-                      </FormLabel>
-                      <Textarea
-                        name="companyBenefits"
-                        onChange={(e) => {
-                          setCompanyBenefits(e.target.value);
-                        }}
-                        minRows={3}
-                        maxRows={6}
-                        value={companyBenefits}
-                      />
-                    </FormControl>
-                    <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                      <Grid item xs={4}>
-                        <Button
-                        fullWidth
-                        onClick={handleCancel}
-                        sx={{
-                            backgroundColor: "#FF0000",
-                            color: "white",
-                            "&:hover": {
-                            backgroundColor: "#CC0000",
-                            },
-                        }}
-                        >
-                        Cancel
-                        </Button>
-                    </Grid>
-                      <Grid item xs={8}>
-                        <Button
-                          fullWidth
-                          type="submit"
-                          sx={{
-                            backgroundColor: "#7F56D9",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: "#6941C6",
-                            },
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </>)}
-                  </Stack>
-                </form>
-                  <form onSubmit={handlePasswordChange}>
-                    <Stack gap={4}>
-                  {currentTab === 3 && (
-                  <>
-                  <Typography level="body-lg" sx={{ textAlign: "center", mb: 4, width: "100%" }}>
-                    Change Your Password Here
-                  </Typography>
-                  <FormControl required>
-                      <FormLabel>Enter Current Password</FormLabel>
-                      <Input
-                        type="text"
-                        name="cpassword"
-                        placeholder="Current Password"
-                        value={passwordCheck}
-                        onChange={(e) => setPasswordCheck(e.target.value)}
-                      />
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>Enter New Password</FormLabel>
-                      <Input
-                        type="text"
-                        name="npassword"
-                        placeholder="Enter new password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                      />
-                    </FormControl>
-                    <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                      <Grid item xs={4}>
-                        <Button
-                        fullWidth
-                        onClick={handleCancel}
-                        sx={{
-                            backgroundColor: "#FF0000",
-                            color: "white",
-                            "&:hover": {
-                            backgroundColor: "#CC0000",
-                            },
-                        }}
-                        >
-                        Cancel
-                        </Button>
-                    </Grid>
-                      <Grid item xs={8}>
-                        <Button
-                          fullWidth
-                          type="handlePasswordChange"
-                          sx={{
-                            backgroundColor: "#7F56D9",
-                            color: "white",
-                            "&:hover": {
-                              backgroundColor: "#6941C6",
-                            },
-                          }}
-                        >
-                          Change Password
-                        </Button>
-                      </Grid>
-                    </Grid>
-                    {error && (
-                  <Alert variant="soft" color="danger">
-                    {error}
-                  </Alert>
-                )}
-                  </>)}
-                  </Stack>
-                </form>
-          </Box>
-        </Grid>
-        </Grid>
-    <Footer />
-    </>)
+                    >
+                        <Typography level="h3">Settings</Typography>
+                        <Stack spacing={1}>
+                            {/* Profile */}
+                            <Button
+                                variant={
+                                    activeTab === "Profile"
+                                        ? "outlined"
+                                        : "plain"
+                                }
+                                color="neutral"
+                                size="lg"
+                                sx={{
+                                    borderRadius: 6,
+                                    bgcolor:
+                                        activeTab === "Profile" ? "white" : "",
+                                    justifyContent: "flex-start",
+                                    paddingLeft: 2,
+                                    paddingRight: 2,
+                                }}
+                                onClick={() => handleTabChange("Profile")}
+                            >
+                                Profile
+                            </Button>
+                            {/* Change Password */}
+                            <Button
+                                variant={
+                                    activeTab === "Change Password"
+                                        ? "outlined"
+                                        : "plain"
+                                }
+                                color="neutral"
+                                size="lg"
+                                sx={{
+                                    borderRadius: 6,
+                                    bgcolor:
+                                        activeTab === "Change Password"
+                                            ? "white"
+                                            : "",
+                                    justifyContent: "flex-start",
+                                    paddingLeft: 2,
+                                    paddingRight: 2,
+                                }}
+                                onClick={() =>
+                                    handleTabChange("Change Password")
+                                }
+                            >
+                                Change Password
+                            </Button>
+                            {/* Delete Account */}
+                            <Button
+                                variant={
+                                    activeTab === "Delete Account"
+                                        ? "outlined"
+                                        : "plain"
+                                }
+                                color="neutral"
+                                size="lg"
+                                sx={{
+                                    borderRadius: 6,
+                                    bgcolor:
+                                        activeTab === "Delete Account"
+                                            ? "white"
+                                            : "",
+                                    justifyContent: "flex-start",
+                                    paddingLeft: 2,
+                                    paddingRight: 2,
+                                }}
+                                onClick={() =>
+                                    handleTabChange("Delete Account")
+                                }
+                            >
+                                Delete Account
+                            </Button>
+                        </Stack>
+                    </Stack>
+                </Grid>
+                {/* Main Content */}
+                <Grid item md={6}>
+                    {activeTab === "Profile" && <CompanyProfileSettings />}
+                    {activeTab === "Change Password" && <ChangePassword />}
+                    {activeTab === "Delete Account" && <DeleteAccount />}
+                </Grid>
+            </Grid>
+            <Footer />
+        </>
+    );
 }

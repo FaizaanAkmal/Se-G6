@@ -1,5 +1,5 @@
 const Dev = require("../models/dev");
-const Job = require("../models/jobpost");
+const JobPost = require("../models/jobpost")
 
 // TODO
 const devRegister = async (req, res) => {
@@ -93,15 +93,75 @@ const devEdit = async (req, res) => {
   }
 };
 
-const getJobs = async (req, res) => {
-  try {
-    const jobs = await Job.find({ status: "open" }).populate("postedBy"); // Populate the 'postedBy' field with the entire Company object
-    // console.log("Jobs",jobs)
 
-    res.status(200).json(jobs);
+//Handling The Developer Application
+const devApplication = async (req, res) => {
+  const { userId, jobId, coverLetter } = req.body;
+  console.log("In here")
+  console.log("JobId recieved: ",jobId)
+
+  try {
+    const dev = await Dev.findOne({ userId });
+    if (!dev) {
+      return res.status(404).json({ success: false, message: "Developer not found." });
+    }
+
+    const jobIndex = dev.myJobs.findIndex(job => job.job.toString() === jobId);
+    if (jobIndex === -1) {
+      // Job not found in developer's list, add it
+      dev.myJobs.push({
+        job: jobId,
+        isBookmarked: false,
+        isOffer: false,
+        isAcceptedOffer: false,
+        isRejectedOffer: false,
+        isApplied: true,
+        coverLetter: coverLetter,
+      });
+    } 
+    else 
+    {
+      // Job found in developer's list, handle according to status
+      console.log("This particular job: ",dev.myJobs[jobIndex])
+      console.log("This particular job status: ",dev.myJobs[jobIndex].isApplied)
+      if (dev.myJobs[jobIndex].isAcceptedOffer) {
+        return res.status(400).json({ success: false, message: "Application already accepted." });
+      } 
+      else if (dev.myJobs[jobIndex].isRejectedOffer) {
+        return res.status(400).json({ success: false, message: "Your application is rejected." });
+      }
+      else if (dev.myJobs[jobIndex].isApplied) {
+        // Applicant has already applied, cannot apply again
+        return res.status(400).json({ success: false, message: "You have already applied for this job." });
+      } 
+      else 
+      {
+        dev.myJobs[jobIndex].isApplied = true;
+        dev.myJobs[jobIndex].coverLetter = coverLetter;
+      }
+    }
+
+    await dev.save();
+
+    // Update the JobPost model with the application
+    const job = await JobPost.findById(jobId);
+    if (!job) {
+      return res.status(404).json({ success: false, message: "Job not found." });
+    }
+    
+    job.applicants.push({
+      applicant: dev._id,
+      coverLetter: coverLetter,
+    });
+
+    await job.save();
+
+    res.status(200).json({ success: true, message: "Application submitted successfully." });
   } catch (error) {
-    console.error("Error fetching jobs:", error);
-    res.status(500).json({ message: "Error fetching jobs" });
+    console.error("Error submitting application:", error);
+    res.status(500).json({ success: false, message: "Error submitting application." });
   }
 };
-module.exports = { devRegister, devEdit, getJobs };
+
+
+module.exports = { devRegister, devEdit, devApplication };

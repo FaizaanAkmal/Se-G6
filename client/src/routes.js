@@ -10,16 +10,19 @@ const apiRoutes = {
   // Job Routes
   job: {
     create: "/job/create",
-    get: "/job/",
     getAll: "/job/all",
+    getRelatedJobs: "/job/related",
     edit: "/job/edit",
     delete: "/job/delete",
+    updateBookmarks: "/job/updateBookmarks",
+    individualBookmarks:"/job/individualBookmarks"
   },
 
   // Developer Routes
   dev: {
     register: "/dev/profileSetup",
     edit: "/dev/profileEdit",
+    application: "/dev/application"
   },
 
   // Company Routes
@@ -41,7 +44,8 @@ const clientRoutes = {
   postAJob: "/postAJob",
   searchJobs: "/dev/search",
   devSettings: "/dev/settings",
-  companySettings: "/company/settings"
+  devIndividualJob: "/dev/job",
+  companySettings: "/company/settings",
 };
 
 export { apiRoutes, clientRoutes };

@@ -115,8 +115,6 @@ const registerUser = async (req, res) => {
     });
     await newUser.save();
 
-    console.log("response: ", res);
-
     res
       .status(201)
       .json({ success: true, message: "User registered successfully." , user: newUser });
