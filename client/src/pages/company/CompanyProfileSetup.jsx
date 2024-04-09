@@ -50,9 +50,9 @@ export default function CompanyProfileSetup() {
 
   // navigation
   const navigate = useNavigate();
+  const location = useLocation()
+  const userId = location.state.userId
   
-  // state received
-  const { userId } = useLocation();
 
   // Error handling state
   const [error, setError] = useState(null);
@@ -113,13 +113,12 @@ export default function CompanyProfileSetup() {
       userId
     };
 
-    console.log("Request data before sending:", requestData);
 
     try {
       const response = await axios.post(apiRoutes.company.register, requestData);
 
       console.log(response.data);
-      navigate(clientRoutes.companyDashboard, { userId: userId });
+      navigate(clientRoutes.companyDashboard,  { state: {userId: userId }});
     } catch (error) {
       console.error("Error Submitting Form", error);
     }

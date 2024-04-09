@@ -53,11 +53,9 @@ export default function PostAJob() {
 
     const [validCompensation, setValidCompensation] = useState(true);
 
-    // navigation
     const navigate = useNavigate();
-
-    // state received
-    const { userId } = useLocation();
+    const location = useLocation()
+    const userId = location.state.userId
 
     // form validation
     const [loading, setLoading] = useState(false);
@@ -162,15 +160,12 @@ export default function PostAJob() {
             userId,
         };
 
-        console.log("Request data before sending:", requestData);
         try {
             // Send a POST request to the server
             const response = await axios.post(
                 apiRoutes.job.create,
                 requestData
             );
-
-            console.log("Response:", response.data);
 
             // Navigate to the dashboard or handle the response accordingly
             navigate(clientRoutes.companyDashboard, { userId: userId });

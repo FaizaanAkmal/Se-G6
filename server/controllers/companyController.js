@@ -3,7 +3,6 @@ const Company = require("../models/company");
 const companyRegister = async (req, res) => {
   try {
     // Destructure the required fields from the request body
-    console.log("Response From Company: ", req.body);
     const {
       companyName,
       website,

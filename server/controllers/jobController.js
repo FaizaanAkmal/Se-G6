@@ -6,7 +6,7 @@ const Developer = require("../models/dev")
 const createJob = async (req, res) => {
   try {
     // Destructure the required fields from the request body
-    console.log("Response From creating JobPost: ", req.body);
+    // console.log("Response From creating JobPost: ", req.body);
     const {
       title,
       description,
@@ -53,7 +53,7 @@ const createJob = async (req, res) => {
   }
 };
 
-// Getting All Jobs Data
+// Getting All Developer Jobs Data
 const getAllJobs = async (req, res) => {
 
   const { userId } = req.query;
@@ -101,7 +101,7 @@ const getAllJobs = async (req, res) => {
   }
 };
 
-//Getting Related Jobs Data
+//Getting Developer Related Jobs Data
 const getRelatedJobs = async (req, res) => {
   const { userId, jobId } = req.query;
   

@@ -20,9 +20,9 @@ export default function CompanyDashboard() {
     
     // navigation
     const navigate = useNavigate();
-
-    // state received
-    const { userId } = useLocation();
+    const location = useLocation()
+    const userId = location.state.userId
+    
 
     // Load jobs based on active tab
     const loadJobs = async () => {

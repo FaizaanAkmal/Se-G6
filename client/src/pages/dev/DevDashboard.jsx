@@ -35,8 +35,6 @@ export default function DevDashboard() {
             const response = await axios.get(apiRoutes.job.getAll, {
                 params: { userId },
             });
-            console.log("Response data,", response.data);
-
             const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } =
                 response.data;
             setAllJobs(allJobs);
