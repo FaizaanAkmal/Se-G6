@@ -69,7 +69,7 @@ export default function DevProfileSettings() {
           try {
             //TODO: Get Using Actual User Id 
             const response1 = await axios.get("/dev/getProfile/660830ea6a95452d7625b433"); //Using Sample User Id
-    
+
             setCurrentCountry(response1.data.country);
             setCurrentExperience(response1.data.experience);
             setCurrentBio(response1.data.bio);
