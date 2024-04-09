@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const testRouter = require("./routes/testRoute");  // For testing only
 const userRouter = require("./routes/authRoute");
 const companyRouter = require("./routes/companyRoute");
 const devRouter = require("./routes/devRoute");
@@ -18,7 +19,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: [process.env.FRONTEND_URL],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -36,6 +37,9 @@ app.use("/dev", devRouter);
 
 // Handling Job Routes
 app.use("/job", jobRouter);
+
+// Handling Test Routes
+app.use("/test", testRouter);
 
 // Using Error Middleware
 app.use(errorMiddleware);

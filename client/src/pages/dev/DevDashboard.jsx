@@ -7,7 +7,7 @@ import { Grid, Typography, Button, Stack, Badge, Alert } from "@mui/joy";
 
 // Custom Components Imports
 import DevNavbar from "../../components/DevNavbar.jsx";
-import JobCard from "../../components/JobCard.jsx";
+import DevJobCard from "../../components/DevJobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
 // Routes Import

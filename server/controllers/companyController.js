@@ -1,4 +1,5 @@
 const Company = require("../models/company");
+const JobPost = require("../models/jobpost");
 
 const companyRegister = async (req, res) => {
   try {
@@ -88,4 +89,51 @@ const companyEdit = async (req, res) => {
   }
 };
 
-module.exports = { companyRegister, companyEdit };
+const getMyJobs = async (req, res) => {
+  // TODO: Get the jobs from the company's myJobs array
+  const { userId } = req.params;
+  try {
+    const company = await Company.findOne({ userId: userId }).populate({
+      path: 'myJobs.job',
+      populate: { path: 'postedBy' }
+    });
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+    const openPinnedJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && myJob.job.isPinned);
+    const openJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && !myJob.job.isPinned);
+    const closedJobs = company.myJobs.filter(myJob => myJob.job.status === 'closed' && !myJob.job.isPinned);
+
+    openJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
+    openPinnedJobs.sort((a, b) => new Date(b.job.pinnedAt) - new Date(a.job.pinnedAt));
+    closedJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
+
+    res.status(200).json({ openPinnedJobs, openJobs, closedJobs });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const updateBookmark = async (req, res) => {
+  // TODO: Update the bookmark in the company's myJobs array
+  const { userId, myJobId, isPinned, pinnedAt } = req.body;
+  try {
+    const company = await Company.findOne({ userId: userId });
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+    const myJob = company.myJobs.find(job => job._id.toString() === myJobId);
+    if (!myJob) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+    myJob.isPinned = isPinned;
+    myJob.pinnedAt = pinnedAt;
+    await company.save();
+
+    res.status(200).json();
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { companyRegister, companyEdit, getMyJobs, updateBookmark };

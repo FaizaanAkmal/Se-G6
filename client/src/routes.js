@@ -1,3 +1,5 @@
+import JobPost from "./pages/company/JobPost";
+
 const apiRoutes = {
   // User Routes
   user: {
@@ -10,7 +12,10 @@ const apiRoutes = {
     create: "/job/create",
     getAll: "/job/all",
     getRelatedJobs: "/job/related",
+    updateBookmarks: "/job/updateBookmarks",
+    individualBookmarks:"/job/individualBookmarks",
     edit: "/job/edit",
+    close: "/job/close",
     delete: "/job/delete",
     updateBookmarks: "/job/updateBookmarks",
     individualBookmarks:"/job/individualBookmarks"
@@ -27,6 +32,8 @@ const apiRoutes = {
   company: {
     register: "/company/profileSetup",
     edit: "/company/profileEdit",
+    getMyJobs: (userId) => `/company/myJobs/${userId}`,
+    updateBookmark: "/company/bookmark",
   },
 };
 
@@ -41,7 +48,9 @@ const clientRoutes = {
   postAJob: "/postAJob",
   searchJobs: "/dev/search",
   devSettings: "/dev/settings",
+  companySettings: "/company/settings",
   devIndividualJob: "/dev/job",
+  JobPost: "/jobpost"
 };
 
 export { apiRoutes, clientRoutes };

@@ -26,7 +26,7 @@ import {
   FormHelperText,
   RadioGroup,
 } from "@mui/joy";
-import { apiRoutes, clientRoutes} from "../routes.js";
+import { apiRoutes, clientRoutes } from "../routes.js";
 function CustomRadio({ label, ...props }) {
   return (
     <ListItem variant="outlined" sx={{ boxShadow: "sm" }}>
@@ -95,9 +95,9 @@ const Signup = () => {
       if (response.data.success) {
         const userId = response.data.user._id;
         if (userType === "Developer") {
-          navigate(clientRoutes.devProfileSetup, {state: {userId: userId} });
+          navigate(clientRoutes.devProfileSetup, { state: { userId: userId } });
         } else if (userType === "Company") {
-          navigate(clientRoutes.companyProfileSetup,  {state: {userId: userId }});
+          navigate(clientRoutes.companyProfileSetup, { state: { userId: userId } });
         }
       }
       // Handle unsuccessful registration

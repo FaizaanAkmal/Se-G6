@@ -53,6 +53,8 @@ export default function CompanyProfileSetup() {
   const location = useLocation()
   const userId = location.state.userId
   
+  // state received
+  const { userId } = useLocation().state;
 
   // Error handling state
   const [error, setError] = useState(null);

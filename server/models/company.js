@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const companySchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: 'User' 
+    ref: "User",
   },
   name: {
     type: String,
@@ -45,6 +45,22 @@ const companySchema = new Schema({
     type: String,
     required: true,
   },
+  myJobs: [
+    {
+      job: {
+        type: Schema.Types.ObjectId,
+        ref: "JobPost",
+      },
+      isPinned: {
+        type: Boolean,
+        default: false,
+      },
+      pinnedAt: {
+        type: Date,
+        default: null,
+      },
+    },
+  ],
 });
 
 const companyModel = mongoose.model("Company", companySchema);

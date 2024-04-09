@@ -27,9 +27,9 @@ export default function DevNavbar({ currentPage }) {
     // state received
     const userId = location.state.userId;
 
-    // Logout handler
+    // Logout handler (redirect to login page)
     const handleLogout = () => {
-        console.log("Logging out...");
+        navigate(clientRoutes.login);
     };
 
     // Helper function to determine button color based on the current page
