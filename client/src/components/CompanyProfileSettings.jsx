@@ -62,6 +62,40 @@ export default function CompanyProfileSettings() {
         useState("");
     const [currentCompanyBenefits, setCurrentCompanyBenefits] = useState("");
 
+    useEffect(() => {
+        const getData = async () => {
+          try {
+            //TODO: Get Using Actual User Id 
+            const response1 = await axios.get("/company/getProfile/660822c3908e5f1de1c036ec"); //Using Sample User Id
+    
+            setCurrentCompanyName(response1.data.name);
+            setCurrentWebsite(response1.data.website);
+            setCurrentCompanyType(response1.data.type);
+            setCurrentCountry(response1.data.country);
+            setCurrentIndustry(response1.data.industry);
+            setCurrentCompanySize(response1.data.size);
+            setCurrentCompanyOverview(response1.data.overview);
+            setCurrentCompanyWorkCulture(response1.data.workCulture);
+            setCurrentCompanyBenefits(response1.data.benefits);
+
+            setCompanyName(response1.data.name);
+            setWebsite(response1.data.website);
+            setCompanyType(response1.data.type);
+            setCountry(response1.data.country);
+            setIndustry(response1.data.industry);
+            setCompanySize(response1.data.size);
+            setCompanyOverview(response1.data.overview);
+            setCompanyWorkCulture(response1.data.workCulture);
+            setCompanyBenefits(response1.data.benefits);
+          } catch (error) {
+            console.error("Error getting data:", error);
+            // Handle error state or display error message
+          }
+        };
+    
+        getData();
+      }, []);
+
     // form validation states
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -134,9 +168,31 @@ export default function CompanyProfileSettings() {
 
         // simulate loading
         setLoading(true);
-        setTimeout(() => {
+        setTimeout(async () => {
             setLoading(false);
-
+            // create a new FormData object with the state data
+        const requestData2 = {
+            companyName,
+            website,
+            companyType,
+            country,
+            industry,
+            companySize,
+            companyOverview,
+            companyWorkCulture,
+            companyBenefits,
+        };
+    
+        console.log("Request data before sending:", requestData2);
+    
+        try {
+            const response = await axios.patch("/company/profileEdit/660822c3908e5f1de1c036ec", requestData2);
+    
+            console.log(response.data);
+            //navigate(clientRoutes.companyDashboard, { userId: userId });
+        } catch (error) {
+            console.error("Error Submitting Form", error);
+        }
             // update current values
             setCurrentCompanyName(companyName);
             setCurrentWebsite(website);

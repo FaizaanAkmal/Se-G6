@@ -20,24 +20,39 @@ import {
 
 export default function ChangePassword() {
     // form fields
-    const [currentPassword, setCurrentPassword] = useState("");
+    const [passwordCheck, setPasswordCheck] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const [currentPassword, setCurrentPassword] = useState("")
 
     // form status
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+    useEffect(() => {
+        const getData = async () => {
+          try {
+            //TODO: Get Using Actual User Id 
+            const response2 = await axios.get("/user/getUser/6614607726c9ef8fec028762");
+            setCurrentPassword(response2.data.password)
+          } catch (error) {
+            console.error("Error getting data:", error);
+            // Handle error state or display error message
+          }
+        };
+    
+        getData();
+      }, []);
 
     // handle fields changes
-    const handleCurrentPasswordChange = (event) => {
-        setCurrentPassword(event.target.value);
+    const handlePasswordCheckChange = (event) => {
+        setPasswordCheck(event.target.value);
     };
     const handleNewPasswordChange = (event) => {
         setNewPassword(event.target.value);
     };
     const handleCancel = () => {
         // clear form fields
-        setCurrentPassword("");
+        setPasswordCheck("");
         setNewPassword("");
     };
 
@@ -46,14 +61,29 @@ export default function ChangePassword() {
 
         // simulate api call
         setLoading(true);
-        setTimeout(() => {
-            // clear form fields
-            setCurrentPassword("");
-            setNewPassword("");
-            // show success snackbar
-            setOpenSuccessSnackbar(true);
+        setTimeout(async () => {
+            const requestData = {
+                passwordCheck,
+                currentPassword,
+                newPassword
+            }
+            const response = await axios.patch("/user/changePassword/6614607726c9ef8fec028762", requestData);
+            console.log(response.data)
+            if (response.data.success==false){
+                setError(response.data.message)
+                setLoading(false)
+            }
+            else {
+                console.log("Success")
+                setError(null)
+                // clear form fields
+                setPasswordCheck("");
+                setNewPassword("");
+                // show success snackbar
+                setOpenSuccessSnackbar(true);
 
-            setLoading(false);
+                setLoading(false);
+            }
         }, 2000);
     };
 
@@ -68,8 +98,8 @@ export default function ChangePassword() {
                         <Input
                             type="password"
                             name="password"
-                            value={currentPassword}
-                            onChange={handleCurrentPasswordChange}
+                            value={passwordCheck}
+                            onChange={handlePasswordCheckChange}
                         />
                     </FormControl>
                     {/* New Passowrd */}

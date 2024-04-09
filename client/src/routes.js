@@ -29,7 +29,7 @@ const apiRoutes = {
   company: {
     register: "/company/profileSetup",
     edit: "/company/profileEdit/:id",
-    getProfile: "/company/getProfile"
+    getProfile: "/company/getProfile/:id"
   },
 };
 

@@ -201,11 +201,11 @@ const editUser = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-  const {passwordCheck, password, newPassword} = req.body;
+  const {passwordCheck, currentPassword, newPassword} = req.body;
   // Function to compare passwords
-  const comparePasswords = (passwordCheck, password) => {
+  const comparePasswords = (passwordCheck, currentPassword) => {
     return new Promise((resolve, reject) => {
-      bcrypt.compare(passwordCheck, password, function(err, result) {
+      bcrypt.compare(passwordCheck, currentPassword, function(err, result) {
         if (err) {
           // Handle error
           reject(err);
@@ -221,7 +221,7 @@ const changePassword = async (req, res) => {
       });
     });
   };
-  const passwordsMatch = await comparePasswords(passwordCheck, password);
+  const passwordsMatch = await comparePasswords(passwordCheck, currentPassword);
   if(passwordsMatch===false) {
     return res.json({
       success: false,
