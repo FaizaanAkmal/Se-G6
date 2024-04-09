@@ -50,7 +50,7 @@ const calculateTimeAgo = (date) => {
   }
 };
 
-const JobCard = ({ userId, myJob, setOpenPinnedJobs, setOpenJobs }) => {
+const CompanyJobCard = ({ userId, myJob, setOpenPinnedJobs, setOpenJobs }) => {
   // Handler function for card click
   const handleCardClick = () => {
     console.log("Card Clicked");
@@ -95,8 +95,8 @@ const JobCard = ({ userId, myJob, setOpenPinnedJobs, setOpenJobs }) => {
     try {
       const response = await axios.patch(apiRoutes.job.close, {
         userId: userId,
-        myJobId: myJob.job._id,
-        jobId: myJob._id,
+        myJobId: myJob._id,
+        jobId: myJob.job._id,
       });
       if (myJob.isPinned) {
         setOpenPinnedJobs((prevJobs) =>
@@ -241,4 +241,4 @@ const JobCard = ({ userId, myJob, setOpenPinnedJobs, setOpenJobs }) => {
   );
 };
 
-export default JobCard;
+export default CompanyJobCard;

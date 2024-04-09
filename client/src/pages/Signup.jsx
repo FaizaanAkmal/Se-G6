@@ -97,9 +97,7 @@ const Signup = () => {
         if (userType === "Developer") {
           navigate(clientRoutes.devProfileSetup, { state: { userId: userId } });
         } else if (userType === "Company") {
-          navigate(clientRoutes.companyProfileSetup, {
-            state: { userId: userId },
-          });
+          navigate(clientRoutes.companyProfileSetup, { state: { userId: userId } });
         }
       }
       // Handle unsuccessful registration

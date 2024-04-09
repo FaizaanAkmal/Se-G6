@@ -7,7 +7,7 @@ import { Grid, Typography, Button, Stack, Divider } from "@mui/joy";
 
 // Custom Components Imports
 import CompanyNavbar from "../../components/CompanyNavbar";
-import JobCard from "../../components/JobCard";
+import CompanyJobCard from "../../components/CompanyJobCard";
 import Footer from "../../components/Footer";
 
 // Routes Import
@@ -120,7 +120,7 @@ export default function CompanyDashboard() {
             <>
               <Stack spacing={2} mt={4}>
                 {openPinnedJobs.map((myJob, index) => (
-                  <JobCard
+                  <CompanyJobCard
                     key={index}
                     userId={userId}
                     myJob={myJob}
@@ -133,7 +133,7 @@ export default function CompanyDashboard() {
               </Stack>
               <Stack spacing={2} mt={4}>
                 {openJobs.map((myJob, index) => (
-                  <JobCard
+                  <CompanyJobCard
                     key={index}
                     userId={userId}
                     myJob={myJob}
@@ -148,7 +148,7 @@ export default function CompanyDashboard() {
           {activeTab === "closed" && (
             <Stack spacing={2} mt={4}>
               {closedJobs.map((myJob, index) => (
-                <JobCard key={index} myJob={myJob} />
+                <CompanyJobCard key={index} myJob={myJob} />
               ))}
             </Stack>
           )}

@@ -14,8 +14,7 @@ import {
 
 // Custom components
 import CompanyNavbar from "../../components/CompanyNavbar.jsx";
-import Footer from "../../components/Footer";
-import JobCard from "../../components/JobCard.jsx";
+import Footer from "../../components/Footer.jsx";
 
 // UI imports
 import {

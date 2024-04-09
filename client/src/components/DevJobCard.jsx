@@ -37,7 +37,7 @@ import PropTypes from "prop-types";
 // Routes Import
 import { apiRoutes } from "../routes.js";
 
-const JobCard = ({
+const DevJobCard = ({
     job,
     userId,
     setBookmarkedJobs,
@@ -167,7 +167,7 @@ const JobCard = ({
     };
 
     //Validating Props
-    JobCard.propTypes = {
+    DevJobCard.propTypes = {
         job: PropTypes.object.isRequired,
         userId: PropTypes.string.isRequired,
         setBookmarkedJobs: PropTypes.func.isRequired,
@@ -549,4 +549,4 @@ const JobCard = ({
     );
 };
 
-export default JobCard;
+export default DevJobCard;

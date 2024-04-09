@@ -7,7 +7,7 @@ import { Grid, Typography, Button, Stack, Badge, Alert } from "@mui/joy";
 
 // Custom Components Imports
 import DevNavbar from "../../components/DevNavbar.jsx";
-import JobCard from "../../components/JobCard.jsx";
+import DevJobCard from "../../components/DevJobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
 // Routes Import
@@ -26,6 +26,7 @@ export default function DevDashboard() {
 
   // state received
   const { userId } = useLocation().state;
+
   //Fetching All Jobs Together
   const fetchJobsData = async () => {
     try {
@@ -55,7 +56,8 @@ export default function DevDashboard() {
     window.scrollTo(0, 0);
 
     // navigate to (/dev/searchjobs)
-    navigate(clientRoutes.searchJobs, { state: location.state });
+    //navigate(clientRoutes.searchJobs, { state: userId });
+    console.log("Loading more jobs...");
   };
 
   // Handler to change the active tab
@@ -183,7 +185,7 @@ export default function DevDashboard() {
           {activeTab === "All" && (
             <Stack spacing={2} mt={4}>
               {jobs.map((job) => (
-                <JobCard
+                <DevJobCard
                   key={job._id}
                   job={job}
                   userId={userId}
@@ -198,7 +200,7 @@ export default function DevDashboard() {
           {activeTab === "Bookmarked" && (
             <Stack spacing={2} mt={4}>
               {jobs.map((job) => (
-                <JobCard
+                <DevJobCard
                   key={job._id}
                   job={job}
                   userId={userId}
@@ -213,7 +215,7 @@ export default function DevDashboard() {
           {activeTab === "Applied" && (
             <Stack spacing={2} mt={4}>
               {jobs.map((job) => (
-                <JobCard
+                <DevJobCard
                   key={job._id}
                   job={job}
                   userId={userId}
@@ -229,7 +231,7 @@ export default function DevDashboard() {
           {activeTab === "Job Offers" && (
             <Stack spacing={2} mt={4}>
               {jobs.map((job) => (
-                <JobCard
+                <DevJobCard
                   key={job._id}
                   job={job}
                   userId={userId}

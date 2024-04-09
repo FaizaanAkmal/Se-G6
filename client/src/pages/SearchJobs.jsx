@@ -31,7 +31,7 @@ import sortIcon from "../assets/sortIcon.svg";
 
 // Custom Components Imports
 import DevNavbar from "../components/DevNavbar";
-import JobCard from "../components/JobCard";
+import DevJobCard from "../components/DevJobCard";
 import Footer from "../components/Footer";
 
 // Routes Import
@@ -59,8 +59,7 @@ export default function SearchJobs() {
     const navigate = useNavigate();
 
     // state received
-    const location = useLocation();
-    const userId = location.state.userId;
+    const userId = useLocation().state;
 
     // Function to fetch jobs based on search criteria
     const fetchJobs = async () => {
@@ -461,7 +460,7 @@ export default function SearchJobs() {
                         {/* Job Cards */}
                         <Stack spacing={2}>
                             {jobs.map((job) => (
-                                <JobCard
+                                <DevJobCard
                                     key={job.id}
                                     job={job}
                                     userId={userId}

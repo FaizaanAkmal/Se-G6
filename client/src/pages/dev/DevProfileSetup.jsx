@@ -14,7 +14,6 @@ import {
 } from "../../globalConstants.js";
 
 // Custom components
-import JobCard from "../../components/JobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 import Navbar from "../../components/DevNavbar.jsx";
 
