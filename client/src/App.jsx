@@ -12,6 +12,7 @@ import DevDashboard from "./pages/dev/DevDashboard.jsx";
 import PostAJob from "./pages/company/PostAJob.jsx";
 import SearchJobs from "./pages/SearchJobs.jsx";
 import DevIndividualJob from "./pages/dev/DevIndividualJob.jsx";
+import DevSettings from "./pages/dev/DevSettings.jsx";
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
@@ -69,8 +70,9 @@ function App() {
           <Route path={clientRoutes.postAJob} element={<PostAJob />} />
           <Route path={clientRoutes.searchJobs} element={<SearchJobs />} />
 
-          {/* temporary path for testing */}
-          <Route path="/test-individual-job" element={<DevIndividualJob />} />
+          {/* adding dev settings route */}
+          <Route path={clientRoutes.devSettings} element={<DevSettings />} />
+          
 
         </Routes>
       </BrowserRouter>
