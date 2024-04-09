@@ -51,6 +51,10 @@ export default function CompanyDashboard() {
         // Redirect to job posting page
         navigate(clientRoutes.postAJob, {state: {userId: userId}});
     };
+    const handleClick = () => {
+        // Redirect to job posting page
+        navigate(clientRoutes.JobPost);
+    };
 
     return (
         <>
@@ -131,6 +135,17 @@ export default function CompanyDashboard() {
                     >
                         Post a Job
                     </Button>
+
+                    <Button
+                        variant="soft"
+                        color="primary"
+                        sx={{ borderRadius: 8, mt: 6 }}
+                        loading={loading}
+                        onClick={handleClick}
+                    >
+                       Testing Single Job
+                    </Button>
+
                 </Grid>
             </Grid>
             <Footer />

@@ -1,3 +1,5 @@
+import JobPost from "./pages/company/JobPost";
+
 const apiRoutes = {
   // User Routes
   user: {
@@ -42,6 +44,7 @@ const clientRoutes = {
   searchJobs: "/dev/search",
   devSettings: "/dev/settings",
   devIndividualJob: "/dev/job",
+  JobPost: "/jobpost"
 };
 
 export { apiRoutes, clientRoutes };
