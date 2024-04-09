@@ -25,7 +25,7 @@ export default function DevNavbar({ currentPage }) {
     const location = useLocation();
 
     // state received
-    const userId = location.state.userId;
+    //const userId = location.state.userId;
 
     // Logout handler
     const handleLogout = () => {

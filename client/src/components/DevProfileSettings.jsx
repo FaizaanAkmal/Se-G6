@@ -51,7 +51,7 @@ export default function DevProfileSettings() {
     const [githubLink, setGithubLink] = useState("");
 
     // form fields (current)
-    const [currentCountry, setCurrentCountry] = useState("India");
+    const [currentCountry, setCurrentCountry] = useState("");
     const [currentExperience, setCurrentExperience] = useState("");
     const [currentBio, setCurrentBio] = useState("");
     const [currentSkills, setCurrentSkills] = useState([]);
@@ -63,6 +63,42 @@ export default function DevProfileSettings() {
         useState("");
     const [currentPortfolioLink, setCurrentPortfolioLink] = useState("");
     const [currentGithubLink, setCurrentGithubLink] = useState("");
+
+    useEffect(() => {
+        const getData = async () => {
+          try {
+            //TODO: Get Using Actual User Id 
+            const response1 = await axios.get("/dev/getProfile/660830ea6a95452d7625b433"); //Using Sample User Id
+    
+            setCurrentCountry(response1.data.country);
+            setCurrentExperience(response1.data.experience);
+            setCurrentBio(response1.data.bio);
+            setCurrentSkills(response1.data.skills);
+            setCurrentLanguages(response1.data.languages);
+            setCurrentTechnologies(response1.data.technologies);
+            setCurrentInterestedJobType(response1.data.interestedJobType);
+            setCurrentEnvironmentPreference(response1.data.environmentPreference);
+            setCurrentPortfolioLink(response1.data.portfolio);
+            setCurrentGithubLink(response1.data.gitLink)
+
+            setCountry(response1.data.country);
+            setExperience(response1.data.experience);
+            setBio(response1.data.bio);
+            setSkills(response1.data.skills);
+            setLanguages(response1.data.languages);
+            setTechnologies(response1.data.technologies);
+            setInterestedJobType(response1.data.interestedJobType);
+            setEnvironmentPreference(response1.data.environmentPreference);
+            setPortfolioLink(response1.data.portfolio);
+            setGithubLink(response1.data.gitLink)
+          } catch (error) {
+            console.error("Error getting data:", error);
+            // Handle error state or display error message
+          }
+        };
+    
+        getData();
+      }, []);
 
     // form validation states
     const [loading, setLoading] = useState(false);
@@ -170,9 +206,32 @@ export default function DevProfileSettings() {
 
         // simulating api call
         setLoading(true);
-        setTimeout(() => {
+        setTimeout(async () => {
             setLoading(false);
-
+            // create a new FormData object with the state data
+        const requestData2 = {
+            country,
+            experience,
+            bio,
+            skills,
+            languages,
+            technologies,
+            interestedJobType,
+            environmentPreference,
+            portfolioLink,
+            githubLink,
+        };
+    
+        console.log("Request data before sending:", requestData2);
+    
+        try {
+            const response = await axios.patch("/dev/profileEdit/660830ea6a95452d7625b433", requestData2);
+    
+            console.log(response.data);
+            //navigate(clientRoutes.companyDashboard, { userId: userId });
+        } catch (error) {
+            console.error("Error Submitting Form", error);
+        }
             // update current values
             setCurrentCountry(country);
             setCurrentExperience(experience);
@@ -406,7 +465,7 @@ export default function DevProfileSettings() {
                             <Button
                                 size="lg"
                                 type="submit"
-                                disabled={() => disableSaveButton()}
+                                disabled={disableSaveButton()}
                                 loading={loading}
                             >
                                 Save Changes

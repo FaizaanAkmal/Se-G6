@@ -3,8 +3,8 @@ const apiRoutes = {
   user: {
     register: "/user/register",
     login: "/user/login",
-    getUser: "/user/getUser/:id",
-    changePassword: "/user/changePassword/:id"
+    getUser: "/user/getUser",
+    changePassword: "/user/changePassword"
   },
 
   // Job Routes
@@ -22,14 +22,15 @@ const apiRoutes = {
   dev: {
     register: "/dev/profileSetup",
     edit: "/dev/profileEdit",
-    application: "/dev/application"
+    application: "/dev/application",
+    getProfile: "/dev/getProfile"
   },
 
   // Company Routes
   company: {
     register: "/company/profileSetup",
-    edit: "/company/profileEdit/:id",
-    getProfile: "/company/getProfile/:id"
+    edit: "/company/profileEdit",
+    getProfile: "/company/getProfile"
   },
 };
 
