@@ -233,7 +233,6 @@ const updateBookmarks = async (req, res) => {
   } else {
     updatedIsBookmarked = true;
   }
-
   try {
     // Find the developer based on userId
     const developer = await Developer.findOne({ userId });
@@ -270,7 +269,7 @@ const updateBookmarks = async (req, res) => {
 //Individual Bookmark
 const individualBookmarks = async (req, res) => {
   const { userId, jobId, isBookmarked } = req.body;
-
+  
   try {
     // Find the developer based on userId
     const developer = await Developer.findOne({ userId });

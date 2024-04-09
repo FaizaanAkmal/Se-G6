@@ -11,7 +11,7 @@ import DevJobCard from "../../components/DevJobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
 // Routes Import
-import { apiRoutes, clientRoutes } from "../../routes.js";
+import { apiRoutes } from "../../routes.js";
 
 export default function DevDashboard() {
   const [activeTab, setActiveTab] = useState("All");
