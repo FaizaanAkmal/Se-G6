@@ -42,6 +42,7 @@ const clientRoutes = {
   searchJobs: "/dev/search",
   devSettings: "/dev/settings",
   devIndividualJob: "/dev/job",
+  companySettings: "/company/settings",
 };
 
 export { apiRoutes, clientRoutes };

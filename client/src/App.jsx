@@ -13,6 +13,7 @@ import PostAJob from "./pages/company/PostAJob.jsx";
 import SearchJobs from "./pages/SearchJobs.jsx";
 import DevIndividualJob from "./pages/dev/DevIndividualJob.jsx";
 import DevSettings from "./pages/dev/DevSettings.jsx";
+import CompanySettings from "./pages/company/CompanySettings.jsx";
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
@@ -72,6 +73,9 @@ function App() {
 
           {/* adding dev settings route */}
           <Route path={clientRoutes.devSettings} element={<DevSettings />} />
+
+          {/* adding company settings route */}
+          <Route path={clientRoutes.companySettings} element={<CompanySettings />} />
           
 
         </Routes>
