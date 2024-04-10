@@ -1,20 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, Typography, Grid, Box, Avatar } from '@mui/joy';
-import { WorkspacePremium, AccessTime, DoneAll, Cancel, CheckCircle, PanoramaFishEye } from '@mui/icons-material';
+// // // // import { WorkspacePremium, AccessTime, DoneAll, Cancel, CheckCircle, PanoramaFishEye } from '@mui/icons-material';
 
 const ApplicantCard = ({ applicant }) => {
     const getStatusIcon = () => {
-        switch (applicant.status) {
-            case 'shortlisted':
-                return <CheckCircle sx={{ color: 'green' }} />;
-            case 'undecided':
-                return <PanoramaFishEye sx={{ color: 'grey' }} />;
-            case 'rejected':
-                return <Cancel sx={{ color: '#D44040' }} />;
-            default:
-                return null;
-        }
+        // switch (applicant.status) {
+        //     case 'shortlisted':
+        //         return <CheckCircle sx={{ color: 'green' }} />;
+        //     case 'undecided':
+        //         return <PanoramaFishEye sx={{ color: 'grey' }} />;
+        //     case 'rejected':
+        //         return <Cancel sx={{ color: '#D44040' }} />;
+        //     default:
+        //         return null;
+        // }
     };
 
     const getInitials = (name) => {
@@ -43,15 +43,15 @@ const ApplicantCard = ({ applicant }) => {
                     </Box>
                     <Grid direction="column" container spacing={2} marginLeft={9}>
                         <Grid item>
-                            <WorkspacePremium/>
+                            {/* <WorkspacePremium/> */}
                             {applicant.qualification}
                         </Grid>
                         <Grid item>
-                            <AccessTime/>
+                            {/* <AccessTime/> */}
                             {applicant.experience}
                         </Grid>
                         <Grid item>
-                            <DoneAll/>
+                            {/* <DoneAll/> */}
                             {applicant.skills}
                         </Grid>
                     </Grid>

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { Typography, Stack, Grid , Button} from "@mui/joy";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { CalendarToday, PeopleAltSharp, CodeOff, Code } from "@mui/icons-material";
+// // // // import { CalendarToday, PeopleAltSharp, CodeOff, Code } from "@mui/icons-material";
 import CompanyNavbar from "../../components/CompanyNavbar";
 import ApplicantCard from "../../components/ApplicantCard"
 import Footer from "../../components/Footer";
@@ -45,11 +45,11 @@ const JobPostPage = () => {
                       {/* Key Info below title */}
                       {/* Border Left is just so we have correct alignment */}
                       <Stack direction="row" spacing={1} borderLeft={8} borderColor="#FFFFFF">
-                          <CalendarToday />
+                          {/* <CalendarToday /> */}
                           <Typography variant="body2" fontSize={12} textColor={475467}> {job.datePosted}</Typography>
-                          {job.status === 'Open' ? <Code /> : <CodeOff />}
+                          {/* {job.status === 'Open' ? <Code /> : <CodeOff />} */}
                           <Typography variant="body2" fontSize={12} textColor={475467}> {job.status}</Typography>
-                          <PeopleAltSharp />
+                          {/* <PeopleAltSharp /> */}
                           <Typography variant="body2" fontSize={12} textColor={475467}> {job.numApplicants}</Typography>
                       </Stack>
                     </Stack>
