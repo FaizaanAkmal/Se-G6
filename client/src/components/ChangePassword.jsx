@@ -28,18 +28,18 @@ export default function ChangePassword() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+    const getData = async () => {
+        try {
+        //TODO: Get Using Actual User Id 
+        const response2 = await axios.get("/user/getUser/6614607726c9ef8fec028762");
+        setCurrentPassword(response2.data.password)
+        } catch (error) {
+        console.error("Error getting data:", error);
+        // Handle error state or display error message
+        }
+    };
+
     useEffect(() => {
-        const getData = async () => {
-          try {
-            //TODO: Get Using Actual User Id 
-            const response2 = await axios.get("/user/getUser/6614607726c9ef8fec028762");
-            setCurrentPassword(response2.data.password)
-          } catch (error) {
-            console.error("Error getting data:", error);
-            // Handle error state or display error message
-          }
-        };
-    
         getData();
       }, []);
 
@@ -79,6 +79,7 @@ export default function ChangePassword() {
                 // clear form fields
                 setPasswordCheck("");
                 setNewPassword("");
+                getData()
                 // show success snackbar
                 setOpenSuccessSnackbar(true);
 
