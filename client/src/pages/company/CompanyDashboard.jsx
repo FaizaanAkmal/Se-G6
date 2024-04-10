@@ -51,19 +51,10 @@ export default function CompanyDashboard() {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-    // Handler for "Post a Job" button
-    const handlePostJob = () => {
-        // Redirect to job posting page
-        navigate(clientRoutes.postAJob, {state: {userId: userId}});
-    };
-    const handleClick = () => {
-        // Redirect to job posting page
-        navigate(clientRoutes.JobPost);
-    };
 
   return (
     <>
-      <CompanyNavbar currentPage="dashboard" userId={userId} />
+      <CompanyNavbar currentPage="dashboard" />
       <Grid
         container
         sx={{

@@ -19,9 +19,12 @@ import {
 // Route imports
 import { clientRoutes } from "../routes.js";
 
-export default function CompanyNavbar({ currentPage, userId }) {
+export default function CompanyNavbar({ currentPage }) {
   // navigation
   const navigate = useNavigate();
+
+  // state received
+  const { userId } = useLocation().state;
 
   // Logout handler
   const handleLogout = () => {
@@ -39,19 +42,19 @@ export default function CompanyNavbar({ currentPage, userId }) {
   };
 
   const handleTabChange = (tab) => {
-    // if (tab === "dashboard") {
-    //   // navigate to (/company/dashboard)
-    //   navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
-    // }
-    // if (tab === "postJob") {
-    //   // navigate to (/postAJob)
-    //   navigate(clientRoutes.postAJob, { state: { userId: userId } });
-    // }
-    // if (tab === "settings") {
-    //   // navigate to (/company/settings)
-    //   //navigate(clientRoutes.companySettings, { state: { userId: userId } });
-    //   console.log("Company Settings");
-    // }
+    if (tab === "dashboard") {
+      // navigate to (/company/dashboard)
+      navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
+    }
+    if (tab === "postJob") {
+      // navigate to (/postAJob)
+      navigate(clientRoutes.postAJob, { state: { userId: userId } });
+    }
+    if (tab === "settings") {
+      // navigate to (/company/settings)
+      //navigate(clientRoutes.companySettings, { state: { userId: userId } });
+      console.log("Company Settings");
+    }
   };
 
   return (
@@ -78,21 +81,21 @@ export default function CompanyNavbar({ currentPage, userId }) {
         <Button
           variant="plain"
           color={getButtonColor("dashboard")}
-          onClick={handleTabChange("dashboard")}
+          onClick={() => handleTabChange("dashboard")}
         >
           Dashboard
         </Button>
         <Button
           variant="plain"
           color={getButtonColor("postJob")}
-          onClick={handleTabChange("postJob")}
+          onClick={() => handleTabChange("postJob")}
         >
           Post a Job
         </Button>
         <Button
           variant="plain"
           color={getButtonColor("settings")}
-          onClick={handleTabChange("settings")}
+          onClick={() => handleTabChange("settings")}
         >
           Settings
         </Button>
