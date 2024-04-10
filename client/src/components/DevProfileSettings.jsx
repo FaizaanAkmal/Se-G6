@@ -68,7 +68,7 @@ export default function DevProfileSettings() {
         const getData = async () => {
           try {
             //TODO: Get Using Actual User Id 
-            const response1 = await axios.get("/dev/getProfile/660830ea6a95452d7625b433"); //Using Sample User Id
+            const response1 = await axios.get("/dev/getProfile/6615c5c8207df6ac838583f3"); //Using Sample User Id
 
             setCurrentCountry(response1.data.country);
             setCurrentExperience(response1.data.experience);
@@ -159,7 +159,7 @@ export default function DevProfileSettings() {
 
         // if any of the fields are empty, disable save button
         if (
-            country === "" ||
+            country === "" || !country ||
             experience === "" ||
             bio === "" ||
             skills.length === 0 ||
@@ -225,7 +225,7 @@ export default function DevProfileSettings() {
         console.log("Request data before sending:", requestData2);
     
         try {
-            const response = await axios.patch("/dev/profileEdit/660830ea6a95452d7625b433", requestData2);
+            const response = await axios.patch("/dev/profileEdit/6615c5c8207df6ac838583f3", requestData2);
     
             console.log(response.data);
             //navigate(clientRoutes.companyDashboard, { userId: userId });

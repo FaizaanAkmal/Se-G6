@@ -284,4 +284,23 @@ const changePassword = async (req, res) => {
   }
 }
 
-module.exports = { registerUser, loginUser, getUser, editUser, changePassword };
+const deleteUser = async (req, res) => {
+  const {id} = req.params
+  try {
+    // Use findByIdAndDelete to find and delete the user by id
+    const deletedUser = await User.findByIdAndDelete(id);
+    
+    if (!deletedUser) {
+      // If no user found with the given id, return appropriate message or handle accordingly
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    // Return success message or any relevant data
+    return res.status(200).json({ message: 'User deleted successfully.' });
+  } catch (error) {
+    // Handle errors
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+module.exports = { registerUser, loginUser, getUser, editUser, changePassword, deleteUser };

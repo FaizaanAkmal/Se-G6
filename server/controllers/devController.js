@@ -177,4 +177,23 @@ const getDev = async (req, res) => {
   }
 }
 
-module.exports = { devRegister, devEdit, devApplication, getDev };
+const deleteDev = async (req, res) => {
+  const userId = req.params.id
+  try {
+    // Use findByIdAndDelete to find and delete the user by id
+    const deletedDev = await Dev.findOneAndDelete({userId: userId});
+    
+    if (!deletedDev) {
+      // If no user found with the given id, return appropriate message or handle accordingly
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    // Return success message or any relevant data
+    return res.status(200).json({ message: 'User deleted successfully.' });
+  } catch (error) {
+    // Handle errors
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+module.exports = { devRegister, devEdit, devApplication, getDev, deleteDev };

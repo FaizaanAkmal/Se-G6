@@ -4,7 +4,8 @@ const apiRoutes = {
     register: "/user/register",
     login: "/user/login",
     getUser: "/user/getUser",
-    changePassword: "/user/changePassword"
+    changePassword: "/user/changePassword",
+    delete: "/user/deleteUser"
   },
 
   // Job Routes
@@ -14,6 +15,7 @@ const apiRoutes = {
     getRelatedJobs: "/job/related",
     edit: "/job/edit",
     delete: "/job/delete",
+    deleteApplicant: "/job/deleteApplicant",
     updateBookmarks: "/job/updateBookmarks",
     individualBookmarks:"/job/individualBookmarks"
   },
@@ -23,14 +25,16 @@ const apiRoutes = {
     register: "/dev/profileSetup",
     edit: "/dev/profileEdit",
     application: "/dev/application",
-    getProfile: "/dev/getProfile"
+    getProfile: "/dev/getProfile",
+    delete: "/dev/deleteDev"
   },
 
   // Company Routes
   company: {
     register: "/company/profileSetup",
     edit: "/company/profileEdit",
-    getProfile: "/company/getProfile"
+    getProfile: "/company/getProfile",
+    delete: "/company/deleteCompany"
   },
 };
 

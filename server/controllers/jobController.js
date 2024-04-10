@@ -290,8 +290,35 @@ const editJob = async (req, res) => {
 };
 
 const deleteJob = async (req, res) => {
-  // TODO: remove Job with job_id in req
+  const userId = req.params.id
+  try {
+    // Use deleteMany to remove documents where the field matches the identifier
+    const result = await JobPost.deleteMany({ postedBy: userId });
+
+    res.status(200).json({ message: `${result.deletedCount} documents deleted` });
+  } catch (error) {
+    console.error("Error deleting users:", error);
+    res.status(400).json({ error: error.message });
+  }
 };
 
+const deleteApplicants = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const result = await JobPost.updateMany(
+      {},
+      {
+        $pull: {
+          applicants: {applicant : userId }, 
+          shortlisted: userId 
+        }
+      }
+    );
+    res.status(200).json({ message: "Documents updated" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 
-module.exports = { createJob, getAllJobs, editJob, deleteJob,updateBookmarks,individualBookmarks,getRelatedJobs};
+module.exports = { createJob, getAllJobs, editJob, deleteJob,updateBookmarks,individualBookmarks,getRelatedJobs, deleteApplicants};

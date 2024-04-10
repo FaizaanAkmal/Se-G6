@@ -1,4 +1,5 @@
 const Company = require("../models/company");
+const JobPost = require("../models/jobpost");
 
 const companyRegister = async (req, res) => {
   try {
@@ -103,4 +104,25 @@ const getCompany = async (req, res) => {
   }
 }
 
-module.exports = { companyRegister, companyEdit, getCompany };
+const deleteCompany = async (req, res) => {
+    const userId = req.params.id
+    
+    try{
+      // Use findByIdAndDelete to find and delete the user by id
+      const deletedCompany = await Company.findOneAndDelete({userId: userId});
+      
+      if (!deletedCompany) {
+        // If no user found with the given id, return appropriate message or handle accordingly
+        return res.json({ success: "false", error: "User not found" });
+      }
+      
+      // Return success message or any relevant data
+      return res.json({ success: "true", message: 'User deleted successfully.' });
+    } catch (error) {
+      // Handle errors
+      return res.json({ success: "false", error: error.message });
+    }
+
+  };
+
+module.exports = { companyRegister, companyEdit, getCompany, deleteCompany };

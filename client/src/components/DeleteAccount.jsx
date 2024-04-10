@@ -25,6 +25,8 @@ export default function DeleteAccount() {
     const [error, setError] = useState(null);
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
     const [accountDeleted, setAccountDeleted] = useState(false);
+    const navigate = useNavigate();
+    const {userId} = useLocation();
 
     const handleCancel = () => {
         // refresh the page
@@ -44,14 +46,33 @@ export default function DeleteAccount() {
     const confirmDeleteAccount = async () => {
         // simulate
         setLoading(true);
-        setTimeout(() => {
+        setTimeout(async () => {
+            try {
+            const response0 = await axios.delete("/user/deleteUser/6613cd6e655bf21c13a4854e");
+            console.log(response0)
+            const response = await axios.delete("/company/deleteCompany/66150cf453be6c870885b43f");
+            console.log(response)
+            if (response.data.success==="false") {
+                const response1 = await axios.delete("/dev/deleteDev/660830ea6a95452d7625b433");
+                console.log(response1)
+                const response2 = await axios.delete("/job/deleteApplicant/660830ea6a95452d7625b433");
+                console.log(response2)
+            }
+            else {
+                const response3 = await axios.delete("/job/delete/66150cf453be6c870885b43f");
+                console.log(response3)
+            }
+        }
+        catch {
+            setError("This user does not exist")
+        }
             // close modal
             setLoading(false);
             setOpenConfirmModal(false);
-            // TODO: Route to sign up page
 
             // show snackbar
             setAccountDeleted(true);
+            navigate(clientRoutes.signup, { userId: userId });
         }, 2000);
     };
 

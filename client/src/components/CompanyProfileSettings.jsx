@@ -66,7 +66,7 @@ export default function CompanyProfileSettings() {
         const getData = async () => {
           try {
             //TODO: Get Using Actual User Id 
-            const response1 = await axios.get("/company/getProfile/660822c3908e5f1de1c036ec"); //Using Sample User Id
+            const response1 = await axios.get("/company/getProfile/6614372a8ea6c9b6abdd0d30"); //Using Sample User Id
     
             setCurrentCompanyName(response1.data.name);
             setCurrentWebsite(response1.data.website);
@@ -186,7 +186,7 @@ export default function CompanyProfileSettings() {
         console.log("Request data before sending:", requestData2);
     
         try {
-            const response = await axios.patch("/company/profileEdit/660822c3908e5f1de1c036ec", requestData2);
+            const response = await axios.patch("/company/profileEdit/6614372a8ea6c9b6abdd0d30", requestData2);
     
             console.log(response.data);
             //navigate(clientRoutes.companyDashboard, { userId: userId });
