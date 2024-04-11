@@ -72,9 +72,6 @@ function App() {
           <Route path={clientRoutes.postAJob} element={<PostAJob />} />
           <Route path={clientRoutes.JobPost} element={<JobPost />} />
           <Route path={clientRoutes.searchJobs} element={<SearchJobs />} />
-          
-          {/* temporary path for testing */}
-          <Route path="/test-individual-job" element={<DevIndividualJob />} />
 
           {/* adding dev settings route */}
           <Route path={clientRoutes.devSettings} element={<DevSettings />} />

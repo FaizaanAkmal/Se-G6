@@ -1,6 +1,5 @@
 const JobPost = require("../models/jobpost");
 const Company = require("../models/company");
-const Developer = require("../models/dev");
 
 //creating a new job post
 const createJob = async (req, res) => {
@@ -211,81 +210,6 @@ const getRelatedJobs = async (req, res) => {
   }
 };
 
-// Updating Bookmarks Dashboard
-const updateBookmarks = async (req, res) => {
-  const { userId, jobId, isBookmarked } = req.body;
-  let updatedIsBookmarked;
-  if (isBookmarked == true) {
-    updatedIsBookmarked = false;
-  } else {
-    updatedIsBookmarked = true;
-  }
-  try {
-    // Find the developer based on userId
-    const developer = await Developer.findOne({ userId });
-    if (!developer) {
-      return res.status(404).json({ message: "Developer not found." });
-    }
-
-    // Find the index of the job in myJobs
-    const jobIndex = developer.myJobs.findIndex((job) => job.job.toString() === jobId);
-
-    if (jobIndex !== -1) {
-      // If the job is already in myJobs, update its bookmark status
-      developer.myJobs[jobIndex].isBookmarked = updatedIsBookmarked;
-    } else {
-      // If the job is not in myJobs, add it and mark it as bookmarked
-      developer.myJobs.push({
-        job: jobId,
-        isBookmarked: true,
-      });
-    }
-
-    // Save the updated developer document
-    await developer.save();
-
-    res.status(200).json({ message: "Bookmark updated successfully" });
-  } catch (error) {
-    console.error("Error updating bookmark:", error);
-    res.status(500).json({ message: "Error updating bookmark" });
-  }
-};
-
-//Individual Bookmark
-const individualBookmarks = async (req, res) => {
-  const { userId, jobId, isBookmarked } = req.body;
-  
-  try {
-    // Find the developer based on userId
-    const developer = await Developer.findOne({ userId });
-    if (!developer) {
-      return res.status(404).json({ message: "Developer not found." });
-    }
-
-    // Find the index of the job in myJobs
-    const jobIndex = developer.myJobs.findIndex((job) => job.job.toString() === jobId);
-
-    if (jobIndex !== -1) {
-      // If the job is already in myJobs, update its bookmark status
-      developer.myJobs[jobIndex].isBookmarked = isBookmarked;
-    } else {
-      // If the job is not in myJobs, add it and mark it as bookmarked
-      developer.myJobs.push({
-        job: jobId,
-        isBookmarked: true,
-      });
-    }
-
-    // Save the updated developer document
-    await developer.save();
-
-    res.status(200).json({ message: "Bookmark updated successfully" });
-  } catch (error) {
-    console.error("Error updating bookmark:", error);
-    res.status(500).json({ message: "Error updating bookmark" });
-  }
-};
-
 const editJob = async (req, res) => {
   // TODO: update Job info with job_id in req
 };
@@ -325,35 +249,7 @@ const closeJob = async (req, res) => {
 };
 
 const deleteJob = async (req, res) => {
-  const userId = req.params.id
-  try {
-    // Use deleteMany to remove documents where the field matches the identifier
-    const result = await JobPost.deleteMany({ postedBy: userId });
-
-    res.status(200).json({ message: `${result.deletedCount} documents deleted` });
-  } catch (error) {
-    console.error("Error deleting users:", error);
-    res.status(400).json({ error: error.message });
-  }
+  // TODO: remove Job with job_id in req
 };
 
-const deleteApplicants = async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const result = await JobPost.updateMany(
-      {},
-      {
-        $pull: {
-          applicants: {applicant : userId }, 
-          shortlisted: userId 
-        }
-      }
-    );
-    res.status(200).json({ message: "Documents updated" });
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
-module.exports = { createJob, getAllJobs, editJob, closeJob, deleteJob,updateBookmarks, individualBookmarks, getRelatedJobs, deleteApplicants};
+module.exports = { createJob, getJob, getAllJobs, editJob, deleteJob };

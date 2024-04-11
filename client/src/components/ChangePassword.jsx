@@ -23,6 +23,7 @@ export default function ChangePassword() {
     const [passwordCheck, setPasswordCheck] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [currentPassword, setCurrentPassword] = useState("")
+   
 
     // form status
     const [loading, setLoading] = useState(false);

@@ -56,7 +56,8 @@ const clientRoutes = {
   devSettings: "/dev/settings",
   companySettings: "/company/settings",
   devIndividualJob: "/dev/job",
-  JobPost: "/jobpost"
+  JobPost: "/jobpost",
+  companySettings: "/company/settings",
 };
 
 export { apiRoutes, clientRoutes };
