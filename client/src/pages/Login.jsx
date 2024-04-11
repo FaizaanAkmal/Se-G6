@@ -41,7 +41,7 @@ export default function Login() {
           navigate(clientRoutes.devDashboard, { state: { userId: userId } });
         } else if (userType === "Company") {
           navigate(clientRoutes.companyDashboard, {
-            state: { userId: userId },
+            state: { userId: userId }
           });
         } else {
           // Handle unknown userType

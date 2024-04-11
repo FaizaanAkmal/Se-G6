@@ -45,16 +45,16 @@ const JobPostSchema = new Schema({
   status: {
     type: String,
     required: true,
-    default: "open"
+    default: "open",
   },
   datePosted: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
   postedBy: {
     type: Schema.Types.ObjectId,
-    ref: 'Company',
-    required: true
+    ref: "Company",
+    required: true,
   },
   applicants: [{
     applicant: {

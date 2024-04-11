@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 // Asset imports
 import logo from "../assets/logo.png";
 
+import { clientRoutes } from "../routes.js";
+
 // UI imports
 import {
   Box,

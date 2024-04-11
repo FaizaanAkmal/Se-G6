@@ -59,61 +59,56 @@ const createJob = async (req, res) => {
 
 // Getting All Jobs Data
 const getAllJobs = async (req, res) => {
+
   const { userId } = req.query;
 
   try {
-    // Find the dev based on userId
-    const dev = await Developer.findOne({ userId });
-    if (!dev) {
-      return res.status(404).json({ message: "Developer not found." });
-    }
+      // Find the dev based on userId
+      const dev = await Developer.findOne({ userId });
+      if (!dev) {
+          return res.status(404).json({ message: "Developer not found." });
+      }
 
-    // Get the job ids for bookmarked, applied, and offered jobs
-    const bookmarkedJobIds = dev.myJobs
-      .filter((job) => job.isBookmarked)
-      .map((job) => job.job);
-    const appliedJobIds = dev.myJobs
-      .filter((job) => job.isApplied)
-      .map((job) => job.job);
-    const offeredJobIds = dev.myJobs
-      .filter((job) => job.isOffer)
-      .map((job) => job.job);
+      // Get the job ids for bookmarked, applied, and offered jobs
+      const bookmarkedJobIds = dev.myJobs.filter(job => job.isBookmarked).map(job => job.job);
+      const appliedJobIds = dev.myJobs.filter(job => job.isApplied).map(job => job.job);
+      const offeredJobIds = dev.myJobs.filter(job => job.isOffer).map(job => job.job);
 
-    // Fetch all jobs that are bookmarked, applied, or offered
-    const bookmarkedJobs = await JobPost.find({
-      status: "open",
-      _id: { $in: bookmarkedJobIds },
-    }).populate("postedBy");
+      // Fetch all jobs that are bookmarked, applied, or offered
+      const bookmarkedJobs = await JobPost.find({
+          status: "open",
+          _id: { $in: bookmarkedJobIds }
+      }).populate('postedBy');
 
-    const appliedJobs = await JobPost.find({
-      status: "open",
-      _id: { $in: appliedJobIds },
-    }).populate("postedBy");
+      const appliedJobs = await JobPost.find({
+          status: "open",
+          _id: { $in: appliedJobIds }
+      }).populate('postedBy');
 
-    const offeredJobs = await JobPost.find({
-      status: "open",
-      _id: { $in: offeredJobIds },
-    }).populate("postedBy");
+      const offeredJobs = await JobPost.find({
+          status: "open",
+          _id: { $in: offeredJobIds }
+      }).populate('postedBy');
 
-    // Fetch all jobs
-    const allJobs = await JobPost.find({ status: "open" }).populate("postedBy");
+      // Fetch all jobs
+      const allJobs = await JobPost.find({ status: "open" }).populate('postedBy');
 
-    res.status(200).json({
-      allJobs,
-      bookmarkedJobs,
-      appliedJobs,
-      offeredJobs,
-    });
+      res.status(200).json({
+          allJobs,
+          bookmarkedJobs,
+          appliedJobs,
+          offeredJobs
+      });
   } catch (error) {
-    console.error("Error fetching jobs:", error);
-    res.status(500).json({ message: "Error fetching jobs" });
+      console.error("Error fetching jobs:", error);
+      res.status(500).json({ message: "Error fetching jobs" });
   }
 };
 
 //Getting Related Jobs Data
 const getRelatedJobs = async (req, res) => {
   const { userId, jobId } = req.query;
-
+  
   try {
     // Find the dev based on userId
     const dev = await Developer.findOne({ userId });
@@ -122,15 +117,10 @@ const getRelatedJobs = async (req, res) => {
     }
 
     // Fetch all jobs
-    const allJobs = await JobPost.find({
-      _id: { $ne: jobId },
-      status: "open",
-    }).populate("postedBy");
+    const allJobs = await JobPost.find({ _id: { $ne: jobId }, status: "open" }).populate('postedBy');
 
     // Extract applicant IDs from applicants array for each job
-    const jobApplicantIds = allJobs.map((job) =>
-      job.applicants.map((applicant) => applicant.applicant.toString())
-    );
+    const jobApplicantIds = allJobs.map(job => job.applicants.map(applicant => applicant.applicant.toString()));
 
     // Get the developer's ID as a string
     const devIdString = dev._id.toString();
@@ -151,21 +141,21 @@ const getRelatedJobs = async (req, res) => {
       }
 
       // Match based on skills
-      dev.skills.forEach((skill) => {
+      dev.skills.forEach(skill => {
         if (job.preferredSkills.includes(skill)) {
           score += 1;
         }
       });
 
       // Match based on languages
-      dev.languages.forEach((language) => {
+      dev.languages.forEach(language => {
         if (job.preferredLanguages.includes(language)) {
           score += 1;
         }
       });
 
       // Match based on technologies
-      dev.technologies.forEach((tech) => {
+      dev.technologies.forEach(tech => {
         if (job.preferredTechnologies.includes(tech)) {
           score += 1;
         }
@@ -183,12 +173,12 @@ const getRelatedJobs = async (req, res) => {
 
       return {
         ...job.toObject(),
-        score,
+        score
       };
     });
 
     // Filter out null values (jobs that were skipped)
-    const filteredJobsWithScore = jobsWithScore.filter((job) => job !== null);
+    const filteredJobsWithScore = jobsWithScore.filter(job => job !== null);
 
     // Sort the filtered jobs by score in descending order
     const sortedJobs = filteredJobsWithScore.sort((a, b) => b.score - a.score);
@@ -197,27 +187,25 @@ const getRelatedJobs = async (req, res) => {
 
     // If no matching jobs were found, send the first three jobs that the developer has not applied to
     if (sortedJobs.length === 0) {
-      topJobs = allJobs.filter(
-        (job) => !jobApplicantIds.flat().includes(devIdString)
-      );
+        topJobs = allJobs.filter(job => !jobApplicantIds.flat().includes(devIdString));
     }
 
     // Send the top three jobs or all sorted jobs if there are fewer than three
     const numJobsToSend = Math.min(topJobs.length, 3);
-    const jobsToSend = topJobs.slice(0, numJobsToSend).map((job) => {
+    const jobsToSend = topJobs.slice(0, numJobsToSend).map(job => {
       // Check if the job is in the developer's myJobs array
-      const devJob = dev.myJobs.find(
-        (myJob) => myJob.job.toString() === job._id.toString()
-      );
+      const devJob = dev.myJobs.find(myJob => myJob.job.toString() === job._id.toString());
       const isBookmarked = devJob ? devJob.isBookmarked : false;
-
+    
       return { ...job, isBookmarked };
     });
 
     res.status(200).json({
-      jobsToSend,
+      jobsToSend
     });
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     console.error("Error fetching jobs:", error);
     res.status(500).json({ message: "Error fetching jobs" });
   }
@@ -240,9 +228,7 @@ const updateBookmarks = async (req, res) => {
     }
 
     // Find the index of the job in myJobs
-    const jobIndex = developer.myJobs.findIndex(
-      (job) => job.job.toString() === jobId
-    );
+    const jobIndex = developer.myJobs.findIndex((job) => job.job.toString() === jobId);
 
     if (jobIndex !== -1) {
       // If the job is already in myJobs, update its bookmark status
@@ -277,9 +263,7 @@ const individualBookmarks = async (req, res) => {
     }
 
     // Find the index of the job in myJobs
-    const jobIndex = developer.myJobs.findIndex(
-      (job) => job.job.toString() === jobId
-    );
+    const jobIndex = developer.myJobs.findIndex((job) => job.job.toString() === jobId);
 
     if (jobIndex !== -1) {
       // If the job is already in myJobs, update its bookmark status
@@ -341,16 +325,35 @@ const closeJob = async (req, res) => {
 };
 
 const deleteJob = async (req, res) => {
-  // TODO: delete the Job with job_id in req
+  const userId = req.params.id
+  try {
+    // Use deleteMany to remove documents where the field matches the identifier
+    const result = await JobPost.deleteMany({ postedBy: userId });
+
+    res.status(200).json({ message: `${result.deletedCount} documents deleted` });
+  } catch (error) {
+    console.error("Error deleting users:", error);
+    res.status(400).json({ error: error.message });
+  }
 };
 
-module.exports = {
-  createJob,
-  getAllJobs,
-  updateBookmarks,
-  individualBookmarks,
-  getRelatedJobs,
-  editJob,
-  closeJob,
-  deleteJob,
-};
+const deleteApplicants = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const result = await JobPost.updateMany(
+      {},
+      {
+        $pull: {
+          applicants: {applicant : userId }, 
+          shortlisted: userId 
+        }
+      }
+    );
+    res.status(200).json({ message: "Documents updated" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+module.exports = { createJob, getAllJobs, editJob, closeJob, deleteJob,updateBookmarks, individualBookmarks, getRelatedJobs, deleteApplicants};

@@ -64,17 +64,17 @@ const companyEdit = async (req, res) => {
   const { id } = req.params;
   try {
     const updatedCompany = await Company.findOneAndUpdate(
-      { _id: id }, // Filter: Find the company by its ID
+      { userId: id }, // Filter: Find the company by its ID
       {
-        companyName,
+        name: companyName,
         website,
-        companyType,
+        type: companyType,
         country,
         industry,
-        companySize,
-        companyOverview,
-        companyWorkCulture,
-        companyBenefits,
+        size: companySize,
+        overview: companyOverview,
+        workCulture: companyWorkCulture,
+        benefits: companyBenefits
       }, // Update
       { new: true } // Options: Return the updated document
     );
@@ -137,4 +137,39 @@ const updateBookmark = async (req, res) => {
   }
 };
 
-module.exports = { companyRegister, companyEdit, getMyJobs, updateBookmark };
+const getCompany = async (req, res) => {
+  const companyId = req.params.id;
+  try {
+    //const company = await Company.findById(companyId);
+    const company = await Company.findOne({ userId: companyId });
+    if (!company) {
+      return res.status(404).json({ message: 'Company not found' });
+    }
+    res.status(200).json(company);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const deleteCompany = async (req, res) => {
+    const userId = req.params.id
+    
+    try{
+      // Use findByIdAndDelete to find and delete the user by id
+      const deletedCompany = await Company.findOneAndDelete({userId: userId});
+      
+      if (!deletedCompany) {
+        // If no user found with the given id, return appropriate message or handle accordingly
+        return res.json({ success: "false", error: "User not found" });
+      }
+      
+      // Return success message or any relevant data
+      return res.json({ success: "true", message: 'User deleted successfully.' });
+    } catch (error) {
+      // Handle errors
+      return res.json({ success: "false", error: error.message });
+    }
+
+  };
+
+module.exports = { companyRegister, companyEdit, getMyJobs, updateBookmark, getCompany, deleteCompany };
