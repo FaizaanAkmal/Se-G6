@@ -203,7 +203,7 @@ export default function DevDashboard() {
                     {activeTab === "All" && (
                         <Stack spacing={2} mt={4}>
                             {jobs.map((job) => (
-                                <JobCard
+                                <DevJobCard
                                     key={job._id}
                                     job={job}
                                     userId={userId}
@@ -218,7 +218,7 @@ export default function DevDashboard() {
                     {activeTab === "Bookmarked" && (
                         <Stack spacing={2} mt={4}>
                             {jobs.map((job) => (
-                                <JobCard
+                                <DevJobCard
                                     key={job._id}
                                     job={job}
                                     userId={userId}
@@ -233,7 +233,7 @@ export default function DevDashboard() {
                     {activeTab === "Applied" && (
                         <Stack spacing={2} mt={4}>
                             {jobs.map((job) => (
-                                <JobCard
+                                <DevJobCard
                                     key={job._id}
                                     job={job}
                                     userId={userId}
@@ -249,7 +249,7 @@ export default function DevDashboard() {
                     {activeTab === "Job Offers" && (
                         <Stack spacing={2} mt={4}>
                             {jobs.map((job) => (
-                                <JobCard
+                                <DevJobCard
                                     key={job._id}
                                     job={job}
                                     userId={userId}

@@ -1,4 +1,4 @@
-import JobPost from "./pages/company/JobPost";
+import JobPost from "./pages/company/CompanyIndividualJob";
 
 const apiRoutes = {
   // User Routes
@@ -17,8 +17,6 @@ const apiRoutes = {
     edit: "/job/edit",
     close: "/job/close",
     delete: "/job/delete",
-    updateBookmarks: "/job/updateBookmarks",
-    individualBookmarks:"/job/individualBookmarks"
   },
 
   // Developer Routes
@@ -34,6 +32,7 @@ const apiRoutes = {
     edit: "/company/profileEdit",
     getMyJobs: (userId) => `/company/myJobs/${userId}`,
     updateBookmark: "/company/bookmark",
+    getApplicants: "/company/getApplicants"
   },
 };
 

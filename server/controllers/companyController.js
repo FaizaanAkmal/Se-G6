@@ -1,5 +1,8 @@
 const Company = require("../models/company");
 const JobPost = require("../models/jobpost");
+const user_applicant = require("../models/user")
+
+
 
 const companyRegister = async (req, res) => {
   try {
@@ -136,4 +139,57 @@ const updateBookmark = async (req, res) => {
   }
 };
 
-module.exports = { companyRegister, companyEdit, getMyJobs, updateBookmark };
+//Get Applicants of an Individual Job
+const getApplicants = async (req, res) => {
+  try {
+    const jobId = "660829646a95452d7625b3ec"; // Custom job ID
+    const jobPost = await JobPost.findById(jobId).populate({
+      path: "applicants.applicant",
+      model: "Dev"
+    });
+
+    const applicants = jobPost.applicants.map(applicant => ({
+      dev: applicant.applicant,
+      coverLetter: applicant.coverLetter
+    }));
+
+    const developers = [];
+   
+    for (const applicant of applicants) {
+      developers.push(applicant.dev);
+      
+    }
+    const users = developers.map(dev => dev.userId);
+    const userPromises = users.map(userId => user_applicant.findById(userId));
+    const userDocs = await Promise.all(userPromises);
+    const userNames = userDocs.map(userDoc => `${userDoc.firstName} ${userDoc.lastName}`);
+
+    if (!jobPost) {
+      return res.status(404).json({ message: "Job post not found" });
+    }
+
+   // Modify the response structure
+   const responseData = {
+      jobPost: {
+        title: jobPost.title,
+        datePosted: jobPost.datePosted,
+        status: jobPost.status,
+        numApplicants: jobPost.applicants.length,
+        description: jobPost.description,
+        requirements: jobPost.requirement,
+        applicants: applicants.map((applicant, index) => ({
+          name: userNames[index],
+          experience: developers[index].experience,
+        }))
+      }
+    };
+    
+    res.status(200).json(responseData);
+  } catch (error) {
+    console.error("Error fetching job post:", error);
+    res.status(500).json({ message: "Error fetching job post" });
+  }
+};
+
+
+module.exports = { companyRegister, companyEdit, getMyJobs, updateBookmark,getApplicants };

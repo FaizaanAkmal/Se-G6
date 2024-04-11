@@ -47,6 +47,7 @@ export default function DevIndividualJob() {
     const [offerAccepted, setOfferAccepted] = useState(location.state.offerAccepted || false);
     const [offerRejected, setOfferRejected] = useState(location.state.offerRejected || false);
     const [isBookmarked, setIsBookmarked] = useState(location.state.isBookmarked || null);
+    const [submitted, setSubmitted] = useState(false);
 
     const datePosted = new Date(job.datePosted);
     const currentDate = new Date();
@@ -343,6 +344,8 @@ export default function DevIndividualJob() {
                                         userId={userId}
                                         jobId={job._id}
                                         applied={applied}
+                                        submitted={submitted}
+                                        setSubmitted={setSubmitted}
                                     />
                                 </Grid>
                             </Grid>
@@ -371,6 +374,8 @@ export default function DevIndividualJob() {
                                     userId={userId}
                                     jobId={job._id}
                                     applied={applied}
+                                    submitted={submitted}
+                                    setSubmitted={setSubmitted}
                                 />
                             </Stack>
                         </Grid>
