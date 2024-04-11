@@ -52,10 +52,11 @@ export default function PostAJob() {
 
   const [validCompensation, setValidCompensation] = useState(true);
 
-    const [validCompensation, setValidCompensation] = useState(true);
-
   // state received
   const { userId } = useLocation().state;
+
+  // navigation
+  const navigate = useNavigate();
 
     // form validation
     const [loading, setLoading] = useState(false);

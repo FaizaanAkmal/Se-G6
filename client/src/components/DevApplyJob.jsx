@@ -80,7 +80,7 @@ export default function DevApplyJob(props) {
             setOpenSnackbar(true); // Open the snackbar
             setOpen(false); // Close the modal
             setSubmitLoading(false);
-            setSubmitted(true);
+            props.setSubmitted(true);
         } catch (error) {
             console.log("Error: ", error);
             // Handle error
@@ -101,7 +101,7 @@ export default function DevApplyJob(props) {
                 onClick={handleOpen}
                 size="lg"
                 fullWidth
-                disabled={submitted}
+                disabled={props.submitted}
             >
                 Apply Now
             </Button>

@@ -7,7 +7,8 @@ const {
   getMyJobs,
   updateBookmark,
   getCompany, 
-  deleteCompany
+  deleteCompany,
+  getApplicants
 } = require("../controllers/companyController");
 
 //Handling Company Creation and Editing Routes
@@ -17,5 +18,6 @@ companyRouter.get("/myJobs/:userId", getMyJobs);
 companyRouter.patch("/bookmark", updateBookmark);
 companyRouter.get("/getProfile/:id", getCompany);
 companyRouter.delete("/deleteCompany/:id", deleteCompany);
+companyRouter.get("/getApplicants",getApplicants)
 
 module.exports = companyRouter;

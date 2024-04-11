@@ -153,10 +153,8 @@ export default function DevProfileSetup() {
         githubLink,
       });
 
-      // Handle the response from the backend as needed
-      // console.log("Response from backend:", response.data);
       setLoading(false);
-      navigate(clientRoutes.devDashboard, { state: { userId: userId } });
+      navigate(clientRoutes.devDashboard, { state: {userId: userId }});
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("Error submitting form. Please try again.");

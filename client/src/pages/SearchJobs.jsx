@@ -14,15 +14,15 @@ import {
 
 // UI Imports
 import {
-  Typography,
-  Button,
-  Input,
-  Stack,
-  Select,
-  Option,
-  Autocomplete,
-  Alert,
-  Grid,
+    Typography,
+    Button,
+    Input,
+    Stack,
+    Select,
+    Option,
+    Autocomplete,
+    Alert,
+    Grid,
 } from "@mui/joy";
 
 // Custom Assets Imports
@@ -55,6 +55,7 @@ export default function SearchJobs() {
     const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
     const [appliedJobs, setAppliedJobs] = useState([]);
     const [offeredJobs, setOfferedJobs] = useState([]);
+    const [sortBy, setSortBy] = useState("newest");
 
     const navigate = useNavigate();
 
@@ -63,7 +64,13 @@ export default function SearchJobs() {
     const userId = location.state.userId;
 
     // Function to fetch jobs based on search criteria
-    const fetchJobs = async () => {
+    const fetchJobs = async (searchQuery,
+        skills,
+        languages,
+        technologies,
+        jobType,
+        experience,
+        environment) => {
         try {
             setLoading(true);
             let response = await axios.get(apiRoutes.job.getAll, {
@@ -73,8 +80,7 @@ export default function SearchJobs() {
             console.log("Response: ", response);
 
             // Destructure the response data
-            const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } =
-                response.data;
+            const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } = response.data;
 
             // Update the state variables
             setJobs(allJobs);
@@ -143,6 +149,17 @@ export default function SearchJobs() {
                         environment.toLowerCase()
                 );
             }
+            
+            console.log("Sorty By: ",sortBy)
+            if (sortBy === "newest") {
+                filteredJobs.sort(
+                    (a, b) => new Date(b.datePosted) - new Date(a.datePosted)
+                );
+            } else if (sortBy === "oldest") {
+                filteredJobs.sort(
+                    (a, b) => new Date(a.datePosted) - new Date(b.datePosted)
+                );
+            }
 
             setJobs(filteredJobs);
             setNoMoreJobs(false);
@@ -156,14 +173,28 @@ export default function SearchJobs() {
 
     // Simulate initial search on component mount
     useEffect(() => {
-        fetchJobs();
-    }, []);
+        fetchJobs(searchQuery,
+            skills,
+            languages,
+            technologies,
+            jobType,
+            experience,
+            environment);
+    }, [sortBy]);
 
     // search jobs handler
     const searchJobs = async () => {
         setLoading(true);
         try {
-            await fetchJobs(); // Call fetchJobs with the current filter values and search query
+            await fetchJobs(
+                searchQuery,
+                skills,
+                languages,
+                technologies,
+                jobType,
+                experience,
+                environment
+            ); // Call fetchJobs with the current filter values and search query
         } catch (error) {
             console.error("Error searching jobs:", error);
             setError("Error searching jobs. Please try again.");
@@ -171,6 +202,8 @@ export default function SearchJobs() {
             setLoading(false);
         }
     };
+    
+    
 
     // clear filters handler
     const clearFilters = () => {
@@ -181,7 +214,7 @@ export default function SearchJobs() {
         setJobType("");
         setExperience("");
         setEnvironment("");
-        fetchJobs();
+        fetchJobs("", [], [], [], "", "", "");
     };
 
     // change handlers for user inputs
@@ -450,7 +483,8 @@ export default function SearchJobs() {
                                             style={{ height: "22px" }}
                                         />
                                     }
-                                    defaultValue="newest"
+                                    value={sortBy}
+                                    onChange={(e, value) => setSortBy(value)}
                                 >
                                     <Option value="newest">Newest</Option>
                                     <Option value="oldest">Oldest</Option>
@@ -461,7 +495,7 @@ export default function SearchJobs() {
                         {/* Job Cards */}
                         <Stack spacing={2}>
                             {jobs.map((job) => (
-                                <JobCard
+                                <DevJobCard
                                     key={job.id}
                                     job={job}
                                     userId={userId}

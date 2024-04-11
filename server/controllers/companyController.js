@@ -1,10 +1,12 @@
 const Company = require("../models/company");
 const JobPost = require("../models/jobpost");
+const user_applicant = require("../models/user")
+
+
 
 const companyRegister = async (req, res) => {
   try {
     // Destructure the required fields from the request body
-    console.log("Response From Company: ", req.body);
     const {
       companyName,
       website,
@@ -101,12 +103,12 @@ const getMyJobs = async (req, res) => {
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
-    const openPinnedJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && myJob.isPinned);
-    const openJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && !myJob.isPinned);
-    const closedJobs = company.myJobs.filter(myJob => myJob.job.status === 'closed' && !myJob.isPinned);
+    const openPinnedJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && myJob.job.isPinned);
+    const openJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && !myJob.job.isPinned);
+    const closedJobs = company.myJobs.filter(myJob => myJob.job.status === 'closed' && !myJob.job.isPinned);
 
     openJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
-    openPinnedJobs.sort((a, b) => new Date(b.pinnedAt) - new Date(a.pinnedAt));
+    openPinnedJobs.sort((a, b) => new Date(b.job.pinnedAt) - new Date(a.job.pinnedAt));
     closedJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
 
     res.status(200).json({ openPinnedJobs, openJobs, closedJobs });
@@ -170,6 +172,62 @@ const deleteCompany = async (req, res) => {
       return res.json({ success: "false", error: error.message });
     }
 
-  };
+};
 
-module.exports = { companyRegister, companyEdit, getMyJobs, updateBookmark, getCompany, deleteCompany };
+//Get Applicants of an Individual Job
+const getApplicants = async (req, res) => {
+  try {
+    const jobId = "660829646a95452d7625b3ec"; // Custom job ID
+    const jobPost = await JobPost.findById(jobId).populate({
+      path: "applicants.applicant",
+      model: "Dev"
+    });
+
+    const applicants = jobPost.applicants.map(applicant => ({
+      dev: applicant.applicant,
+      coverLetter: applicant.coverLetter
+    }));
+
+    const developers = [];
+   
+    for (const applicant of applicants) {
+      developers.push(applicant.dev);
+      
+    }
+    const users = developers.map(dev => dev.userId);
+    const userPromises = users.map(userId => user_applicant.findById(userId));
+    const userDocs = await Promise.all(userPromises);
+    const userNames = userDocs.map(userDoc => `${userDoc.firstName} ${userDoc.lastName}`);
+
+    if (!jobPost) {
+      return res.status(404).json({ message: "Job post not found" });
+    }
+
+   // Modify the response structure
+   const responseData = {
+      jobPost: {
+        title: jobPost.title,
+        datePosted: jobPost.datePosted,
+        status: jobPost.status,
+        numApplicants: jobPost.applicants.length,
+        description: jobPost.description,
+        requirements: jobPost.requirement,
+        applicants: applicants.map((applicant, index) => ({
+          name: userNames[index],
+          experience: developers[index].experience,
+        }))
+      }
+    };
+    
+    res.status(200).json(responseData);
+  } catch (error) {
+    console.error("Error fetching job post:", error);
+    res.status(500).json({ message: "Error fetching job post" });
+  }
+};
+
+
+
+
+module.exports = { companyRegister, companyEdit, getMyJobs, updateBookmark, getCompany, deleteCompany,getApplicants };
+

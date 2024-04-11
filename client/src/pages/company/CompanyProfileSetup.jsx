@@ -113,7 +113,6 @@ export default function CompanyProfileSetup() {
       userId,
     };
 
-    console.log("Request data before sending:", requestData);
 
     try {
       const response = await axios.post(

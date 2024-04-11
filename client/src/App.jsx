@@ -12,7 +12,7 @@ import DevDashboard from "./pages/dev/DevDashboard.jsx";
 import PostAJob from "./pages/company/PostAJob.jsx";
 import SearchJobs from "./pages/SearchJobs.jsx";
 import DevIndividualJob from "./pages/dev/DevIndividualJob.jsx";
-import JobPost from "./pages/company/JobPost.jsx";
+import JobPost from "./pages/company/CompanyIndividualJob.jsx";
 import DevSettings from "./pages/dev/DevSettings.jsx";
 import CompanySettings from "./pages/company/CompanySettings.jsx";
 
