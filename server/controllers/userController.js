@@ -156,4 +156,151 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const getUser = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+// update user info 
+const editUser = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email
+  } = req.body;
+
+  const { id } = req.params;
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id }, // Filter: Find the user by its ID
+      {
+        firstName,
+        lastName,
+        email
+      }, // Update
+      { new: true } // Options: Return the updated document
+    );
+
+    // If the company doesn't exist, return 404
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const changePassword = async (req, res) => {
+  const {passwordCheck, currentPassword, newPassword} = req.body;
+  // Function to compare passwords
+  const comparePasswords = (passwordCheck, currentPassword) => {
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(passwordCheck, currentPassword, function(err, result) {
+        if (err) {
+          // Handle error
+          reject(err);
+          return;
+        }
+        if (result) {
+          // Passwords match
+          resolve(true);
+        } else {
+          // Passwords don't match
+          resolve(false);
+        }
+      });
+    });
+  };
+  const passwordsMatch = await comparePasswords(passwordCheck, currentPassword);
+  if(passwordsMatch===false) {
+    return res.json({
+      success: false,
+      field: "password",
+      message: "Entered password does not match current password",
+    });
+  }
+  if (newPassword===passwordCheck) {
+    return res.json({
+      success: false,
+      field: "password",
+      message: "New password must be different from old password"
+    });
+  }
+  // Regular expression for password validation
+  const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  // Validate password
+  if (!passwordRegex.test(newPassword)) {
+  let errorMessage = "Password must ";
+  if (newPassword.length < 8) {
+    errorMessage += "be at least 8 characters long ";
+  }
+  if (!/(?=.*[a-z])/.test(newPassword)) {
+    errorMessage += "contain at least one lowercase letter ";
+  }
+  if (!/(?=.*[A-Z])/.test(newPassword)) {
+    errorMessage += "contain at least one uppercase letter ";
+  }
+  if (!/(?=.*\d)/.test(newPassword)) {
+    errorMessage += "contain at least one number ";
+  }
+  if (!/(?=.*[@$!%*#?&])/.test(newPassword)) {
+    errorMessage += "contain at least one special character ";
+  }
+  return res.json({
+    success: false,
+    field: "password",
+    message: errorMessage.trim(),
+  });
+  }
+  //Hashing and Bycrypting the password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const { id } = req.params;
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id }, // Filter: Find the user by its ID
+      {password: hashedPassword}, // Update
+      { new: true } // Options: Return the updated document
+    );
+
+    // If the company doesn't exist, return 404
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+const deleteUser = async (req, res) => {
+  const {id} = req.params
+  try {
+    // Use findByIdAndDelete to find and delete the user by id
+    const deletedUser = await User.findByIdAndDelete(id);
+    
+    if (!deletedUser) {
+      // If no user found with the given id, return appropriate message or handle accordingly
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    // Return success message or any relevant data
+    return res.status(200).json({ message: 'User deleted successfully.' });
+  } catch (error) {
+    // Handle errors
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+module.exports = { registerUser, loginUser, getUser, editUser, changePassword, deleteUser };

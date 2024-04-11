@@ -67,7 +67,7 @@ const devEdit = async (req, res) => {
   const { id } = req.params;
   try {
     const updatedDev = await Dev.findOneAndUpdate(
-      { _id: id },
+      { userId: id },
       {
         country,
         experience,
@@ -78,13 +78,13 @@ const devEdit = async (req, res) => {
         interestedJobType,
         environmentPreference,
         portfolioLink,
-        githubLink,
+        gitLink: githubLink,
       },
       { new: true }
     );
 
     if (!updatedDev) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "Dev not found" });
     }
 
     res.status(200).json(updatedDev);
@@ -163,5 +163,37 @@ const devApplication = async (req, res) => {
   }
 };
 
+const getDev = async (req, res) => {
+  const devId = req.params.id;
+  try {
+    //const company = await Company.findById(companyId);
+    const dev = await Dev.findOne({ userId: devId });
+    if (!dev) {
+      return res.status(404).json({ message: 'Dev not found' });
+    }
+    res.status(200).json(dev);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
-module.exports = { devRegister, devEdit, devApplication };
+const deleteDev = async (req, res) => {
+  const userId = req.params.id
+  try {
+    // Use findByIdAndDelete to find and delete the user by id
+    const deletedDev = await Dev.findOneAndDelete({userId: userId});
+    
+    if (!deletedDev) {
+      // If no user found with the given id, return appropriate message or handle accordingly
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    // Return success message or any relevant data
+    return res.status(200).json({ message: 'User deleted successfully.' });
+  } catch (error) {
+    // Handle errors
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+module.exports = { devRegister, devEdit, devApplication, getDev, deleteDev };

@@ -50,7 +50,13 @@ const calculateTimeAgo = (date) => {
   }
 };
 
-const CompanyJobCard = ({ userId, myJob, setOpenPinnedJobs, setOpenJobs }) => {
+const CompanyJobCard = ({
+  userId,
+  myJob,
+  setOpenPinnedJobs,
+  setOpenJobs,
+  setClosedJobs,
+}) => {
   // Handler function for card click
   const handleCardClick = () => {
     console.log("Card Clicked");
@@ -61,29 +67,35 @@ const CompanyJobCard = ({ userId, myJob, setOpenPinnedJobs, setOpenJobs }) => {
   const handleBookmarkToggle = async (myJob) => {
     // console.log("bookmark toggled: ", myJob);
     try {
+      myJob.isPinned = !myJob.isPinned;
+      myJob.pinnedAt = myJob.isPinned ? Date.now() : null;
+
       const response = await axios.patch(apiRoutes.company.updateBookmark, {
         userId: userId,
         myJobId: myJob._id,
-        isPinned: !myJob.isPinned,
-        pinnedAt: myJob.pinnedAt === null ? Date.now() : null,
+        isPinned: myJob.isPinned,
+        pinnedAt: myJob.pinnedAt,
       });
+      
       if (myJob.isPinned) {
+        // remove from open jobs
+        setOpenJobs((prevJobs) =>
+          prevJobs.filter((j) => j.job._id !== myJob.job._id)
+        );
+        // insert in pinned jobs
+        setOpenPinnedJobs((prevJobs) => [myJob, ...prevJobs]);
+      } else {
+        // remove from pinned jobs
         setOpenPinnedJobs((prevJobs) =>
           prevJobs.filter((j) => j.job._id !== myJob.job._id)
         );
+        // insert in open jobs
         setOpenJobs((prevJobs) =>
           [...prevJobs, myJob].sort(
             (a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted)
           )
         );
-      } else {
-        setOpenJobs((prevJobs) =>
-          prevJobs.filter((j) => j.job._id !== myJob.job._id)
-        );
-        setOpenPinnedJobs((prevJobs) => [myJob, ...prevJobs]);
       }
-      myJob.isPinned = !myJob.isPinned;
-      myJob.pinnedAt = myJob.isPinned ? Date.now() : null;
       console.log("Bookmark updated successfully");
     } catch (error) {
       console.error("Error updating bookmark:", error);
@@ -107,14 +119,14 @@ const CompanyJobCard = ({ userId, myJob, setOpenPinnedJobs, setOpenJobs }) => {
           prevJobs.filter((j) => j.job._id !== myJob.job._id)
         );
       }
+      myJob.isPinned = false;
+      myJob.pinnedAt = null;
       setClosedJobs((prevJobs) =>
         [myJob, ...prevJobs].sort(
           (a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted)
         )
       );
-      myJob.isPinned = False;
-      myJob.pinnedAt = null;
-      console.log("Job Closed successfully");
+      console.log(response.data.message);
     } catch (error) {
       console.error("Error closing the job:", error);
     }

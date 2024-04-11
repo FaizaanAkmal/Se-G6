@@ -52,14 +52,9 @@ export default function CompanyDashboard() {
     setActiveTab(tab);
   };
 
-  const handleClick = () => {
-    // Redirect to job posting page
-    navigate(clientRoutes.JobPost);
-  };
-
   return (
     <>
-      <CompanyNavbar currentPage="dashboard" userId={userId} />
+      <CompanyNavbar currentPage="dashboard" />
       <Grid
         container
         sx={{
@@ -69,7 +64,6 @@ export default function CompanyDashboard() {
         }}
       >
         <Grid
-          item
           xs={12}
           md={8}
           sx={{
@@ -157,15 +151,6 @@ export default function CompanyDashboard() {
               ))}
             </Stack>
           )}
-          <Button
-            variant="soft"
-            color="primary"
-            sx={{ borderRadius: 8, mt: 6 }}
-            loading={loading}
-            onClick={handleClick}
-          >
-            Testing Single Job
-          </Button>
         </Grid>
       </Grid>
       <Footer />

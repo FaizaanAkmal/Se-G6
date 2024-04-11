@@ -33,10 +33,10 @@ import {
 
 import { apiRoutes, clientRoutes } from "../../routes.js";
 
-export default function CompanyProfileSetup() {  
+export default function CompanyProfileSetup() {
   // State to control the visibility of form sections
   const [currentStep, setCurrentStep] = useState(1);
-  
+
   // Form fields state
   const [companyName, setCompanyName] = useState("");
   const [website, setWebsite] = useState("");
@@ -50,9 +50,10 @@ export default function CompanyProfileSetup() {
 
   // navigation
   const navigate = useNavigate();
-  const location = useLocation()
-  const userId = location.state.userId
-  
+
+  // state received
+  const { userId } = useLocation().state;
+
   // Error handling state
   const [error, setError] = useState(null);
 
@@ -109,15 +110,18 @@ export default function CompanyProfileSetup() {
       companyOverview,
       companyWorkCulture,
       companyBenefits,
-      userId
+      userId,
     };
 
 
     try {
-      const response = await axios.post(apiRoutes.company.register, requestData);
+      const response = await axios.post(
+        apiRoutes.company.register,
+        requestData
+      );
 
       console.log(response.data);
-      navigate(clientRoutes.companyDashboard,  { state: {userId: userId }});
+      navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
     } catch (error) {
       console.error("Error Submitting Form", error);
     }
@@ -134,7 +138,6 @@ export default function CompanyProfileSetup() {
         }}
       >
         <Grid
-          item
           xs={12}
           md={4.5}
           sx={{
@@ -261,7 +264,7 @@ export default function CompanyProfileSetup() {
                       </Select>
                     </FormControl>
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                      <Grid item xs={4}>
+                      <Grid xs={4}>
                         <Button
                           fullWidth
                           onClick={handleBack}
@@ -278,7 +281,7 @@ export default function CompanyProfileSetup() {
                           Back
                         </Button>
                       </Grid>
-                      <Grid item xs={8}>
+                      <Grid xs={8}>
                         <Button
                           fullWidth
                           onClick={handleNext}
@@ -343,7 +346,7 @@ export default function CompanyProfileSetup() {
                     </FormControl>
 
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                      <Grid item xs={4}>
+                      <Grid xs={4}>
                         <Button
                           fullWidth
                           onClick={handleBack}
@@ -361,7 +364,7 @@ export default function CompanyProfileSetup() {
                         </Button>
                       </Grid>
 
-                      <Grid item xs={8}>
+                      <Grid xs={8}>
                         <Button
                           fullWidth
                           type="submit"

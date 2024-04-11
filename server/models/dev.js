@@ -6,14 +6,14 @@ const devProfile = require("../models/dev");
 const devSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: 'User' 
+    ref: "User",
   },
   country: {
     type: String,
     required: true,
   },
   experience: {
-    type: Number,
+    type: String,
     required: true,
   },
   bio: {

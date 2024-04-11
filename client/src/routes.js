@@ -5,6 +5,9 @@ const apiRoutes = {
   user: {
     register: "/user/register",
     login: "/user/login",
+    getUser: "/user/getUser",
+    changePassword: "/user/changePassword",
+    delete: "/user/deleteUser"
   },
 
   // Job Routes
@@ -12,18 +15,21 @@ const apiRoutes = {
     create: "/job/create",
     getAll: "/job/all",
     getRelatedJobs: "/job/related",
-    updateBookmarks: "/job/updateBookmarks",
-    individualBookmarks:"/job/individualBookmarks",
     edit: "/job/edit",
     close: "/job/close",
     delete: "/job/delete",
+    deleteApplicant: "/job/deleteApplicant",
+    updateBookmarks: "/job/updateBookmarks",
+    individualBookmarks:"/job/individualBookmarks"
   },
 
   // Developer Routes
   dev: {
     register: "/dev/profileSetup",
     edit: "/dev/profileEdit",
-    application: "/dev/application"
+    application: "/dev/application",
+    getProfile: "/dev/getProfile",
+    delete: "/dev/deleteDev"
   },
 
   // Company Routes
@@ -32,6 +38,8 @@ const apiRoutes = {
     edit: "/company/profileEdit",
     getMyJobs: (userId) => `/company/myJobs/${userId}`,
     updateBookmark: "/company/bookmark",
+    getProfile: "/company/getProfile",
+    delete: "/company/deleteCompany",
     getApplicants: "/company/getApplicants"
   },
 };
@@ -49,7 +57,8 @@ const clientRoutes = {
   devSettings: "/dev/settings",
   companySettings: "/company/settings",
   devIndividualJob: "/dev/job",
-  JobPost: "/jobpost"
+  JobPost: "/jobpost",
+  companySettings: "/company/settings",
 };
 
 export { apiRoutes, clientRoutes };

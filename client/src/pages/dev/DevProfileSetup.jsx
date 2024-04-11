@@ -61,7 +61,8 @@ export default function DevProfileSetup() {
   // state received
   const location = useLocation();
   const userId = location.state.userId
-  
+  console.log("User ID received: ",userId)
+
   // form validation
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

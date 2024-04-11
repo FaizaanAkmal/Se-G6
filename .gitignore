@@ -25,6 +25,7 @@ dist-ssr
 *.sln
 *.sw?
 
+package-lock.json
 # Node modules
 node_modules
 client/node_modules
