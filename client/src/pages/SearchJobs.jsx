@@ -230,7 +230,6 @@ export default function SearchJobs() {
           }}
         >
           <Grid
-            item
             xs={12}
             md={10}
             sx={{
@@ -251,7 +250,7 @@ export default function SearchJobs() {
             <Stack spacing={2} p={2} bgcolor="white" borderRadius={"12px"}>
               <Grid container spacing={1}>
                 {/* Search Bar */}
-                <Grid item xs={9}>
+                <Grid xs={9}>
                   <Input
                     placeholder="Job title or skill..."
                     size="lg"
@@ -274,7 +273,6 @@ export default function SearchJobs() {
 
                 {/* Button Group */}
                 <Grid
-                  item
                   xs={3}
                   container
                   spacing={2}
@@ -283,7 +281,7 @@ export default function SearchJobs() {
                   }}
                 >
                   {/* Clear Button */}
-                  <Grid item xs={12} md={6}>
+                  <Grid xs={12} md={6}>
                     <Button
                       onClick={clearFilters}
                       variant="plain"
@@ -295,7 +293,7 @@ export default function SearchJobs() {
                     </Button>
                   </Grid>
                   {/* Search Button */}
-                  <Grid item xs={12} md={6}>
+                  <Grid xs={12} md={6}>
                     <Button
                       color="primary"
                       fullWidth
@@ -313,7 +311,7 @@ export default function SearchJobs() {
               <Stack spacing={0} bgcolor="white" borderRadius={"12px"}>
                 {/* First Line of Filters */}
                 <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={12} sm={4} md={4}>
+                  <Grid xs={12} sm={4} md={4}>
                     <Autocomplete
                       placeholder="Skills"
                       multiple
@@ -325,7 +323,7 @@ export default function SearchJobs() {
                       value={skills}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={4} md={4}>
+                  <Grid xs={12} sm={4} md={4}>
                     <Autocomplete
                       placeholder="Programming Languages"
                       sx={{ backgroundColor: "white" }}
@@ -337,7 +335,7 @@ export default function SearchJobs() {
                       value={languages}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={4} md={4}>
+                  <Grid xs={12} sm={4} md={4}>
                     <Autocomplete
                       placeholder="Technologies"
                       sx={{ backgroundColor: "white" }}
@@ -353,7 +351,7 @@ export default function SearchJobs() {
                 {/* Second Line of Filters */}
                 <Grid container spacing={2} alignItems="center" sx={{ mt: 2 }}>
                   {/* Job Type */}
-                  <Grid item xs={12} sm={4} md={4}>
+                  <Grid xs={12} sm={4} md={4}>
                     <Autocomplete
                       placeholder="Job Type"
                       sx={{ backgroundColor: "white" }}
@@ -365,7 +363,7 @@ export default function SearchJobs() {
                     />
                   </Grid>
                   {/* Experience */}
-                  <Grid item xs={12} sm={6} md={4}>
+                  <Grid xs={12} sm={6} md={4}>
                     <Autocomplete
                       placeholder="Experience"
                       options={experienceOptions}
@@ -377,7 +375,7 @@ export default function SearchJobs() {
                     />
                   </Grid>
                   {/* Environment */}
-                  <Grid item xs={12} sm={6} md={4}>
+                  <Grid xs={12} sm={6} md={4}>
                     <Autocomplete
                       placeholder="Environment"
                       sx={{ backgroundColor: "white" }}
@@ -403,7 +401,6 @@ export default function SearchJobs() {
           }}
         >
           <Grid
-            item
             xs={12}
             md={10}
             sx={{
@@ -418,7 +415,7 @@ export default function SearchJobs() {
               alignItems="center"
               sx={{ mb: 4, justifyContent: "flex-end" }} // Right align the sort dropdown
             >
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid xs={12} sm={6} md={4}>
                 <Select
                   placeholder="Sort by"
                   size="lg"

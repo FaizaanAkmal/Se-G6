@@ -97,7 +97,9 @@ const Signup = () => {
         if (userType === "Developer") {
           navigate(clientRoutes.devProfileSetup, { state: { userId: userId } });
         } else if (userType === "Company") {
-          navigate(clientRoutes.companyProfileSetup, { state: { userId: userId } });
+          navigate(clientRoutes.companyProfileSetup, {
+            state: { userId: userId },
+          });
         }
       }
       // Handle unsuccessful registration
@@ -124,7 +126,6 @@ const Signup = () => {
           }}
         >
           <Grid
-            item
             xs={6}
             sx={{
               p: 4,
@@ -145,7 +146,7 @@ const Signup = () => {
                 <form onSubmit={registerUser}>
                   <Stack gap={4} sx={{ mt: 4, color: "#ffffff" }}>
                     <Grid container spacing={2}>
-                      <Grid item xs={6}>
+                      <Grid xs={6}>
                         <FormControl required>
                           <FormLabel
                             sx={{
@@ -353,7 +354,6 @@ const Signup = () => {
             </Box>
           </Grid>
           <Grid
-            item
             xs={6}
             sx={{
               backgroundColor: "#181818",

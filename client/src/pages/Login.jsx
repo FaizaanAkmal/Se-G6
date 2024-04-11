@@ -62,7 +62,6 @@ export default function Login() {
   return (
     <Grid container sx={{ flexGrow: 1, minHeight: "100vh" }}>
       <Grid
-        item
         xs={6}
         sx={{
           p: 0,
@@ -140,7 +139,7 @@ export default function Login() {
           </Box>
         </Box>
       </Grid>
-      <Grid item xs={6} sx={{ backgroundColor: "#f5f5f5" }}>
+      <Grid xs={6} sx={{ backgroundColor: "#f5f5f5" }}>
         {/*Background column, set to loginBackgroun  of available height and width, crop the rest*/}
         <img
           src={loginBackground}

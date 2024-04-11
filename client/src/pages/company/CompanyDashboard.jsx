@@ -64,7 +64,6 @@ export default function CompanyDashboard() {
         }}
       >
         <Grid
-          item
           xs={12}
           md={8}
           sx={{

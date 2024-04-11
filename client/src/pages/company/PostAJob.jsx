@@ -187,7 +187,6 @@ export default function PostAJob() {
         }}
       >
         <Grid
-          item
           xs={12}
           md={6}
           sx={{
@@ -327,7 +326,7 @@ export default function PostAJob() {
                     {/* Back + Next Buttons */}
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                       {/* Back Button */}
-                      <Grid item xs={4}>
+                      <Grid xs={4}>
                         <Button
                           fullWidth
                           onClick={handleBack}
@@ -345,7 +344,7 @@ export default function PostAJob() {
                         </Button>
                       </Grid>
                       {/* Next Button */}
-                      <Grid item xs={8}>
+                      <Grid xs={8}>
                         <Button
                           fullWidth
                           onClick={handleNext}
@@ -419,7 +418,7 @@ export default function PostAJob() {
                     {/* Back + Submit Button */}
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                       {/* Back Button */}
-                      <Grid item xs={4}>
+                      <Grid xs={4}>
                         <Button
                           fullWidth
                           onClick={handleBack}
@@ -437,7 +436,7 @@ export default function PostAJob() {
                         </Button>
                       </Grid>
                       {/* Submit Button */}
-                      <Grid item xs={8}>
+                      <Grid xs={8}>
                         <Button
                           fullWidth
                           type="submit"
