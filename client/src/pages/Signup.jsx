@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 // Assets Imports
 import logo from "../assets/logo.png";
 import signupBackground from "../assets/signupBackground.png";
-import { GitHubIcon, BusinessCenterIcon } from "../svgIcons";
 import signupCompanyIcon from "../assets/signupCompanyIcon.svg";
 import signupDeveloperIcon from "../assets/signupDeveloperIcon.svg";
 import radioCheckedIcon from "../assets/radioCheckedIcon.svg";
