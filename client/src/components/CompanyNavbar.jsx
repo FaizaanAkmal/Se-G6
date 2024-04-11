@@ -18,8 +18,6 @@ import {
   Avatar,
 } from "@mui/joy";
 
-// Route imports
-import { clientRoutes } from "../routes.js";
 
 export default function CompanyNavbar({ currentPage }) {
   // navigation
@@ -27,6 +25,7 @@ export default function CompanyNavbar({ currentPage }) {
 
   // state received
   const { userId } = useLocation().state;
+  // console.log("UserId in Navbar: ",userId)
 
   // Logout handler
   const handleLogout = () => {
@@ -54,8 +53,8 @@ export default function CompanyNavbar({ currentPage }) {
     }
     if (tab === "settings") {
       // navigate to (/company/settings)
-      //navigate(clientRoutes.companySettings, { state: { userId: userId } });
-      console.log("Company Settings");
+      navigate(clientRoutes.companySettings, { state: { userId: userId } });
+      // console.log("Company Settings");
     }
   };
 

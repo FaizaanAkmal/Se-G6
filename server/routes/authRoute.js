@@ -6,9 +6,9 @@ const { registerUser, loginUser, getUser, editUser, changePassword, deleteUser }
 // All the routes Defined
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/getUser/:id", getUser)
+router.get("/getUser", getUser)
 router.patch("/editUser/:id", editUser)
-router.patch("/changePassword/:id", changePassword)
+router.patch("/changePassword", changePassword)
 router.delete("/deleteUser/:id", deleteUser)
 
 module.exports = router;

@@ -8,17 +8,24 @@ import ApplicantCard from "../../components/ApplicantCard"
 import Footer from "../../components/Footer";
 import axios from 'axios'
 import { apiRoutes } from "../../routes";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const JobPostPage = () => {
   const [loading, setLoading] = useState(false);
   const [applicants_real, setApplicants] = useState([]);
   const [error, setError] = useState(null);
+  const location = useLocation()
+  const jobId = location.state
+
+  console.log("JobId: ",jobId)
 
   const fetchApplicants = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(apiRoutes.company.getApplicants); // Make a request to your backend API
+      const response = await axios.get(apiRoutes.company.getApplicants ,
+        { params:{jobId}}
+      ); // Make a request to your backend API
       console.log("Data that I am getting: ",response.data.jobPost)
       setApplicants(response.data.jobPost); // Update the state with the fetched applicants
     } catch (error) {

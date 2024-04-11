@@ -157,9 +157,12 @@ const loginUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const userId = req.params.id;
+  console.log("Get Usre: ",req.query)
+  const {userId} = req.query;
+  console.log("UserId: ",userId)
   try {
     const user = await User.findById(userId);
+    console.log
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -201,7 +204,11 @@ const editUser = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-  const {passwordCheck, currentPassword, newPassword} = req.body;
+  console.log("In here")
+  const {passwordCheck, currentPassword, newPassword , userId} = req.body;
+  console.log("UserId: ",userId)
+  console.log("Current Password: ",currentPassword)
+  console.log("new  Password: ",newPassword)
   // Function to compare passwords
   const comparePasswords = (passwordCheck, currentPassword) => {
     return new Promise((resolve, reject) => {
@@ -265,10 +272,9 @@ const changePassword = async (req, res) => {
   }
   //Hashing and Bycrypting the password
   const hashedPassword = await bcrypt.hash(newPassword, 10);
-  const { id } = req.params;
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { _id: id }, // Filter: Find the user by its ID
+      { _id: userId }, // Filter: Find the user by its ID
       {password: hashedPassword}, // Update
       { new: true } // Options: Return the updated document
     );

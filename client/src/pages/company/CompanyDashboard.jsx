@@ -15,9 +15,7 @@ import { apiRoutes, clientRoutes } from "../../routes.js";
 
 export default function CompanyDashboard() {
   // navigation
-  const navigate = useNavigate();
 
-  // state received
   const { userId } = useLocation().state;
 
   // State to keep track of the active tab

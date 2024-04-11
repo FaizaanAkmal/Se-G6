@@ -177,7 +177,7 @@ const deleteCompany = async (req, res) => {
 //Get Applicants of an Individual Job
 const getApplicants = async (req, res) => {
   try {
-    const jobId = "660829646a95452d7625b3ec"; // Custom job ID
+    const {jobId} = req.query; // Custom job ID
     const jobPost = await JobPost.findById(jobId).populate({
       path: "applicants.applicant",
       model: "Dev"

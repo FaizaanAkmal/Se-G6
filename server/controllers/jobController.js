@@ -21,8 +21,11 @@ const createJob = async (req, res) => {
       userId,
     } = req.body;
 
+    console.log("UserId: ",userId)
+
     // Find the company based on the userId
     const company = await Company.findOne({ userId });
+    console.log("Company: ",company)
     // Create a new job post instance
     const newJobPost = new JobPost({
       title,

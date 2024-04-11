@@ -17,6 +17,9 @@ import { Typography, Button, Stack, Grid } from "@mui/joy";
 
 export default function CompanySettings() {
     const [activeTab, setActiveTab] = useState("Profile");
+    const location = useLocation()
+    const userId = location.state
+    // console.log("Location In COmpany: ",location)
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -124,9 +127,15 @@ export default function CompanySettings() {
                 </Grid>
                 {/* Main Content */}
                 <Grid item md={6}>
-                    {activeTab === "Profile" && <CompanyProfileSettings />}
-                    {activeTab === "Change Password" && <ChangePassword />}
-                    {activeTab === "Delete Account" && <DeleteAccount />}
+                    {activeTab === "Profile" && <CompanyProfileSettings
+                                                    userId = {userId}
+                                                    />}
+                    {activeTab === "Change Password" && <ChangePassword
+                                                            userId = {userId} 
+                                                        />}
+                    {activeTab === "Delete Account" && <DeleteAccount
+                                                        userId = {userId} 
+                    />}
                 </Grid>
             </Grid>
             <Footer />

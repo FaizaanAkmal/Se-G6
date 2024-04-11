@@ -1,5 +1,6 @@
 import React, { useState } from "react"; // Ensure useState is imported
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // UI Imports
 import {
@@ -22,7 +23,7 @@ import bookmarkInactiveIcon from "../assets/bookmarkInactiveIcon.svg";
 import closeJobIcon from "../assets/closeJob.svg";
 
 // Routes Import
-import { apiRoutes } from "../routes";
+import { apiRoutes, clientRoutes } from "../routes";
 
 // Function to calculate time ago
 const calculateTimeAgo = (date) => {
@@ -34,6 +35,7 @@ const calculateTimeAgo = (date) => {
   const days = Math.floor(hours / 24);
   const months = Math.floor(days / 30);
   const years = Math.floor(months / 12);
+
 
   if (years > 0) {
     return `${years}yr`;
@@ -58,9 +60,13 @@ const CompanyJobCard = ({
   setClosedJobs,
 }) => {
   // Handler function for card click
+
+  const navigate = useNavigate();
   const handleCardClick = () => {
-    console.log("Card Clicked");
+    // console.log("Card Clicked");
     // navigate to job details page
+    console.log("Job Id here: ",myJob.job._id)
+    navigate(clientRoutes.companyIndividualJob,{state:myJob.job._id})
   };
 
   // Handler function for bookmark toggle

@@ -54,6 +54,7 @@ export default function PostAJob() {
 
   // state received
   const { userId } = useLocation().state;
+  console.log("")
 
   // navigation
   const navigate = useNavigate();
@@ -172,7 +173,7 @@ export default function PostAJob() {
             console.log("Response:", response.data);
 
             // Navigate to the dashboard or handle the response accordingly
-            navigate(clientRoutes.companyDashboard, { userId: userId });
+            navigate(clientRoutes.companyDashboard,  { state: {userId: userId }});
         } catch (error) {
             console.error("Error submitting form:", error);
             // Handle error state or display error message
