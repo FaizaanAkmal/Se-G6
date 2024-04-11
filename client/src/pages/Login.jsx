@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import loginBackground from "../assets/loginBackground.png";
 import {
+  Alert,
   Grid,
   Box,
   Typography,
@@ -36,15 +37,12 @@ export default function Login() {
         const userType = response.data.userType;
         const userId = response.data.userId;
 
-        console.log("UserType: ", userType);
-        console.log("UserId: ", userId);
-
         if (userType === "Developer") {
-          console.log("Developer");
           navigate(clientRoutes.devDashboard, { state: { userId: userId } });
         } else if (userType === "Company") {
-          console.log("Company");
-          navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
+          navigate(clientRoutes.companyDashboard, {
+            state: { userId: userId },
+          });
         } else {
           // Handle unknown userType
           console.log("Unknown userType:", userType);

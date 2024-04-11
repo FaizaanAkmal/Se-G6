@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const JobPost = require("../models/jobpost");
 const Company = require("../models/company");
 const Developer = require("../models/dev");
@@ -312,9 +311,8 @@ const closeJob = async (req, res) => {
   try {
     const { userId, myJobId, jobId } = req.body;
     const company = await Company.findOne({ userId: userId });
-    const job = await JobPost.findOne({ jobId });
-    console.log(req.body);
-    console.log(job);
+    const job = await JobPost.findOne({ _id: jobId });
+
     // Check if company and job are found
     if (!company || !job) {
       return res.status(404).json({ message: "Company or job not found" });

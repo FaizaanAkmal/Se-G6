@@ -161,15 +161,12 @@ export default function PostAJob() {
       userId,
     };
 
-    console.log("Request data before sending:", requestData);
+    // console.log("Request data before sending:", requestData);
     try {
       // Send a POST request to the server
       const response = await axios.post(apiRoutes.job.create, requestData);
-
-      console.log("Response:", response.data);
-
       // Navigate to the dashboard or handle the response accordingly
-      navigate(clientRoutes.companyDashboard, { userId: userId });
+      navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle error state or display error message

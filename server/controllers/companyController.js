@@ -101,12 +101,12 @@ const getMyJobs = async (req, res) => {
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
-    const openPinnedJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && myJob.job.isPinned);
-    const openJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && !myJob.job.isPinned);
-    const closedJobs = company.myJobs.filter(myJob => myJob.job.status === 'closed' && !myJob.job.isPinned);
+    const openPinnedJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && myJob.isPinned);
+    const openJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && !myJob.isPinned);
+    const closedJobs = company.myJobs.filter(myJob => myJob.job.status === 'closed' && !myJob.isPinned);
 
     openJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
-    openPinnedJobs.sort((a, b) => new Date(b.job.pinnedAt) - new Date(a.job.pinnedAt));
+    openPinnedJobs.sort((a, b) => new Date(b.pinnedAt) - new Date(a.pinnedAt));
     closedJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
 
     res.status(200).json({ openPinnedJobs, openJobs, closedJobs });
