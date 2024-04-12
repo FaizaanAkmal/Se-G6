@@ -18,8 +18,6 @@ import {
   Avatar,
 } from "@mui/joy";
 
-// Route imports
-import { clientRoutes } from "../routes.js";
 
 export default function CompanyNavbar({ currentPage }) {
   // navigation
@@ -54,7 +52,7 @@ export default function CompanyNavbar({ currentPage }) {
     }
     if (tab === "settings") {
       // navigate to (/company/settings)
-      //navigate(clientRoutes.companySettings, { state: { userId: userId } });
+      navigate(clientRoutes.companySettings, { state: { userId: userId } });
       console.log("Company Settings");
     }
   };

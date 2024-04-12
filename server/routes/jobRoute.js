@@ -10,9 +10,6 @@ const {
   editJob,
   closeJob,
   deleteJob,
-  updateBookmarks,
-  individualBookmarks,
-  getRelatedJobs,
   deleteApplicants
   
 } = require("../controllers/jobController");

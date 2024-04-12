@@ -36,6 +36,6 @@ server/package-lock.json
 client/package-lock.json
 
 # Package.json files
-server/package.json
-client/package.json
-package.json
+# server/package.json
+# client/package.json
+# package.json
