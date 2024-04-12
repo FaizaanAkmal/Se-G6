@@ -5,7 +5,7 @@ const companyDB = require("../models/company")
 const OpenAI = require("openai");
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: "sk-or-v1-345148e5095f2335b3c6578c972ff0ca3198e7b686fe75b6fa5edf9f11d8c2177"
+  apiKey: "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"
 })
 
 const generateCoverLetter = async (req, res) => {
