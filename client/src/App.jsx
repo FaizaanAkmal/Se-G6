@@ -15,6 +15,7 @@ import DevIndividualJob from "./pages/dev/DevIndividualJob.jsx";
 import DevSettings from "./pages/dev/DevSettings.jsx";
 import CompanySettings from "./pages/company/CompanySettings.jsx";
 import JobPostPage from "./pages/company/CompanyIndividualJob.jsx";
+import CompanyIndividualJobNew from "./pages/company/CompanyIndividualJobNew.jsx";
 
 // Experimenting with themes
 import { CssVarsProvider, extendTheme } from "@mui/joy/styles";
@@ -78,6 +79,9 @@ function App() {
 
           {/* adding company settings route */}
           <Route path={clientRoutes.companySettings} element={<CompanySettings />} />
+
+          {/* temporaray company individual job route for testing */}
+          <Route path="/test-company-job" element={<CompanyIndividualJobNew />} />
           
 
         </Routes>
