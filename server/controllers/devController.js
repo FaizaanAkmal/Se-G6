@@ -19,7 +19,7 @@ const devRegister = async (req, res) => {
 
   try {
     // Convert experience to a number
-    const experienceValue = parseInt(experience);
+    //const experienceValue = parseInt(experience);
 
     // Validate that portfolioLink and githubLink are provided
     if (!portfolioLink || !githubLink) {
@@ -29,7 +29,7 @@ const devRegister = async (req, res) => {
     const newUser = new Dev({
       userId,
       country,
-      experience: experienceValue,
+      experience,
       bio,
       skills,
       languages,
