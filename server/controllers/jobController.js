@@ -328,7 +328,7 @@ const closeJob = async (req, res) => {
 };
 
 const deleteJob = async (req, res) => {
-  const userId = req.params.id
+  const {userId} = req.query;
   try {
     // Use deleteMany to remove documents where the field matches the identifier
     const result = await JobPost.deleteMany({ postedBy: userId });
@@ -341,7 +341,7 @@ const deleteJob = async (req, res) => {
 };
 
 const deleteApplicants = async (req, res) => {
-  const userId = req.params.id;
+  const {userId} = req.query;
   try {
     const result = await JobPost.updateMany(
       {},

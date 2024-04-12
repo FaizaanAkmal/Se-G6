@@ -157,9 +157,7 @@ const loginUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  console.log("Get Usre: ",req.query)
   const {userId} = req.query;
-  console.log("UserId: ",userId)
   try {
     const user = await User.findById(userId);
     console.log
@@ -291,10 +289,10 @@ const changePassword = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-  const {id} = req.params
+  const {userId} = req.query;
   try {
     // Use findByIdAndDelete to find and delete the user by id
-    const deletedUser = await User.findByIdAndDelete(id);
+    const deletedUser = await User.findByIdAndDelete(userId);
     
     if (!deletedUser) {
       // If no user found with the given id, return appropriate message or handle accordingly

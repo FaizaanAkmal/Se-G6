@@ -7,8 +7,8 @@ const { registerUser, loginUser, getUser, editUser, changePassword, deleteUser }
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/getUser", getUser)
-router.patch("/editUser/:id", editUser)
+router.patch("/editUser/", editUser)
 router.patch("/changePassword", changePassword)
-router.delete("/deleteUser/:id", deleteUser)
+router.delete("/deleteUser", deleteUser)
 
 module.exports = router;
