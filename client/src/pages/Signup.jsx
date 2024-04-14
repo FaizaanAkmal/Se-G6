@@ -126,7 +126,16 @@ const Signup = () => {
             // Handle successful registration
             if (response.data.success) {
                 const userId = response.data.user._id;
+                const userType = response.data.user.userType;
+                const token = response.data.token;
+
+                console.log("Response Data: ",response.data)
+                console.log("Token Received: ",token)
+    
+                // Set JWT token in local storage
+                localStorage.setItem("authToken", token);
                 if (userType === "Developer") {
+                    console.log("Here")
                     navigate(clientRoutes.devProfileSetup, {
                         state: { userId: userId },
                     });

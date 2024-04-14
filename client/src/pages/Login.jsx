@@ -42,12 +42,11 @@ export default function Login() {
             });
 
             if (response.data.success) {
+
+                console.log("Response: ",response.data)
                 localStorage.setItem("authToken", response.data.token);
                 const userType = response.data.userType;
                 const userId = response.data.userId;
-
-                console.log("UserType: ", userType);
-                console.log("UserId: ", userId);
 
                 if (userType === "Developer") {
                     console.log("Developer");

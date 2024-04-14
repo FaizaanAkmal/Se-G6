@@ -1,4 +1,3 @@
-import JobPost from "./pages/company/CompanyIndividualJob";
 
 const apiRoutes = {
   // User Routes

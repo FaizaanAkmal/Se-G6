@@ -62,27 +62,24 @@ function App() {
   return (
     <CssVarsProvider theme={newTheme}>
       <BrowserRouter>
-        <Routes>
-          <Route path={clientRoutes.signup} element={<Signup />} />
-          <Route path={clientRoutes.login} element={<Login />} />
-          <Route path={clientRoutes.companyProfileSetup} element={<CompanyProfileSetup />} />
-          <Route path={clientRoutes.devProfileSetup} element={<DevProfileSetup />} />
-          <Route path={clientRoutes.companyDashboard} element={<CompanyDashboard />} />
-          <Route path={clientRoutes.devDashboard} element={<DevDashboard />} />
-          <Route path={clientRoutes.devIndividualJob} element={<DevIndividualJob/>} />
-          <Route path={clientRoutes.companyIndividualJob} element={<JobPostPage/>} />
-          <Route path={clientRoutes.postAJob} element={<PostAJob />} />
-          <Route path={clientRoutes.searchJobs} element={<SearchJobs />} />
+      <Routes>
+        <Route path={clientRoutes.signup} element={<Signup />} />
+        <Route path={clientRoutes.login} element={<Login />} />
+        <Route path={clientRoutes.companyProfileSetup} element={<CompanyProfileSetup />} />
+        <Route path={clientRoutes.devProfileSetup} element={<DevProfileSetup />} />
+        <Route path={clientRoutes.companyDashboard} element={<CompanyDashboard />} />
+        <Route path={clientRoutes.devDashboard} element={<DevDashboard />} />
+        <Route path={clientRoutes.devIndividualJob} element={<DevIndividualJob/>} />
+        <Route path={clientRoutes.companyIndividualJob} element={<JobPostPage/>} />
+        <Route path={clientRoutes.postAJob} element={<PostAJob />} />
+        <Route path={clientRoutes.searchJobs} element={<SearchJobs />} />
 
-          {/* adding dev settings route */}
-          <Route path={clientRoutes.devSettings} element={<DevSettings />} />
+        {/* adding dev settings route */}
+        <Route path={clientRoutes.devSettings} element={<DevSettings />} />
 
-          {/* adding company settings route */}
-          <Route path={clientRoutes.companySettings} element={<CompanySettings />} />
-
-          {/* temporaray company individual job route for testing */}
-          <Route path="/test-company-job" element={<CompanyIndividualJobNew />} />
-          
+        {/* adding company settings route */}
+        <Route path={clientRoutes.companySettings} element={<CompanySettings />} />
+        
 
         </Routes>
       </BrowserRouter>
