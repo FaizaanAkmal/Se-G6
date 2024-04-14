@@ -6,6 +6,7 @@ const userRouter = require("./routes/authRoute");
 const companyRouter = require("./routes/companyRoute");
 const devRouter = require("./routes/devRoute");
 const jobRouter = require("./routes/jobRoute");
+const aiRouter = require("./routes/aiRoute.js");
 const cookieParser = require("cookie-parser");
 const { errorMiddleware } = require("./middlewares/Error.js");
 require("dotenv").config(); // Load environment variables
@@ -14,6 +15,11 @@ const port = process.env.PORT || 8000;
 
 // Middleware
 // Using Middlewares
+const corsConfig = {
+  credentials: true,
+  origin: true,
+};
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -23,6 +29,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 // Defining Routes
 
@@ -40,6 +47,10 @@ app.use("/job", jobRouter);
 
 // Handling Test Routes
 app.use("/test", testRouter);
+
+// AI features
+app.use("/ai", aiRouter)
+
 
 // Using Error Middleware
 app.use(errorMiddleware);

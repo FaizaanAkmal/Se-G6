@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import generateIcon from "../../assets/generateIcon.svg";
 
 // Global constants
 import {
@@ -50,13 +51,15 @@ export default function PostAJob() {
   const [environment, setEnvironment] = useState("");
   const [compensation, setCompensation] = useState("");
 
-  const [validCompensation, setValidCompensation] = useState(true);
+  const [generateLoading, setGenerateLoading] = useState(false);
 
-  // navigation
-  const navigate = useNavigate();
+  const [validCompensation, setValidCompensation] = useState(true);
 
   // state received
   const { userId } = useLocation().state;
+
+  // navigation
+  const navigate = useNavigate();
 
   // form validation
   const [loading, setLoading] = useState(false);
@@ -97,11 +100,48 @@ export default function PostAJob() {
     setCompensation(e.target.value);
   };
 
+  const handleGenerateDescription = async () => {
+    // // TODO: Implement cover letter generation
+
+    // implementation:
+    setGenerateLoading(true);
+    try {
+      const jobProfile = {
+        title,
+        requirement,
+        preferredSkills,
+        preferredLanguages,
+        preferredTechnologies,
+        experience,
+        jobType,
+        environment,
+        compensation,
+      };
+      console.log(jobProfile);
+      const response = await axios.post("/ai/generate-job-description", {
+        jobInfo: JSON.stringify(jobProfile),
+      });
+
+      const generated_description = response.data.jobDescription;
+
+      console.log(generated_description);
+
+      setDescription(generated_description);
+    } catch (error) {
+      console.error("Error generating cover letter:", error);
+      setDescription(
+        "AI service down at the moment, please try later. (Or maybe show your own creativity ;)"
+      );
+    } finally {
+      setGenerateLoading(false);
+    }
+  };
+
   // go to next step
   const handleNext = () => {
     // validate required form fields
     if (currentStep === 1) {
-      if (!title || !description || !requirement) {
+      if (!title || !requirement) {
         setError("Please fill in all required fields.");
         return;
       }
@@ -111,7 +151,7 @@ export default function PostAJob() {
         return;
       }
     } else if (currentStep === 3) {
-      if (!jobType || !environment) {
+      if (!jobType || !environment || !description) {
         setError("Please fill in all required fields.");
         return;
       }
@@ -161,12 +201,15 @@ export default function PostAJob() {
       userId,
     };
 
-    // console.log("Request data before sending:", requestData);
+    console.log("Request data before sending:", requestData);
     try {
       // Send a POST request to the server
       const response = await axios.post(apiRoutes.job.create, requestData);
+
+      console.log("Response:", response.data);
+
       // Navigate to the dashboard or handle the response accordingly
-      navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
+      navigate(clientRoutes.companyDashboard, { userId: userId });
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle error state or display error message
@@ -225,17 +268,6 @@ export default function PostAJob() {
                         value={title}
                       />
                     </FormControl>
-                    {/* Job Description */}
-                    <FormControl required>
-                      <FormLabel>Job description</FormLabel>
-                      <Textarea
-                        placeholder="Provide a detailed description of the job..."
-                        onChange={handleDescriptionChange}
-                        value={description}
-                        minRows={8}
-                        maxRows={16}
-                      />
-                    </FormControl>
                     {/* Minimum Requirements */}
                     <FormControl required>
                       <FormLabel>Minimum requirements</FormLabel>
@@ -247,28 +279,6 @@ export default function PostAJob() {
                         maxRows={12}
                       />
                     </FormControl>
-                    {/* Next Button */}
-                    <Button
-                      fullWidth
-                      type="button"
-                      sx={{
-                        backgroundColor: "#F9F5FF",
-                        color: "#6941C6",
-                        "&:hover": {
-                          backgroundColor: "#e3dcf7",
-                        },
-                      }}
-                      loading={loading}
-                      onClick={handleNext}
-                    >
-                      Next
-                    </Button>
-                  </>
-                )}
-                {/* Step 2 */}
-                {currentStep === 2 && (
-                  <>
-                    <Typography level="h3">Step 2 of 3: Preferences</Typography>
                     {/* Preferred Skills */}
                     <FormControl>
                       <FormLabel>
@@ -295,6 +305,28 @@ export default function PostAJob() {
                         onChange={handleLanguagesChange}
                       />
                     </FormControl>
+                    {/* Next Button */}
+                    <Button
+                      fullWidth
+                      type="button"
+                      sx={{
+                        backgroundColor: "#F9F5FF",
+                        color: "#6941C6",
+                        "&:hover": {
+                          backgroundColor: "#e3dcf7",
+                        },
+                      }}
+                      loading={loading}
+                      onClick={handleNext}
+                    >
+                      Next
+                    </Button>
+                  </>
+                )}
+                {/* Step 2 */}
+                {currentStep === 2 && (
+                  <>
+                    <Typography level="h3">Step 2 of 3: Preferences</Typography>
                     {/* Preferred Technologies */}
                     <FormControl>
                       <FormLabel>
@@ -414,6 +446,33 @@ export default function PostAJob() {
                       <FormHelperText>
                         Please enter a number between 1,000 and 1,000,000
                       </FormHelperText>
+                    </FormControl>
+                    {/* Description */}
+                    <FormControl required>
+                      <FormLabel>Job description</FormLabel>
+                      <Textarea
+                        startDecorator={
+                          <Button
+                            size="sm"
+                            variant="soft"
+                            loading={generateLoading}
+                            startDecorator={
+                              <img
+                                src={generateIcon}
+                                alt="Generate"
+                                width={"16px"}
+                              />
+                            }
+                            sx={{ "--Button-gap": "4px" }}
+                            onClick={handleGenerateDescription}
+                          >
+                            Generate with AI
+                          </Button>
+                        }
+                        placeholder="Write your job descrption... If you are using `Generate with AI`, you are can try multiple times to get the desired response."
+                        value={description}
+                        onChange={handleDescriptionChange}
+                      />
                     </FormControl>
                     {/* Back + Submit Button */}
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>

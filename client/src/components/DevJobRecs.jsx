@@ -41,40 +41,58 @@ export default function DevJobRecs() {
   const userId = location.state.userId;
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [jobs, setJobs] = useState([]);
+  const [key, setKey] = useState(0);
+  const { applied, offerAccepted, offerRejected, pendingOffer } =
+    location.state;
 
   const viewAllJobsHandler = () => {
     // Navigate to the search jobs page
     navigate(clientRoutes.devDashboard, { state: location.state });
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (job) => {
     // Redirect to job details page
+    navigate(`/dev/job`, {
+      state: {
+        userId,
+        job,
+        applied,
+        pendingOffer,
+        offerAccepted,
+        offerRejected,
+        isBookmarked,
+      }
+    });
   };
 
   //Fetching Related Jobs
 
-  const fetchRelatedJobs = async () => {
-    try {
-      const response = await axios.get(apiRoutes.job.getRelatedJobs, {
-        params: { userId, jobId },
-      });
-      console.log(response.data);
-      // Calculate days ago for each job
-      const jobsWithDaysAgo = response.data.jobsToSend.map((job) => {
-        const datePosted = new Date(job.datePosted);
-        const currentDate = new Date();
-        const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-        const daysAgo = Math.round(
-          Math.abs((currentDate - datePosted) / oneDay)
-        );
-        return { ...job, daysAgo };
-      });
+  useEffect(() => {
+    const fetchRelatedJobs = async () => {
+      try {
+        const response = await axios.get(apiRoutes.job.getRelatedJobs, {
+          params: { userId, jobId },
+        });
+        console.log(response.data);
+        // Calculate days ago for each job
+        const jobsWithDaysAgo = response.data.jobsToSend.map((job) => {
+          const datePosted = new Date(job.datePosted);
+          const currentDate = new Date();
+          const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+          const daysAgo = Math.round(
+            Math.abs((currentDate - datePosted) / oneDay)
+          );
+          return { ...job, daysAgo };
+        });
 
-      setJobs(jobsWithDaysAgo);
-    } catch (error) {
-      console.error("Error fetching related jobs:", error);
-    }
-  };
+        setJobs(jobsWithDaysAgo);
+      } catch (error) {
+        console.error("Error fetching related jobs:", error);
+      }
+    };
+
+    fetchRelatedJobs();
+  }, [location, userId, jobId]);
 
   const handleBookmarkToggle = async (jobToUpdate) => {
     try {
@@ -100,9 +118,6 @@ export default function DevJobRecs() {
       console.error("Error toggling bookmark:", error);
     }
   };
-  useEffect(() => {
-    fetchRelatedJobs();
-  }, []);
 
   return (
     <>
@@ -140,7 +155,7 @@ export default function DevJobRecs() {
             {/* Job Recommendations - Only 3 Recs */}
             <Grid container spacing={2}>
               {jobs.map((job) => (
-                <Grid md={4} key={job._id}>
+                <Grid md={4} key={job._id} onClick={() => handleCardClick(job)}>
                   <Card
                     variant="outlined"
                     size="lg"

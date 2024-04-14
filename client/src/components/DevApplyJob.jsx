@@ -33,7 +33,6 @@ export default function DevApplyJob(props) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [submitted, setSubmitted] = useState(props.applied);
 
-
     const [error, setError] = useState(null);
 
     const handleOpen = () => {
@@ -46,14 +45,29 @@ export default function DevApplyJob(props) {
     };
 
     const handleGenerateCoverLetter = async () => {
-        // TODO: Implement cover letter generation
+        // // TODO: Implement cover letter generation
 
-        // Simulate loading state (remove when implemented)
+        // implementation:
+        const jobId = props.jobId; 
+        const applicantId = props.userId; 
+        
         setGenerateLoading(true);
-        setTimeout(() => {
-            setCoverLetter("This is an AI-generated cover letter.");
+        try {
+            const response = await axios.post('/ai/generate-cover-letter', {
+                jobId,
+                applicantId
+            });
+
+            const coverLetter = response.data.coverLetter
+            setCoverLetter(coverLetter);
+
+        } catch (error) {
+            console.error('Error generating cover letter:', error);
+            setCoverLetter("AI service down at the moment, please try later. (Or maybe show your own creativity ;)");
+
+        } finally {
             setGenerateLoading(false);
-        }, 2000);
+        }
     };
 
     const handleCoverLetterChange = (event) => {
@@ -80,7 +94,7 @@ export default function DevApplyJob(props) {
             setOpenSnackbar(true); // Open the snackbar
             setOpen(false); // Close the modal
             setSubmitLoading(false);
-            setSubmitted(true);
+            props.setSubmitted(true);
         } catch (error) {
             console.log("Error: ", error);
             // Handle error
@@ -101,7 +115,7 @@ export default function DevApplyJob(props) {
                 onClick={handleOpen}
                 size="lg"
                 fullWidth
-                disabled={submitted}
+                disabled={props.submitted}
             >
                 Apply Now
             </Button>
@@ -152,7 +166,7 @@ export default function DevApplyJob(props) {
                                         </Button>
                                     }
                                     disabled={generateLoading || submitted}
-                                    placeholder="Write your cover letter here..."
+                                    placeholder="Write your cover letter here... If you are using `Generate with AI`, you are can try multiple times to get the desired response."
                                     value={coverLetter}
                                     onChange={handleCoverLetterChange}
                                     minRows={10}
