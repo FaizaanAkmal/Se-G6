@@ -115,9 +115,14 @@ const registerUser = async (req, res) => {
     });
     await newUser.save();
 
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+
     res
       .status(201)
-      .json({ success: true, message: "User registered successfully." , user: newUser });
+      .json({ success: true, message: "User registered successfully." , user: newUser , user: {userId: newUser._id , token : token} });
   } catch (error) {
     console.log("Here");
     console.error("Error registering user:", error);
@@ -148,8 +153,7 @@ const loginUser = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.cookie("token", token, { httpOnly: true, sameSite: "strict" });
-    res.status(200).json({ success: true, userType: user.userType, userId: user._id });
+    res.status(200).json({ success: true, userType: user.userType, userId: user._id , user: {userId: user._id , token : token} });
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ success: false, message: "Internal server error." });

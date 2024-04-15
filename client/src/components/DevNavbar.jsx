@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useLogout } from "./logout.jsx";
 
 // Asset imports
 import logo from "../assets/logo.png";
@@ -23,13 +24,11 @@ export default function DevNavbar({ currentPage }) {
     // navigation
     const navigate = useNavigate();
     const location = useLocation();
-
-    // state received
-    const userId = location.state.userId;
+    const { logout } = useLogout()
 
     // Logout handler (redirect to login page)
     const handleLogout = () => {
-        navigate(clientRoutes.login);
+       logout();
     };
 
     // Helper function to determine button color based on the current page

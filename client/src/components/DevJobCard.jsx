@@ -44,6 +44,7 @@ const DevJobCard = ({
     bookmarkedJobs,
     appliedJobs,
     offeredJobs,
+   
 }) => {
     // To Navigate
     const navigate = useNavigate();
@@ -52,6 +53,20 @@ const DevJobCard = ({
     const [applied, setApplied] = useState(
         appliedJobs.some((appliedJob) => appliedJob._id === job._id)
     );
+  
+    const [offerAccepted, setOfferAccepted] = useState(
+        offeredJobs.some(
+            (offeredJob) =>
+                offeredJob._id === job._id && offeredJob.acceptedApplicants.length > 0
+        )
+    );
+    const [offerRejected, setOfferRejected] = useState(
+        offeredJobs.some(
+            (offeredJob) =>
+                offeredJob._id === job._id && offeredJob.rejectedApplicants.length > 0
+        )
+    );
+
     const [pendingOffer, setPendingOffer] = useState(
         offeredJobs.some(
             (offeredJob) =>
@@ -60,19 +75,6 @@ const DevJobCard = ({
                 !offeredJob.offerRejected
         )
     );
-    const [offerAccepted, setOfferAccepted] = useState(
-        offeredJobs.some(
-            (offeredJob) =>
-                offeredJob._id === job._id && offeredJob.offerAccepted
-        )
-    );
-    const [offerRejected, setOfferRejected] = useState(
-        offeredJobs.some(
-            (offeredJob) =>
-                offeredJob._id === job._id && offeredJob.offerRejected
-        )
-    );
-
     // Modal State
     const [openRejectModal, setOpenRejectModal] = useState(false);
     const [openAcceptModal, setOpenAcceptModal] = useState(false);
@@ -116,19 +118,24 @@ const DevJobCard = ({
 
     const handleRejectOffer = async () => {
         // API call to reject offer
-
-        // simulate loading state (replace with API call)
         setLoading(true);
-        setTimeout(() => {
-            // Update state
+        try {
+            console.log("Job id: ", job._id)
+            const response = await axios.post(apiRoutes.job.rejectOffer, {
+                userId,
+                jobId: job._id,
+            });
+            console.log("Offer Rejected:", response.data);
             setOfferRejected(true);
             setOfferAccepted(false);
             setPendingOffer(false);
             setLoading(false);
-            closeRejectModal();
-        }, 2000);
-
-        console.log("Offer Rejected");
+            setOpenRejectModal(false);
+        } catch (error) {
+            console.error("Error rejecting offer:", error);
+            setLoading(false);
+            // Handle error (e.g., show error message to user)
+        }
     };
 
     const closeRejectModal = () => {
@@ -138,19 +145,24 @@ const DevJobCard = ({
 
     const handleAcceptOffer = async () => {
         // API call to accept offer
-
-        // simulate loading state (replace with API call)
         setLoading(true);
-        setTimeout(() => {
-            // Update state
+        try {
+            // console.log("Job id: " ,job._id)
+            const response = await axios.post(apiRoutes.job.acceptOffer, {
+                userId,
+                jobId: job._id,
+            });
+            console.log("Offer Accepted:", response.data);
             setOfferAccepted(true);
             setOfferRejected(false);
             setPendingOffer(false);
             setLoading(false);
             setOpenAcceptModal(false);
-        }, 2000);
-
-        console.log("Offer Accepted");
+        } catch (error) {
+            console.error("Error accepting offer:", error);
+            setLoading(false);
+            // Handle error (e.g., show error message to user)
+        }
     };
 
     // Calculate days ago
@@ -260,7 +272,7 @@ const DevJobCard = ({
                                                     </Typography>
                                                 )}
                                             {/* Pending Offer */}
-                                            {pendingOffer && (
+                                            {pendingOffer && !offerAccepted && !offerRejected && (
                                                 <Typography
                                                     level="body-md"
                                                     sx={{ color: "#F79009" }}
@@ -404,7 +416,7 @@ const DevJobCard = ({
                                     {/* Add more chips as needed */}
                                 </Stack>
                                 {/* Accept/Reject Buttons (only shown if offer is pending) */}
-                                {pendingOffer && (
+                                {pendingOffer && !offerAccepted && !offerRejected &&  (
                                     <Grid
                                         container
                                         direction="row"

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLogout } from "./logout.jsx";
 
 // Asset imports
 import logo from "../assets/logo.png";
@@ -22,6 +23,7 @@ import {
 export default function CompanyNavbar({ currentPage }) {
   // navigation
   const navigate = useNavigate();
+  const { logout } = useLogout()
 
   // state received
   const { userId } = useLocation().state;
@@ -29,7 +31,7 @@ export default function CompanyNavbar({ currentPage }) {
 
   // Logout handler
   const handleLogout = () => {
-    navigate(clientRoutes.login);
+    logout();
   };
 
   // Helper function to determine button color based on the current page

@@ -26,8 +26,9 @@ export default function DevDashboard() {
 
     // state received
     const location = useLocation();
-    const userId = location.state.userId;
-
+    const user = JSON.parse(localStorage.getItem("user"))
+    const userId = user.userId
+    // console.log("UserID now: ",userId)
     //Fetching All Jobs Together
     const fetchJobsData = async () => {
         try {
@@ -35,7 +36,7 @@ export default function DevDashboard() {
             const response = await axios.get(apiRoutes.job.getAll, {
                 params: { userId },
             });
-            const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } =
+            const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs} =
                 response.data;
             setAllJobs(allJobs);
             setJobs(allJobs);
@@ -211,6 +212,7 @@ export default function DevDashboard() {
                                     bookmarkedJobs={bookmarkedJobs}
                                     appliedJobs={appliedJobs}
                                     offeredJobs={offeredJobs}
+                                   
                                 />
                             ))}
                         </Stack>
@@ -226,6 +228,7 @@ export default function DevDashboard() {
                                     bookmarkedJobs={bookmarkedJobs}
                                     appliedJobs={appliedJobs}
                                     offeredJobs={offeredJobs}
+                                  
                                 />
                             ))}
                         </Stack>
@@ -241,6 +244,7 @@ export default function DevDashboard() {
                                     bookmarkedJobs={bookmarkedJobs}
                                     appliedJobs={appliedJobs}
                                     offeredJobs={offeredJobs}
+                                    
                                 />
                             ))}
                         </Stack>
@@ -257,6 +261,7 @@ export default function DevDashboard() {
                                     bookmarkedJobs={bookmarkedJobs}
                                     appliedJobs={appliedJobs}
                                     offeredJobs={offeredJobs}
+                                  
                                 />
                             ))}
                         </Stack>

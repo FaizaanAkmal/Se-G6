@@ -18,6 +18,7 @@ import {
 } from "@mui/joy";
 import { GlobalStyles, border, display } from "@mui/system";
 import { apiRoutes, clientRoutes } from "../routes.js";
+import { useAuthContext } from "../components/useAuthContext.jsx";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -25,6 +26,7 @@ export default function Login() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { dispatch } = useAuthContext();
 
     const loginUser = async (event) => {
         event.preventDefault();
@@ -42,12 +44,13 @@ export default function Login() {
             });
 
             if (response.data.success) {
-                localStorage.setItem("authToken", response.data.token);
+
+                localStorage.setItem("user", JSON.stringify(response.data.user));
                 const userType = response.data.userType;
                 const userId = response.data.userId;
+                console.log("UserType: ", response.data);
 
-                console.log("UserType: ", userType);
-                console.log("UserId: ", userId);
+                dispatch({ type: "LOGIN", payload: { user: response.data.user} });
 
                 if (userType === "Developer") {
                     console.log("Developer");

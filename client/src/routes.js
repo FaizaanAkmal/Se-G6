@@ -20,7 +20,9 @@ const apiRoutes = {
     delete: "/job/delete",
     deleteApplicant: "/job/deleteApplicant",
     updateBookmarks: "/job/updateBookmarks",
-    individualBookmarks:"/job/individualBookmarks"
+    individualBookmarks:"/job/individualBookmarks",
+    acceptOffer:"/job/acceptOffer",
+    rejectOffer: "/job/rejectOffer"
   },
 
   // Developer Routes

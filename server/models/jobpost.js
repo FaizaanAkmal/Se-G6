@@ -65,10 +65,19 @@ const JobPostSchema = new Schema({
       type: String,
     },
   }],
+  acceptedApplicants: [{
+    type: Schema.Types.ObjectId,
+    ref: "Dev",
+  }],
+  rejectedApplicants: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Dev',
+  }],
   shortlisted: [{
     type: Schema.Types.ObjectId,
     ref: 'Dev',
-  }]
+  }],
+  
 });
 
 const JobPost = mongoose.model("JobPost", JobPostSchema);

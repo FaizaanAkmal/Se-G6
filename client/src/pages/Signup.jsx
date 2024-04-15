@@ -36,6 +36,7 @@ import {
 
 // Routes Imports
 import { apiRoutes, clientRoutes } from "../routes.js";
+import { useAuthContext } from "../components/useAuthContext.jsx";
 
 function CustomRadio({ label, ...props }) {
     return (
@@ -101,6 +102,7 @@ const Signup = () => {
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState("");
+    const { dispatch } = useAuthContext();
 
     const [loading, setLoading] = useState(false);
 
@@ -126,6 +128,11 @@ const Signup = () => {
             // Handle successful registration
             if (response.data.success) {
                 const userId = response.data.user._id;
+
+                localStorage.setItem("user", JSON.stringify( response.data.user));
+                
+
+                dispatch({ type: "LOGIN", payload: { user: response.data.user} });
                 if (userType === "Developer") {
                     navigate(clientRoutes.devProfileSetup, {
                         state: { userId: userId },

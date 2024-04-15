@@ -40,6 +40,7 @@ export default function DevIndividualJob() {
     const location = useLocation();
     const userId = location.state.userId;
     const job = location.state.job;
+    console.log("Location State: ",location.state)
     
     // Job Application Status
     const [applied, setApplied] = useState(location.state.applied || false);
@@ -47,7 +48,7 @@ export default function DevIndividualJob() {
     const [offerAccepted, setOfferAccepted] = useState(location.state.offerAccepted || false);
     const [offerRejected, setOfferRejected] = useState(location.state.offerRejected || false);
     const [isBookmarked, setIsBookmarked] = useState(location.state.isBookmarked || null);
-    const [submitted, setSubmitted] = useState(false);
+    const [submitted, setSubmitted] = useState(location.state.applied || false);
 
     const datePosted = new Date(job.datePosted);
     const currentDate = new Date();

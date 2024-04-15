@@ -10,7 +10,9 @@ const {
   closeJob,
   deleteJob,
   updateBookmarks,
-  deleteApplicants
+  deleteApplicants,
+  acceptOffer,
+  rejectOffer
   
 } = require("../controllers/jobController");
 
@@ -24,5 +26,7 @@ jobRouter.delete("/delete/:id", deleteJob);
 jobRouter.delete("/deleteApplicant/:id", deleteApplicants)
 jobRouter.put("/updateBookmarks",updateBookmarks)
 jobRouter.put("/individualBookmarks",individualBookmarks)
+jobRouter.post("/acceptOffer",acceptOffer)
+jobRouter.post("/rejectOffer",rejectOffer)
 
 module.exports = jobRouter;
