@@ -19,8 +19,6 @@ import {
   Avatar,
 } from "@mui/joy";
 
-// Route imports
-import { clientRoutes } from "../routes.js";
 
 export default function CompanyNavbar({ currentPage }) {
   // navigation
