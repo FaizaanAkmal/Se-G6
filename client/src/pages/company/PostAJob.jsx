@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import generateIcon from "../../assets/generateIcon.svg";
 
 // Global constants
 import {
@@ -56,8 +57,9 @@ export default function PostAJob() {
   const { userId } = useLocation().state;
   console.log("")
 
-  // navigation
-  const navigate = useNavigate();
+  const [generateLoading, setGenerateLoading] = useState(false);
+
+  const [validCompensation, setValidCompensation] = useState(true);
 
     // form validation
     const [loading, setLoading] = useState(false);

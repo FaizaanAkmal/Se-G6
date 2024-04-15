@@ -55,10 +55,9 @@ export default function CompanyDashboard() {
         loadMyJobs();
     }, []);
 
-    // Handler to change the active tab
-    const handleTabChange = (tab) => {
-        setActiveTab(tab);
-    };
+  useEffect(() => {
+    loadMyJobs();
+  }, []);
 
     return (
         <>

@@ -13,7 +13,7 @@ const {
   deleteApplicants,
   acceptOffer,
   rejectOffer
-  
+
 } = require("../controllers/jobController");
 
 jobRouter.post("/create", createJob);

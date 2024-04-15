@@ -174,7 +174,6 @@ export default function DevProfileSetup() {
         }}
       >
         <Grid
-          item
           xs={12}
           md={4.5}
           sx={{
@@ -396,7 +395,7 @@ export default function DevProfileSetup() {
                   <>
                     <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                       {/* Back Button */}
-                      <Grid item xs={4}>
+                      <Grid xs={4}>
                         <Button
                           fullWidth
                           onClick={handleBack}
@@ -414,7 +413,7 @@ export default function DevProfileSetup() {
                         </Button>
                       </Grid>
                       {/* Next Button */}
-                      <Grid item xs={8}>
+                      <Grid xs={8}>
                         <Button
                           fullWidth
                           onClick={handleNext}
@@ -436,7 +435,7 @@ export default function DevProfileSetup() {
                 {currentStep === 4 && (
                   <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                     {/* Back Button */}
-                    <Grid item xs={4}>
+                    <Grid xs={4}>
                       <Button
                         fullWidth
                         onClick={handleBack}
@@ -454,7 +453,7 @@ export default function DevProfileSetup() {
                       </Button>
                     </Grid>
                     {/* Submit Button */}
-                    <Grid item xs={8}>
+                    <Grid xs={8}>
                       <Button
                         fullWidth
                         type="submit"

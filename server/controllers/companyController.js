@@ -1,8 +1,6 @@
 const Company = require("../models/company");
 const JobPost = require("../models/jobpost");
-const user_applicant = require("../models/user")
-
-
+const user_applicant = require("../models/user");
 
 const companyRegister = async (req, res) => {
   try {
@@ -17,7 +15,7 @@ const companyRegister = async (req, res) => {
       companyOverview,
       companyWorkCulture,
       companyBenefits,
-      userId
+      userId,
     } = req.body;
 
     // Create a new company instance
@@ -102,13 +100,25 @@ const getMyJobs = async (req, res) => {
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
-    const openPinnedJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && myJob.job.isPinned);
-    const openJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && !myJob.job.isPinned);
-    const closedJobs = company.myJobs.filter(myJob => myJob.job.status === 'closed' && !myJob.job.isPinned);
+    const openPinnedJobs = company.myJobs.filter(
+      (myJob) => myJob.job.status === "open" && myJob.job.isPinned
+    );
+    const openJobs = company.myJobs.filter(
+      (myJob) => myJob.job.status === "open" && !myJob.job.isPinned
+    );
+    const closedJobs = company.myJobs.filter(
+      (myJob) => myJob.job.status === "closed" && !myJob.job.isPinned
+    );
 
-    openJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
-    openPinnedJobs.sort((a, b) => new Date(b.job.pinnedAt) - new Date(a.job.pinnedAt));
-    closedJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
+    openJobs.sort(
+      (a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted)
+    );
+    openPinnedJobs.sort(
+      (a, b) => new Date(b.job.pinnedAt) - new Date(a.job.pinnedAt)
+    );
+    closedJobs.sort(
+      (a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted)
+    );
 
     res.status(200).json({ openPinnedJobs, openJobs, closedJobs });
   } catch (error) {
@@ -124,7 +134,7 @@ const updateBookmark = async (req, res) => {
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
-    const myJob = company.myJobs.find(job => job._id.toString() === myJobId);
+    const myJob = company.myJobs.find((job) => job._id.toString() === myJobId);
     if (!myJob) {
       return res.status(404).json({ error: "Job not found" });
     }
