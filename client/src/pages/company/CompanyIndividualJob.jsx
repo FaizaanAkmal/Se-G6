@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Typography, Stack, Grid, Button } from "@mui/joy";
-import {
-    CalendarToday,
-    PeopleAltSharp,
-    CodeOff,
-    Code,
-} from "@mui/icons-material";
-// import CircularProgress from "@material-ui/core/CircularProgress";
+import React, {useState,useEffect} from "react";
+import { Typography, Stack, Grid , Button} from "@mui/joy";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { CalendarToday, PeopleAltSharp, CodeOff, Code } from "@mui/icons-material";
+import CircularProgress from '@mui/material/CircularProgress';
 import CompanyNavbar from "../../components/CompanyNavbar";
 import ApplicantCard from "../../components/ApplicantCard";
 import Footer from "../../components/Footer";

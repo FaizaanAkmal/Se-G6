@@ -39,6 +39,8 @@ import {
 } from "@mui/joy";
 
 export default function CompanyProfileSettings() {
+    const location = useLocation()
+    const userId = location.state.userId
     // Form fields (new)
     const [companyName, setCompanyName] = useState("");
     const [website, setWebsite] = useState("");
@@ -65,8 +67,7 @@ export default function CompanyProfileSettings() {
     useEffect(() => {
         const getData = async () => {
           try {
-            //TODO: Get Using Actual User Id 
-            const response1 = await axios.get("/company/getProfile/6614372a8ea6c9b6abdd0d30"); //Using Sample User Id
+            const response1 = await axios.get(apiRoutes.company.getProfile, {params: {userId: userId}});
     
             setCurrentCompanyName(response1.data.name);
             setCurrentWebsite(response1.data.website);
@@ -181,12 +182,13 @@ export default function CompanyProfileSettings() {
             companyOverview,
             companyWorkCulture,
             companyBenefits,
+            userId
         };
     
         console.log("Request data before sending:", requestData2);
     
         try {
-            const response = await axios.patch("/company/profileEdit/6614372a8ea6c9b6abdd0d30", requestData2);
+            const response = await axios.patch(apiRoutes.company.edit, requestData2);
     
             console.log(response.data);
             //navigate(clientRoutes.companyDashboard, { userId: userId });

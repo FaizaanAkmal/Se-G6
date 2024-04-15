@@ -38,6 +38,8 @@ import {
 } from "@mui/joy";
 
 export default function DevProfileSettings() {
+    const location = useLocation()
+    const userId = location.state.userId
     // form fields (new)
     const [country, setCountry] = useState("");
     const [experience, setExperience] = useState("");
@@ -67,8 +69,7 @@ export default function DevProfileSettings() {
     useEffect(() => {
         const getData = async () => {
           try {
-            //TODO: Get Using Actual User Id 
-            const response1 = await axios.get("/dev/getProfile/6615c5c8207df6ac838583f3"); //Using Sample User Id
+            const response1 = await axios.get(apiRoutes.dev.getProfile, {params: {userId: userId}});
 
             setCurrentCountry(response1.data.country);
             setCurrentExperience(response1.data.experience);
@@ -220,12 +221,13 @@ export default function DevProfileSettings() {
             environmentPreference,
             portfolioLink,
             githubLink,
+            userId
         };
     
         console.log("Request data before sending:", requestData2);
     
         try {
-            const response = await axios.patch("/dev/profileEdit/6615c5c8207df6ac838583f3", requestData2);
+            const response = await axios.patch(apiRoutes.dev.edit, requestData2);
     
             console.log(response.data);
             //navigate(clientRoutes.companyDashboard, { userId: userId });

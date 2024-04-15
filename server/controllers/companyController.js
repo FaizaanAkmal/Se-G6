@@ -61,12 +61,11 @@ const companyEdit = async (req, res) => {
     companyOverview,
     companyWorkCulture,
     companyBenefits,
+    userId
   } = req.body;
-
-  const { id } = req.params;
   try {
     const updatedCompany = await Company.findOneAndUpdate(
-      { userId: id }, // Filter: Find the company by its ID
+      { userId: userId }, // Filter: Find the company by its ID
       {
         name: companyName,
         website,
@@ -140,10 +139,10 @@ const updateBookmark = async (req, res) => {
 };
 
 const getCompany = async (req, res) => {
-  const companyId = req.params.id;
+  const {userId} = req.query;
   try {
     //const company = await Company.findById(companyId);
-    const company = await Company.findOne({ userId: companyId });
+    const company = await Company.findOne({ userId: userId });
     if (!company) {
       return res.status(404).json({ message: 'Company not found' });
     }
@@ -154,7 +153,7 @@ const getCompany = async (req, res) => {
 }
 
 const deleteCompany = async (req, res) => {
-    const userId = req.params.id
+    const {userId} = req.query;
     
     try{
       // Use findByIdAndDelete to find and delete the user by id

@@ -104,7 +104,7 @@ export default function ChangePassword() {
                 <Stack spacing={3}>
                     {/* Current Passowrd */}
                     <FormControl required>
-                        <FormLabel>Current Passowrd</FormLabel>
+                        <FormLabel>Current Password</FormLabel>
                         <Input
                             type="password"
                             name="password"
@@ -114,7 +114,7 @@ export default function ChangePassword() {
                     </FormControl>
                     {/* New Passowrd */}
                     <FormControl required>
-                        <FormLabel>New Passowrd</FormLabel>
+                        <FormLabel>New Password</FormLabel>
                         <Input
                             type="password"
                             name="password"
@@ -122,7 +122,7 @@ export default function ChangePassword() {
                             onChange={handleNewPasswordChange}
                         />
                         <FormHelperText>
-                            Your new password must be different than your old
+                            Your new password must be different than your current
                             password.
                         </FormHelperText>
                     </FormControl>

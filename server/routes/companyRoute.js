@@ -13,11 +13,11 @@ const {
 
 //Handling Company Creation and Editing Routes
 companyRouter.post("/profileSetup", companyRegister);
-companyRouter.patch("/profileEdit/:id", companyEdit);
+companyRouter.patch("/profileEdit", companyEdit);
 companyRouter.get("/myJobs/:userId", getMyJobs);
 companyRouter.patch("/bookmark", updateBookmark);
-companyRouter.get("/getProfile/:id", getCompany);
-companyRouter.delete("/deleteCompany/:id", deleteCompany);
+companyRouter.get("/getProfile", getCompany);
+companyRouter.delete("/deleteCompany", deleteCompany);
 companyRouter.get("/getApplicants",getApplicants)
 
 module.exports = companyRouter;
