@@ -19,7 +19,7 @@ const devRegister = async (req, res) => {
 
   try {
     // Convert experience to a number
-    const experienceValue = parseInt(experience);
+    //const experienceValue = parseInt(experience);
 
     // Validate that portfolioLink and githubLink are provided
     if (!portfolioLink || !githubLink) {
@@ -29,7 +29,7 @@ const devRegister = async (req, res) => {
     const newUser = new Dev({
       userId,
       country,
-      experience: experienceValue,
+      experience,
       bio,
       skills,
       languages,
@@ -62,12 +62,12 @@ const devEdit = async (req, res) => {
     environmentPreference,
     portfolioLink,
     githubLink,
+    userId
   } = req.body;
 
-  const { id } = req.params;
   try {
     const updatedDev = await Dev.findOneAndUpdate(
-      { userId: id },
+      { userId: userId },
       {
         country,
         experience,
@@ -162,10 +162,10 @@ const devApplication = async (req, res) => {
 };
 
 const getDev = async (req, res) => {
-  const devId = req.params.id;
+  const {userId} = req.query;
   try {
     //const company = await Company.findById(companyId);
-    const dev = await Dev.findOne({ userId: devId });
+    const dev = await Dev.findOne({ userId: userId });
     if (!dev) {
       return res.status(404).json({ message: 'Dev not found' });
     }
@@ -176,7 +176,7 @@ const getDev = async (req, res) => {
 }
 
 const deleteDev = async (req, res) => {
-  const userId = req.params.id
+  const {userId} = req.query;
   try {
     // Use findByIdAndDelete to find and delete the user by id
     const deletedDev = await Dev.findOneAndDelete({userId: userId});

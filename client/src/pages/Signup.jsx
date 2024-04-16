@@ -192,7 +192,7 @@ const Signup = () => {
                             Create Account
                         </Typography>
                         <Typography>
-                            Sign up as a Developer or an Company to get started.
+                            Sign up as a Developer or a Company to get started.
                         </Typography>
                         <Box>
                             <form onSubmit={registerUser}>

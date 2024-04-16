@@ -22,8 +22,7 @@ jobRouter.get("/related",getRelatedJobs)
 jobRouter.patch("/edit", editJob);
 jobRouter.patch("/close", closeJob);
 jobRouter.delete("/delete", deleteJob);
-jobRouter.delete("/delete/:id", deleteJob);
-jobRouter.delete("/deleteApplicant/:id", deleteApplicants)
+jobRouter.delete("/deleteApplicant", deleteApplicants)
 jobRouter.put("/updateBookmarks",updateBookmarks)
 jobRouter.put("/individualBookmarks",individualBookmarks)
 jobRouter.post("/acceptOffer",acceptOffer)

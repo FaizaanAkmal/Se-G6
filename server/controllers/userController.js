@@ -56,7 +56,7 @@ const registerUser = async (req, res) => {
 
     // Regular expression for password validation
     const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_^])[A-Za-z\d@$!%*#?&_^]{8,}$/;
 
     // Validate password
     if (!passwordRegex.test(password)) {
@@ -64,16 +64,16 @@ const registerUser = async (req, res) => {
       if (password.length < 8) {
         errorMessage += "be at least 8 characters long ";
       }
-      if (!/(?=.*[a-z])/.test(password)) {
+      else if (!/(?=.*[a-z])/.test(password)) {
         errorMessage += "contain at least one lowercase letter ";
       }
-      if (!/(?=.*[A-Z])/.test(password)) {
+      else if (!/(?=.*[A-Z])/.test(password)) {
         errorMessage += "contain at least one uppercase letter ";
       }
-      if (!/(?=.*\d)/.test(password)) {
+      else if (!/(?=.*\d)/.test(password)) {
         errorMessage += "contain at least one number ";
       }
-      if (!/(?=.*[@$!%*#?&])/.test(password)) {
+      else if (!/(?=.*[@$!%*#?&_^])/.test(password)) {
         errorMessage += "contain at least one special character ";
       }
       return res.status(400).json({
@@ -161,9 +161,7 @@ const loginUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  console.log("Get Usre: ",req.query)
   const {userId} = req.query;
-  console.log("UserId: ",userId)
   try {
     const user = await User.findById(userId);
     console.log
@@ -249,23 +247,23 @@ const changePassword = async (req, res) => {
   }
   // Regular expression for password validation
   const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_^])[A-Za-z\d@$!%*#?&_^]{8,}$/;
   // Validate password
   if (!passwordRegex.test(newPassword)) {
   let errorMessage = "Password must ";
   if (newPassword.length < 8) {
     errorMessage += "be at least 8 characters long ";
   }
-  if (!/(?=.*[a-z])/.test(newPassword)) {
+  else if (!/(?=.*[a-z])/.test(newPassword)) {
     errorMessage += "contain at least one lowercase letter ";
   }
-  if (!/(?=.*[A-Z])/.test(newPassword)) {
+  else if (!/(?=.*[A-Z])/.test(newPassword)) {
     errorMessage += "contain at least one uppercase letter ";
   }
-  if (!/(?=.*\d)/.test(newPassword)) {
+  else if (!/(?=.*\d)/.test(newPassword)) {
     errorMessage += "contain at least one number ";
   }
-  if (!/(?=.*[@$!%*#?&])/.test(newPassword)) {
+  else if (!/(?=.*[@$!%*#?&_^])/.test(newPassword)) {
     errorMessage += "contain at least one special character ";
   }
   return res.json({
@@ -295,10 +293,10 @@ const changePassword = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-  const {id} = req.params
+  const {userId} = req.query;
   try {
     // Use findByIdAndDelete to find and delete the user by id
-    const deletedUser = await User.findByIdAndDelete(id);
+    const deletedUser = await User.findByIdAndDelete(userId);
     
     if (!deletedUser) {
       // If no user found with the given id, return appropriate message or handle accordingly
