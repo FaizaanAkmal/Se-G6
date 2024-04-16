@@ -177,15 +177,25 @@ export default function DevProfileSettings() {
         return false;
     };
 
-    const handleGenerateBio = () => {
-        // TODO: Implement bio generation
-
-        // simulate e
+    const handleGenerateBio = async () => {
+        //implementation
+        const user_id = userId // sample user id
         setGenerateLoading(true);
-        setTimeout(() => {
-            setBio("This is an AI-generated bio.");
+        try {
+            const response = await axios.post('/ai/generate-dev-bio', {
+                userId: user_id 
+            });
+
+            const generated_bio = response.data.bio
+            setBio(generated_bio)
+
+        } catch (error) {
+            console.error('Error generating Bio:', error);
+            setBio("AI service down at the moment, please try later. (Or maybe show your own creativity ;) \n \n" + bio);
+        } finally {
             setGenerateLoading(false);
-        }, 2000);
+        }
+
     };
 
     const handleCancel = () => {
@@ -293,7 +303,7 @@ export default function DevProfileSettings() {
                             </FormLabel>
                             <Textarea
                                 name="Bio"
-                                placeholder="Enter a short bio/description..."
+                                placeholder="Enter a short bio/description... If you are using `Generate with AI`, you are can try multiple times to get the desired response."
                                 onChange={handleBioChange}
                                 minRows={8}
                                 maxRows={10}

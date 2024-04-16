@@ -218,28 +218,26 @@ export default function CompanyProfileSettings() {
 
     const generateOverview = async () => {
         setLoadingOverview(true);
-        // simulate loading
-        setTimeout(() => {
-            setLoadingOverview(false);
-            setCompanyOverview("This is AI-generated company overview");
-        }, 2000);
-    };
-    const generateWorkCulture = async () => {
-        setLoadingWorkCulture(true);
-        // simulate loading
-        setTimeout(() => {
-            setLoadingWorkCulture(false);
-            setCompanyWorkCulture("This is AI-generated company work culture");
-        }, 2000);
-    };
 
-    const generateBenefits = async () => {
-        setLoadingBenefits(true);
-        // simulate loading
-        setTimeout(() => {
-            setLoadingBenefits(false);
-            setCompanyBenefits("This is AI-generated company benefits");
-        }, 2000);
+        const user_id = userId //Sample Company ID
+
+        setLoadingOverview(true);
+        try {
+            console.log('hello')
+            const response = await axios.post('/ai/generate-company-overview', {
+                userId: user_id 
+            });
+
+            const generated_overview = response.data.companyOverview
+            setCompanyOverview(generated_overview)
+
+        } catch (error) {
+            console.error('Error generating Overview:', error);
+            setCompanyOverview("AI service down at the moment, please try later. (Or maybe show your own creativity ;) \n \n" + companyOverview);
+
+        } finally {
+            setLoadingOverview(false);
+        }
     };
 
     return (
@@ -337,7 +335,7 @@ export default function CompanyProfileSettings() {
                         <Textarea
                             name="companyOverview"
                             onChange={handleCompanyOverviewChange}
-                            placeholder="Enter a short description about your company..."
+                            placeholder="Enter a short description about your company... If you are using `Generate with AI`, you are can try multiple times to get the desired response."
                             minRows={6}
                             maxRows={10}
                             value={companyOverview}
@@ -381,24 +379,26 @@ export default function CompanyProfileSettings() {
                             minRows={6}
                             maxRows={10}
                             value={companyWorkCulture}
-                            startDecorator={
-                                <Button
-                                    size="sm"
-                                    variant="soft"
-                                    loading={loadingWorkCulture}
-                                    startDecorator={
-                                        <img
-                                            src={generateIcon}
-                                            alt="Generate"
-                                            width={"16px"}
-                                        />
-                                    }
-                                    sx={{ "--Button-gap": "4px" }}
-                                    onClick={generateWorkCulture}
-                                >
-                                    Generate with AI
-                                </Button>
-                            }
+
+                            // Should be inputted from the company not AI generated
+                            // startDecorator={
+                            //     <Button
+                            //         size="sm"
+                            //         variant="soft"
+                            //         loading={loadingWorkCulture}
+                            //         startDecorator={
+                            //             <img
+                            //                 src={generateIcon}
+                            //                 alt="Generate"
+                            //                 width={"16px"}
+                            //             />
+                            //         }
+                            //         sx={{ "--Button-gap": "4px" }}
+                            //         onClick={generateWorkCulture}
+                            //     >
+                            //         Generate with AI
+                            //     </Button>
+                            // }
                             endDecorator={
                                 <Typography level="body-xs" sx={{ ml: "auto" }}>
                                     {companyWorkCulture.length}/2000
@@ -421,24 +421,25 @@ export default function CompanyProfileSettings() {
                             minRows={6}
                             maxRows={10}
                             value={companyBenefits}
-                            startDecorator={
-                                <Button
-                                    size="sm"
-                                    variant="soft"
-                                    loading={loadingBenefits}
-                                    startDecorator={
-                                        <img
-                                            src={generateIcon}
-                                            alt="Generate"
-                                            width={"16px"}
-                                        />
-                                    }
-                                    sx={{ "--Button-gap": "4px" }}
-                                    onClick={generateBenefits}
-                                >
-                                    Generate with AI
-                                </Button>
-                            }
+                            // Is a fact that should be shared by company, not AI generated
+                            // startDecorator={
+                            //     <Button
+                            //         size="sm"
+                            //         variant="soft"
+                            //         loading={loadingBenefits}
+                            //         startDecorator={
+                            //             <img
+                            //                 src={generateIcon}
+                            //                 alt="Generate"
+                            //                 width={"16px"}
+                            //             />
+                            //         }
+                            //         sx={{ "--Button-gap": "4px" }}
+                            //         onClick={generateBenefits}
+                            //     >
+                            //         Generate with AI
+                            //     </Button>
+                            // }
                             endDecorator={
                                 <Typography level="body-xs" sx={{ ml: "auto" }}>
                                     {companyBenefits.length}/2000

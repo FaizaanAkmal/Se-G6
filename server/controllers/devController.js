@@ -97,6 +97,8 @@ const devEdit = async (req, res) => {
 //Handling The Developer Application
 const devApplication = async (req, res) => {
   const { userId, jobId, coverLetter } = req.body;
+  console.log("In here")
+  console.log("JobId recieved: ",jobId)
 
   try {
     const dev = await Dev.findOne({ userId });
