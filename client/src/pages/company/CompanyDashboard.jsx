@@ -24,8 +24,8 @@ export default function CompanyDashboard() {
     // navigation
     const navigate = useNavigate();
 
-    const { userId } = useLocation().state;
-
+    const user = JSON.parse(localStorage.getItem("user"))
+    const userId = user.userId
     // State to keep track of the active tab
     const [activeTab, setActiveTab] = useState("all");
     const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ export default function CompanyDashboard() {
             setOpenPinnedJobs(response.data.openPinnedJobs);
             setOpenJobs(response.data.openJobs);
             setClosedJobs(response.data.closedJobs);
-            // console.log(response.data);
+            console.log(response.data);
         } catch (error) {
             console.error("Error fetching jobs:", error);
         }

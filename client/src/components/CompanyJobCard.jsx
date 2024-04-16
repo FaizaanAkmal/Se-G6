@@ -69,8 +69,8 @@ const CompanyJobCard = ({
     const handleCardClick = () => {
         // console.log("Card Clicked");
         // navigate to job details page
-        console.log("Job Id here: ", myJob.job._id);
-        navigate(clientRoutes.companyIndividualJob, { state: myJob.job._id });
+        // console.log("Job Id here: ", myJob.job);
+        navigate(clientRoutes.companyIndividualJob, { state: myJob.job});
     };
 
     // Handler function for bookmark toggle

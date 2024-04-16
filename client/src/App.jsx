@@ -81,7 +81,7 @@ function App() {
                 <Route path={clientRoutes.companyDashboard} element={<CompanyDashboard />} />
                 <Route path={clientRoutes.devDashboard} element={<DevDashboard />} />
                 <Route path={clientRoutes.devIndividualJob} element={<DevIndividualJob />} />
-                <Route path={clientRoutes.companyIndividualJob} element={<JobPostPage />} />
+                <Route path={clientRoutes.companyIndividualJob} element={<CompanyIndividualJobNew />} />
                 <Route path={clientRoutes.postAJob} element={<PostAJob />} />
                 <Route path={clientRoutes.searchJobs} element={<SearchJobs />} />
                 <Route path={clientRoutes.devSettings} element={<DevSettings />} />

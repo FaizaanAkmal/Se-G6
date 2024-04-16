@@ -15,6 +15,7 @@ const apiRoutes = {
     create: "/job/create",
     getAll: "/job/all",
     getRelatedJobs: "/job/related",
+    getAllApplicants: "/job/allApplicants",
     edit: "/job/edit",
     close: "/job/close",
     delete: "/job/delete",

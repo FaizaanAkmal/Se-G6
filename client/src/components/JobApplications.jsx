@@ -23,8 +23,32 @@ import {
     Alert,
 } from "@mui/joy";
 
-export default function JobApplications() {
+export default function JobApplications({ job }) {
     const [activeTab, setActiveTab] = useState("All");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // console.log("Job applications: ",job)
+
+    // useEffect(() => {
+    //     const fetchApplicants = async () => {
+    //         try {
+    //             setLoading(true);
+    //             const response = await axios.get(apiRoutes.job.getAllApplicants, {
+    //                 params: { jobId: job._id },
+    //             });
+
+    //             setApplicants(response.data.applications);
+    //             setLoading(false);
+    //         } catch (error) {
+    //             console.error("Error fetching applicants:", error);
+    //             setError("Error fetching applicants. Please try again.");
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchApplicants();
+    // }, [job._id]);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);

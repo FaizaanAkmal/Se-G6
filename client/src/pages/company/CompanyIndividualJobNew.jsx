@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import React from "react";
 
 // Route Imports
 import { apiRoutes } from "../../routes";
@@ -34,6 +35,41 @@ export default function CompanyIndividualJobNew() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [jobPost, setJobpost] = useState([]);
+    const location = useLocation();
+    console.log()
+    const job = location.state;
+    const jobId = job._id
+
+    // console.log("Job: ",job)
+
+    const datePosted = new Date(jobPost.datePosted);
+    const currentDate = new Date();
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const daysAgo = Math.round(Math.abs((currentDate - datePosted) / oneDay));
+
+    // console.log("JobId: ", jobId);
+
+    const fetchApplicants = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get(apiRoutes.company.getApplicants, {
+                params: { jobId },
+            }); // Make a request to your backend API
+            console.log("Data that I am getting: ", response.data);
+            setJobpost(response.data.jobPost); // Update the state with the fetched applicants
+        } catch (error) {
+            console.error("Error fetching applicants:", error);
+            setError("Error fetching applicants. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchApplicants();
+    }, []);
+
 
     const handleCloseJob = async () => {
         setLoading(true);
@@ -50,7 +86,7 @@ export default function CompanyIndividualJobNew() {
 
     return (
         <>
-            {/* <CompanyNavbar /> */}
+            <CompanyNavbar />
             <Stack spacing={0}>
                 {/* Hero Section */}
                 <Grid
@@ -71,7 +107,7 @@ export default function CompanyIndividualJobNew() {
                         <Stack spacing={"20px"}>
                             {/* Job Title */}
                             <Typography level="h1" sx={{ width: "100%" }}>
-                                Junior Software Engineer
+                                {jobPost.title}
                             </Typography>
                             {/* Key Facts */}
                             <Stack
@@ -91,7 +127,7 @@ export default function CompanyIndividualJobNew() {
                                         ></img>
                                     }
                                 >
-                                    20
+                                    {jobPost.applicants ? jobPost.applicants.length : 0}
                                 </Typography>
                                 {/* Time Posted */}
                                 <Typography
@@ -105,7 +141,11 @@ export default function CompanyIndividualJobNew() {
                                         ></img>
                                     }
                                 >
-                                    10 hours ago
+                                    {daysAgo === 0
+                                        ? "Today"
+                                        : `${daysAgo} day${
+                                              daysAgo > 1 ? "s" : ""
+                                          } ago`}
                                 </Typography>
                             </Stack>
                         </Stack>
@@ -128,40 +168,24 @@ export default function CompanyIndividualJobNew() {
                             <Stack spacing={2}>
                                 <Typography level="h2">Description</Typography>
                                 <Typography level="body-lg" color="neutral">
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Donec maximus turpis massa,
-                                    eget imperdiet justo sollicitudin id.
-                                    Vestibulum nisi ante, ullamcorper et nulla
-                                    eget, accumsan dictum neque. Fusce ac nisl
-                                    in nisl semper lacinia. In quis auctor
-                                    mauris. <br /> <br /> Quisque maximus purus
-                                    cursus rhoncus dignissim. Maecenas
-                                    condimentum turpis non lacus ullamcorper,
-                                    vel consectetur mi sodales. Fusce id
-                                    ullamcorper erat. Ut varius vitae purus at
-                                    fringilla. Nunc laoreet metus porta luctus
-                                    porttitor. Vivamus sed vestibulum mauris.
-                                    <br />
-                                    <br /> Morbi in pretium ex. Donec a faucibus
-                                    quam. Nunc vel tincidunt diam. Suspendisse
-                                    vitae urna at nibh venenatis pulvinar eu nec
-                                    diam. Donec rhoncus, erat ac elementum
-                                    porta, erat lacus fermentum augue, aliquam
-                                    convallis mi tortor id odio. Proin ut
-                                    malesuada velit, imperdiet vehicula urna.{" "}
+                                    {jobPost.description && jobPost.description.split("\n").map((line, index) => (
+                                        <React.Fragment key={index}>
+                                            - {line}
+                                            <br />
+                                        </React.Fragment>
+                                    ))}
                                 </Typography>
                             </Stack>
                             {/* Requirements */}
                             <Stack spacing={2}>
                                 <Typography level="h2">Requirements</Typography>
                                 <Typography level="body-lg" color="neutral">
-                                    - 1-2 years of experience in software
-                                    development <br /> - Proficient in Ruby on
-                                    Rails <br /> - Experience with GraphQL{" "}
-                                    <br /> - Experience with Kubernetes <br /> -
-                                    Strong understanding of Agile Development{" "}
-                                    <br /> - Strong understanding of Systems
-                                    Architecture <br />
+                                    {jobPost.requirements && jobPost.requirements.split("\n").map((line, index) => (
+                                        <React.Fragment key={index}>
+                                            - {line}
+                                            <br />
+                                        </React.Fragment>
+                                    ))}
                                 </Typography>
                             </Stack>
                         </Stack>
@@ -218,7 +242,13 @@ export default function CompanyIndividualJobNew() {
                                         Posted On
                                     </Typography>
                                     <Typography level="title-md">
-                                        24 March 2024
+                                        {new Date(
+                                                job.datePosted
+                                            ).toLocaleDateString("en-GB", {
+                                                day: "numeric",
+                                                month: "long",
+                                                year: "numeric",
+                                            })}
                                     </Typography>
                                 </Stack>
                                 {/* Compensation */}
@@ -230,7 +260,9 @@ export default function CompanyIndividualJobNew() {
                                         Compensation
                                     </Typography>
                                     <Typography level="title-md">
-                                        {formatCompenstation(100000)}
+                                        {formatCompenstation(
+                                                        job.compensation
+                                                    )}
                                     </Typography>
                                 </Stack>
                                 {/* Job Logistics */}
@@ -255,7 +287,7 @@ export default function CompanyIndividualJobNew() {
                                             }}
                                             variant="outlined"
                                         >
-                                            Full-time
+                                           {job.jobType}
                                         </Chip>
                                         {/* Job Environment */}
                                         <Chip
@@ -265,7 +297,7 @@ export default function CompanyIndividualJobNew() {
                                             }}
                                             variant="outlined"
                                         >
-                                            Remote
+                                             {job.environment}
                                         </Chip>
                                         {/* Experience Level */}
                                         <Chip
@@ -275,139 +307,115 @@ export default function CompanyIndividualJobNew() {
                                             }}
                                             variant="outlined"
                                         >
-                                            1-2 years
+                                            {job.experience}
                                         </Chip>
                                     </Stack>
                                 </Stack>
                                 {/* Skills */}
-                                <Stack spacing={0.8}>
-                                    <Typography
-                                        level="title-md"
-                                        color="neutral"
-                                    >
-                                        Skills
-                                    </Typography>
-                                    <Stack
-                                        direction="row"
-                                        spacing={1}
-                                        flexWrap="wrap"
-                                        useFlexGap
-                                    >
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
+                                {job.preferredSkills.length > 0 && (
+                                    <Stack spacing={0.8}>
+                                        <Typography
+                                            level="title-md"
+                                            color="neutral"
                                         >
-                                            Agile Development
-                                        </Chip>
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
+                                            Skills
+                                        </Typography>
+                                        <Stack
+                                            direction="row"
+                                            spacing={1}
+                                            flexWrap="wrap"
+                                            useFlexGap
                                         >
-                                            Systems Architecture
-                                        </Chip>
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
-                                        >
-                                            Backend
-                                        </Chip>
+                                            {/* Map chips according to no. of skills specified */}
+                                            {job.preferredSkills.map(
+                                                (skill, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        sx={{
+                                                            "--Chip-radius":
+                                                                "6px",
+                                                            borderColor:
+                                                                "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {skill}
+                                                    </Chip>
+                                                )
+                                            )}
+                                        </Stack>
                                     </Stack>
-                                </Stack>
+                                )}
                                 {/* Technologies */}
-                                <Stack spacing={0.8}>
-                                    <Typography
-                                        level="title-md"
-                                        color="neutral"
-                                    >
-                                        Technologies
-                                    </Typography>
-                                    <Stack
-                                        direction="row"
-                                        spacing={1}
-                                        flexWrap="wrap"
-                                        useFlexGap
-                                    >
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
+                                {job.preferredTechnologies.length > 0 && (
+                                    <Stack spacing={0.8}>
+                                        <Typography
+                                            level="title-md"
+                                            color="neutral"
                                         >
-                                            Ruby On Rails
-                                        </Chip>
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
+                                            Technologies
+                                        </Typography>
+                                        <Stack
+                                            direction="row"
+                                            spacing={1}
+                                            flexWrap="wrap"
+                                            useFlexGap
                                         >
-                                            GraphQL
-                                        </Chip>
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
-                                        >
-                                            Kubernetes
-                                        </Chip>
+                                            {/* Map chips according to no. of technologies specified */}
+                                            {job.preferredTechnologies.map(
+                                                (technology, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        sx={{
+                                                            "--Chip-radius":
+                                                                "6px",
+                                                            borderColor:
+                                                                "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {technology}
+                                                    </Chip>
+                                                )
+                                            )}
+                                        </Stack>
                                     </Stack>
-                                </Stack>
+                                )}
                                 {/* Programming Languages */}
-                                <Stack spacing={0.8}>
-                                    <Typography
-                                        level="title-md"
-                                        color="neutral"
-                                    >
-                                        Programming Languages
-                                    </Typography>
-                                    <Stack
-                                        direction="row"
-                                        spacing={1}
-                                        flexWrap="wrap"
-                                        useFlexGap
-                                    >
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
+                                {job.preferredLanguages.length > 0 && (
+                                    <Stack spacing={0.8}>
+                                        <Typography
+                                            level="title-md"
+                                            color="neutral"
                                         >
-                                            Python
-                                        </Chip>
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
+                                            Programming Languages
+                                        </Typography>
+                                        <Stack
+                                            direction="row"
+                                            spacing={1}
+                                            flexWrap="wrap"
+                                            useFlexGap
                                         >
-                                            Java
-                                        </Chip>
-                                        <Chip
-                                            sx={{
-                                                "--Chip-radius": "6px",
-                                                borderColor: "#D0D5DD",
-                                            }}
-                                            variant="outlined"
-                                        >
-                                            C++
-                                        </Chip>
+                                            {/* Map chips according to no. of programming langs specified */}
+                                            {job.preferredLanguages.map(
+                                                (language, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        sx={{
+                                                            "--Chip-radius":
+                                                                "6px",
+                                                            borderColor:
+                                                                "#D0D5DD",
+                                                        }}
+                                                        variant="outlined"
+                                                    >
+                                                        {language}
+                                                    </Chip>
+                                                )
+                                            )}
+                                        </Stack>
                                     </Stack>
-                                </Stack>
+                                )}
                             </Stack>
                         </Stack>
                     </Grid>
@@ -438,7 +446,7 @@ export default function CompanyIndividualJobNew() {
                 {success ? "Job closed successfully." : error}
             </Snackbar>
             {/* Job Applications Management */}
-            <JobApplications />
+            <JobApplications job={job} />
             <Footer />
         </>
     );
