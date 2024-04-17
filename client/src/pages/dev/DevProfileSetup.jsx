@@ -60,8 +60,8 @@ export default function DevProfileSetup() {
 
   // state received
   const location = useLocation();
-  const userId = location.state.userId
-  console.log("User ID received: ",userId)
+  const user = JSON.parse(localStorage.getItem("user"))
+  const userId = user.userId
 
   // form validation
   const [loading, setLoading] = useState(false);

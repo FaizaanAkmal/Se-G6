@@ -38,7 +38,8 @@ export default function DevJobRecs() {
     const navigate = useNavigate();
     const location = useLocation()
     const jobId = location.state.job._id
-    const userId = location.state.userId
+    const user = JSON.parse(localStorage.getItem("user"))
+    const userId = user.userId
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [jobs, setJobs] = useState([]);
     const [key, setKey] = useState(0);

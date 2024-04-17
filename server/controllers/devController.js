@@ -17,10 +17,12 @@ const devRegister = async (req, res) => {
     githubLink,
   } = req.body;
 
-  try {
-    // Convert experience to a number
-    //const experienceValue = parseInt(experience);
+  // Check if any of the required fields are missing
+  if (!userId || !country || !experience || !bio || !skills || !languages || !technologies || !interestedJobType || !environmentPreference || !portfolioLink || !githubLink) {
+    return res.status(400).json({ success: false, message: "All fields are required." });
+  }
 
+  try {
     // Validate that portfolioLink and githubLink are provided
     if (!portfolioLink || !githubLink) {
       return res.status(400).json({ success: false, message: "Portfolio link and Github link are required." });
@@ -144,17 +146,21 @@ const devApplication = async (req, res) => {
     await dev.save();
 
     // Update the JobPost model with the application
+    console.log("JobId here: ",jobId)
     const job = await JobPost.findById(jobId);
     if (!job) {
       return res.status(404).json({ success: false, message: "Job not found." });
     }
+
+    console.log("job: ",job)
     
     job.applicants.push({
       applicant: dev._id,
       coverLetter: coverLetter,
     });
-
+    console.log("Pushed Job")
     await job.save();
+    console.log("Ornot")
 
     res.status(200).json({ success: true, message: "Application submitted successfully." });
   } catch (error) {

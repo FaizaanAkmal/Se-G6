@@ -38,7 +38,8 @@ export default function DevIndividualJob() {
 
     // Handling The Data Received
     const location = useLocation();
-    const userId = location.state.userId;
+    const user = JSON.parse(localStorage.getItem("user"))
+    const userId = user.userId
     const job = location.state.job;
     console.log("Location State: ",location.state)
     

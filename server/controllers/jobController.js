@@ -385,11 +385,11 @@ const getJobApplicants = async (req, res) => {
       return res.status(404).json({ success: false, message: "Job post not found" });
     }
 
-    // const allApplicants = await Promise.all(jobPost.applicants.map(async (applicant) => {
-    //   const devData = await Developer.findById(applicant.applicant._id);
-    //   const user = await User.findById(devData.userId);
-    //   return { ...applicant.toObject(),  username: user.firstName + " " + user.lastName };
-    // }));
+    const allApplicants = await Promise.all(jobPost.applicants.map(async (applicant) => {
+      const devData = await Developer.findById(applicant.applicant._id);
+      const user = await User.findById(devData.userId);
+      return { ...applicant.toObject(),  username: user.firstName + " " + user.lastName };
+    }));
     
     const shortlisted = await Promise.all(jobPost.shortlisted.map(async (applicantId) => {
       const devData = await Developer.findById(applicantId);
@@ -420,7 +420,9 @@ const getJobApplicants = async (req, res) => {
       return { applicant: devData,  username: user.firstName + " " + user.lastName , coverLetter: coverLetter , status: "Offer Sent" };
     }));
 
-    const allApplicants = [...accepted, ...shortlisted, ...rejected, ...offered];
+    // const allApplicants = [...accepted, ...shortlisted, ...rejected, ...offered].filter(applicant => applicant !== null);
+
+    console.log(" All Applicants: ",allApplicants)
 
     return res.status(200).json({
       success: true,

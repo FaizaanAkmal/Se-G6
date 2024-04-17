@@ -37,7 +37,6 @@ export default function CompanyIndividualJobNew() {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [jobPost, setJobpost] = useState([]);
     const location = useLocation();
-    console.log()
     const job = location.state;
     const jobId = job._id
 
@@ -56,7 +55,7 @@ export default function CompanyIndividualJobNew() {
             const response = await axios.get(apiRoutes.company.getApplicants, {
                 params: { jobId },
             }); // Make a request to your backend API
-            // console.log("Data that I am  ", response);
+            // console.log("Data that I am getting for the applicants  ", response);
             setJobpost(response.data.jobPost); // Update the state with the fetched applicants
         } catch (error) {
             console.error("Error fetching applicants:", error);
