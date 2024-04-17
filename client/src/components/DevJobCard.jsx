@@ -175,6 +175,7 @@ const DevJobCard = ({
     const handleCardClick = () => {
         console.log("Card Clicked");
         // navigate to job details page
+        window.scrollTo(0, 0);
         navigate(`/dev/job`, { state: { userId, job, applied, pendingOffer, offerAccepted, offerRejected , isBookmarked } });
     };
 

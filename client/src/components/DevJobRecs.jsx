@@ -48,11 +48,13 @@ export default function DevJobRecs() {
 
     const viewAllJobsHandler = () => {
         // Navigate to the search jobs page
+        window.scrollTo(0, 0);
         navigate(clientRoutes.devDashboard, { state: location.state });
     };
 
     const handleCardClick = (job) => {
         // Redirect to job details page
+        window.scrollTo(0, 0);
         navigate(`/dev/job`, { state: { userId, job, applied, pendingOffer, offerAccepted, offerRejected , isBookmarked } });
        
     };
@@ -153,7 +155,7 @@ export default function DevJobRecs() {
                         {/* Job Recommendations - Only 3 Recs */}
                         <Grid container spacing={2}>
                             {jobs.map((job) => (
-                                <Grid item md={4} key={job._id} onClick={() => handleCardClick(job)}>
+                                <Grid item md={4} key={job._id} >
                                     <Card
                                         variant="outlined"
                                         size="lg"
@@ -202,6 +204,7 @@ export default function DevJobRecs() {
                                                     color="primary"
                                                     sx={{ color: "#101828" }}
                                                     mb={1}
+                                                    onClick={() => handleCardClick(job)}
                                                 >
                                                     {job.title}
                                                 </Link>

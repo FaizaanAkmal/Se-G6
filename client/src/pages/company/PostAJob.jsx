@@ -54,8 +54,10 @@ export default function PostAJob() {
   const [validCompensation, setValidCompensation] = useState(true);
 
   // state received
-  const { userId } = useLocation().state;
-  console.log("")
+  const location = useLocation()
+  const user = JSON.parse(localStorage.getItem("user"))
+  const userId = user.userId
+  console.log(userId)
 
 
   const [generateLoading, setGenerateLoading] = useState(false);
@@ -207,6 +209,7 @@ export default function PostAJob() {
         console.log("Response:", response.data);
 
         // Navigate to the dashboard or handle the response accordingly
+        window.scrollTo(0, 0);
         navigate(clientRoutes.companyDashboard, { userId: userId });
     } catch (error) {
         console.error("Error submitting form:", error);

@@ -70,6 +70,9 @@ const CompanyJobCard = ({
         // console.log("Card Clicked");
         // navigate to job details page
         // console.log("Job Id here: ", myJob.job);
+        console.log("TESTING",myJob);
+        if (myJob.job.status === "closed") return;
+        window.scrollTo(0, 0);
         navigate(clientRoutes.companyIndividualJob, { state: myJob.job});
     };
 
@@ -220,8 +223,9 @@ const CompanyJobCard = ({
                                         {/* Job Title */}
                                         <Link
                                             level="h3"
-                                            color="primary"
+                                            color={myJob.job.status === "closed"? "neutral": "primary"}
                                             sx={{ color: "#101828" }}
+                                            disabled={myJob.job.status === "closed"}
                                         >
                                             {myJob.job.title}
                                         </Link>

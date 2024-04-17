@@ -54,11 +54,13 @@ export default function Login() {
 
                 if (userType === "Developer") {
                     console.log("Developer");
+                    window.scrollTo(0, 0);
                     navigate(clientRoutes.devDashboard, {
                         state: { userId: userId },
                     });
                 } else if (userType === "Company") {
                     console.log("Company");
+                    window.scrollTo(0, 0);
                     navigate(clientRoutes.companyDashboard, {
                         state: { userId: userId },
                     });

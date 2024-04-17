@@ -40,20 +40,24 @@ export default function DevNavbar({ currentPage }) {
     const handleTabChange = (tab) => {
         if (tab === "dashboard") {
             // navigate to (/dev)
+            window.scrollTo(0, 0);
             navigate(clientRoutes.devDashboard, { state: location.state });
         }
         if (tab === "search") {
             // navigate to (/dev/searchjobs)
+            window.scrollTo(0, 0);
             navigate(clientRoutes.searchJobs, { state: location.state });
         }
         if (tab === "settings") {
             // navigate to (/dev/settings)
+            window.scrollTo(0, 0);
             navigate(clientRoutes.devSettings, { state: location.state });
         }
     };
 
     const handleLogoClick = () => {
         // navigate to (/dev)
+        window.scrollTo(0, 0);
         navigate(clientRoutes.devDashboard, { state: location.state });
     };
 

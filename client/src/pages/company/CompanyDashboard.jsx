@@ -58,6 +58,9 @@ export default function CompanyDashboard() {
   useEffect(() => {
     loadMyJobs();
   }, []);
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+};
 
     return (
         <>
@@ -176,10 +179,10 @@ export default function CompanyDashboard() {
                         {/* Post a job button */}
                         <Button
                             size="lg"
-                            onClick={() =>
+                            onClick={() =>{window.scrollTo(0, 0);
                                 navigate(clientRoutes.postAJob, {
                                     state: { userId: userId },
-                                })
+                                })}
                             }
                         >
                             Post a Job

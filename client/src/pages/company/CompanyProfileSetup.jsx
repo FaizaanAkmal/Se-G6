@@ -52,7 +52,10 @@ export default function CompanyProfileSetup() {
   const navigate = useNavigate();
 
   // state received
-  const { userId } = useLocation().state;
+  const location = useLocation()
+  const user = JSON.parse(localStorage.getItem("user"))
+  const userId = user.userId
+  console.log(userId)
 
   // Error handling state
   const [error, setError] = useState(null);
@@ -121,6 +124,7 @@ export default function CompanyProfileSetup() {
       );
 
       console.log(response.data);
+      window.scrollTo(0, 0);
       navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
     } catch (error) {
       console.error("Error Submitting Form", error);
