@@ -9,12 +9,12 @@ const companySchema = new Schema({
   },
   name: {
     type: String,
-    unique: true,
+    //unique: true,
     required: true,
   },
   website: {
     type: String,
-    unique: true,
+    //unique: true,
     required: true,
   },
   type: {

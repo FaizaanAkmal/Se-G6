@@ -11,7 +11,7 @@ import DevJobCard from "../../components/DevJobCard.jsx";
 import Footer from "../../components/Footer.jsx";
 
 // Routes Import
-import { apiRoutes } from "../../routes.js";
+import { apiRoutes, clientRoutes } from "../../routes.js";
 
 export default function DevDashboard() {
     const [activeTab, setActiveTab] = useState("All");
@@ -142,6 +142,7 @@ export default function DevDashboard() {
                         </Button>
                         {/* Bookmarked */}
                         <Button
+                            disabled= {activeTab === "All" && allJobs.length === 0}
                             variant={
                                 activeTab === "Bookmarked"
                                     ? "outlined"
@@ -160,6 +161,7 @@ export default function DevDashboard() {
                         </Button>
                         {/* Applied */}
                         <Button
+                            disabled= {activeTab === "All" && allJobs.length === 0}
                             variant={
                                 activeTab === "Applied" ? "outlined" : "plain"
                             }
@@ -180,6 +182,7 @@ export default function DevDashboard() {
                             size="sm"
                         >
                             <Button
+                                disabled= {activeTab === "All" && allJobs.length === 0}
                                 variant={
                                     activeTab === "Job Offers"
                                         ? "outlined"

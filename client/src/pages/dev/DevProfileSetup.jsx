@@ -154,6 +154,7 @@ export default function DevProfileSetup() {
       });
 
       setLoading(false);
+      window.scrollTo(0, 0);
       navigate(clientRoutes.devDashboard, { state: {userId: userId }});
     } catch (error) {
       console.error("Error submitting form:", error);

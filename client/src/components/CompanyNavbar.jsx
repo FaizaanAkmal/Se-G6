@@ -26,7 +26,10 @@ export default function CompanyNavbar({ currentPage }) {
   const { logout } = useLogout()
 
   // state received
-  const { userId } = useLocation().state;
+  const location = useLocation()
+  const user = JSON.parse(localStorage.getItem("user"))
+  const userId = user.userId
+  console.log(userId)
   // console.log("UserId in Navbar: ",userId)
 
   // Logout handler
@@ -41,20 +44,24 @@ export default function CompanyNavbar({ currentPage }) {
 
   const handleLogoClick = () => {
     // navigate to (/company/dashboard)
+    window.scrollTo(0, 0);
     navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
   };
 
   const handleTabChange = (tab) => {
     if (tab === "dashboard") {
       // navigate to (/company/dashboard)
+      window.scrollTo(0, 0);
       navigate(clientRoutes.companyDashboard, { state: { userId: userId } });
     }
     if (tab === "postJob") {
       // navigate to (/postAJob)
+      window.scrollTo(0, 0);
       navigate(clientRoutes.postAJob, { state: { userId: userId } });
     }
     if (tab === "settings") {
       // navigate to (/company/settings)
+      window.scrollTo(0, 0);
       navigate(clientRoutes.companySettings, { state: { userId: userId } });
       // console.log("Company Settings");
     }

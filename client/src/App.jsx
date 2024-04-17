@@ -87,6 +87,9 @@ function App() {
                 <Route path={clientRoutes.devSettings} element={<DevSettings />} />
                 <Route path={clientRoutes.companySettings} element={<CompanySettings />} />
                 <Route path="/test-company-job" element={<CompanyIndividualJobNew />} />
+                {/* Temporary fix if user goes back from dashboard */}
+                <Route path={clientRoutes.signup} element={<Signup />} />
+                <Route path={clientRoutes.login} element={<Login />} />
               </>
             )}
         </Routes>

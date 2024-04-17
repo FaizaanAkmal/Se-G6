@@ -73,6 +73,7 @@ export default function DeleteAccount() {
 
             // show snackbar
             setAccountDeleted(true);
+            window.scrollTo(0, 0);
             navigate(clientRoutes.signup, { userId: userId });
         }, 2000);
     };

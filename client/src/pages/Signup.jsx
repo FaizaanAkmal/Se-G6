@@ -128,16 +128,18 @@ const Signup = () => {
             // Handle successful registration
             if (response.data.success) {
                 const userId = response.data.user._id;
-
+                console.log(userId)
                 localStorage.setItem("user", JSON.stringify( response.data.user));
                 
 
                 dispatch({ type: "LOGIN", payload: { user: response.data.user} });
                 if (userType === "Developer") {
+                    window.scrollTo(0, 0);
                     navigate(clientRoutes.devProfileSetup, {
                         state: { userId: userId },
                     });
                 } else if (userType === "Company") {
+                    window.scrollTo(0, 0);
                     navigate(clientRoutes.companyProfileSetup, {
                         state: { userId: userId },
                     });
