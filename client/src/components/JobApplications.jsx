@@ -53,7 +53,7 @@ export default function JobApplications({ job }) {
                     hired: response.data.accepted,
                 });
 
-                console.log("Applicants in  jb applicantion: ",response.data)
+                // console.log("Applicants in  jb applicantion: ",response.data)
 
                 // setApplicants(response.data.applications);
                 setLoading(false);
@@ -88,6 +88,9 @@ export default function JobApplications({ job }) {
         }
     };
 
+    useEffect(() => {
+       //
+    }, [activeTab]);
     return (
         <Grid
             container

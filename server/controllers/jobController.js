@@ -395,7 +395,7 @@ const getJobApplicants = async (req, res) => {
       const devData = await Developer.findById(applicantId);
       const user = await User.findById(devData.userId);
       const coverLetter = applicantsWithCoverLetters.find(applicant => applicant.applicantId === applicantId.toString())?.coverLetter;
-      return { applicant: devData, username: user.firstName + " " + user.lastName , coverLetter: coverLetter };
+      return { applicant: devData, username: user.firstName + " " + user.lastName , coverLetter: coverLetter ,status: true };
     }));
 
     const rejected = await Promise.all(jobPost.rejectedApplicants.map(async (applicantId) => {
@@ -422,7 +422,8 @@ const getJobApplicants = async (req, res) => {
 
     // const allApplicants = [...accepted, ...shortlisted, ...rejected, ...offered].filter(applicant => applicant !== null);
 
-    console.log(" All Applicants: ",allApplicants)
+    // console.log(" All Applicants: ",allApplicants)
+    console.log("Shorlitst Jobs: ",shortlisted)
 
     return res.status(200).json({
       success: true,

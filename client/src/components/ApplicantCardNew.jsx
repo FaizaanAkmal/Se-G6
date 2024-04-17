@@ -41,8 +41,9 @@ import {
 
 export default function ApplicantCardNew({ applicant , jobId }) {
     const [status, setStatus] = useState(applicant.status || "Applied");
-    const [shortlisted, setShortlisted] = useState(false);
+    const [shortlisted, setShortlisted] = useState(applicant.status || false);
     const [bestMatch, setBestMatch] = useState(false);
+
 
     console.log("Applicant in applicant card: ",applicant)
 

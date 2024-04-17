@@ -29,7 +29,7 @@ export default function CompanyNavbar({ currentPage }) {
   const location = useLocation()
   const user = JSON.parse(localStorage.getItem("user"))
   const userId = user.userId
-  console.log(userId)
+  // console.log(userId)
   // console.log("UserId in Navbar: ",userId)
 
   // Logout handler
