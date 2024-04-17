@@ -144,7 +144,7 @@ export default function DevIndividualJob() {
                                 </Typography>
 
                                 {/* Applied */}
-                                {applied && (
+                                {applied && !pendingOffer && !offerAccepted && !offerRejected && (
                                     <Typography
                                         level="title-lg"
                                         sx={{
@@ -163,7 +163,7 @@ export default function DevIndividualJob() {
                                 )}
 
                                 {/* Offer Pending */}
-                                {pendingOffer && (
+                                {pendingOffer && !offerAccepted && !offerRejected && (
                                     <Typography
                                         level="title-lg"
                                         sx={{
