@@ -77,6 +77,10 @@ const JobPostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Dev',
   }],
+  offered : [{
+    type: Schema.Types.ObjectId,
+    ref: 'Dev',
+  }]
   
 });
 

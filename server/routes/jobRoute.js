@@ -12,7 +12,10 @@ const {
   updateBookmarks,
   deleteApplicants,
   acceptOffer,
-  rejectOffer
+  rejectOffer,
+  getJobApplicants,
+  sendJobOffer,
+  shortlistToggle
   
 } = require("../controllers/jobController");
 
@@ -24,8 +27,11 @@ jobRouter.patch("/close", closeJob);
 jobRouter.delete("/delete", deleteJob);
 jobRouter.delete("/deleteApplicant", deleteApplicants)
 jobRouter.put("/updateBookmarks",updateBookmarks)
+jobRouter.put("/toggleStatus",shortlistToggle)
 jobRouter.put("/individualBookmarks",individualBookmarks)
 jobRouter.post("/acceptOffer",acceptOffer)
 jobRouter.post("/rejectOffer",rejectOffer)
+jobRouter.get("/getJobApplicants",getJobApplicants)
+jobRouter.post("/sendJobOffer",sendJobOffer)
 
 module.exports = jobRouter;

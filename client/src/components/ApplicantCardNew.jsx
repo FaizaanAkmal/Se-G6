@@ -39,10 +39,12 @@ import {
     DialogContent,
 } from "@mui/joy";
 
-export default function ApplicantCardNew() {
-    const [status, setStatus] = useState("Applied");
+export default function ApplicantCardNew({ applicant , jobId }) {
+    const [status, setStatus] = useState(applicant.status || "Applied");
     const [shortlisted, setShortlisted] = useState(false);
     const [bestMatch, setBestMatch] = useState(false);
+
+    console.log("Applicant in applicant card: ",applicant)
 
     const [openRejectModal, setOpenRejectModal] = useState(false);
     const [openAcceptModal, setOpenAcceptModal] = useState(false);
@@ -50,30 +52,55 @@ export default function ApplicantCardNew() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+
     const handleApplicantNameClick = () => {
         // TODO: open application cover letter popup
+        alert(applicant.coverLetter);
     };
     const handlePortfolioClick = () => {
         // TODO: open portfolio link in new tab
+        window.open(applicant.applicant.portfolio, "_blank");
     };
     const handleGithubClick = () => {
         // TODO: open github link in new tab
+        window.open(applicant.applicant.gitLink, "_blank");
     };
-    const handleShortlistToggle = () => {
-        setShortlisted((prevShortlisted) => !prevShortlisted);
-        // TODO: API call to update shortlist status
+    const handleShortlistToggle = async () => {
+        try {
+            // Toggle the shortlist status locally
+            console.log("Shortlist" )
+            setShortlisted((prevShortlisted) => !prevShortlisted);
+    
+            // Make the API call to update the shortlist status
+           const response =  await axios.put(apiRoutes.job.updateToggleStatus, { jobId, devId: applicant.applicant._id, shortlisted: !shortlisted });
+
+           console.log("Response: ",response)
+        } catch (error) {
+            // If the API call fails, revert the local state to the previous value
+            setShortlisted((prevShortlisted) => !prevShortlisted);
+            console.error("Failed to update shortlist status:", error);
+            setError("Failed to update shortlist status");
+        }
     };
 
     const handleAcceptOffer = async () => {
+        console.log("In Send OFfer")
         setLoading(true);
-        // TODP: API call to accept offer
-
-        // Simulate API call (remove when API is integrated)
-        setTimeout(() => {
+        try {
+            // Send API call to send offer
+            console.log("Dev ID: ",applicant.applicant._id)
+            const response = await axios.post(apiRoutes.job.sendJobOffer, { jobId  , devId : applicant.applicant._id });
+            console.log("Response: ",response)
+            // Update status and close modal on successful offer
             setStatus("Offer Sent");
             setLoading(false);
             closeAcceptModal();
-        }, 2000);
+        } catch (error) {
+            console.error("Error sending offer:", error);
+            setLoading(false);
+            // Handle error as needed
+            setError(error)
+        }
     };
     const closeAcceptModal = () => {
         if (!loading) {
@@ -118,7 +145,7 @@ export default function ApplicantCardNew() {
                         {/* Applicant Initials */}
                         <Avatar
                             size="lg"
-                            alt="ApplicantName" // TODO: Replace alt with applicant name
+                            alt={applicant.username} // TODO: Replace alt with applicant name
                             src="companyLogo"
                             color="primary"
                         />
@@ -140,7 +167,7 @@ export default function ApplicantCardNew() {
                                             sx={{ color: "#101828" }}
                                             onClick={handleApplicantNameClick}
                                         >
-                                            Applicant Name
+                                            {applicant.username}
                                         </Link>
                                         {/* Key Facts */}
                                         <Stack
@@ -231,7 +258,7 @@ export default function ApplicantCardNew() {
                                                     />
                                                 }
                                             >
-                                                Country
+                                                {applicant.applicant.country}
                                             </Typography>
                                             {/* Portfolio Link */}
                                             <Typography
@@ -320,7 +347,7 @@ export default function ApplicantCardNew() {
                                         }}
                                         variant="outlined"
                                     >
-                                        UI/UX Design
+                                        {applicant.applicant.skills[0]}
                                     </Chip>
                                     <Chip
                                         sx={{
@@ -329,7 +356,7 @@ export default function ApplicantCardNew() {
                                         }}
                                         variant="outlined"
                                     >
-                                        Web Development
+                                        {applicant.applicant.technologies[0]}
                                     </Chip>
                                     <Chip
                                         sx={{
@@ -338,7 +365,7 @@ export default function ApplicantCardNew() {
                                         }}
                                         variant="outlined"
                                     >
-                                        Python
+                                        {applicant.applicant.languages[0]}
                                     </Chip>
                                 </Stack>
                                 {/* Send Offer / Reject Buttons */}

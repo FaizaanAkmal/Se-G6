@@ -1,6 +1,7 @@
 const JobPost = require("../models/jobpost");
 const Company = require("../models/company");
 const Developer = require("../models/dev");
+const User = require("../models/user");
 
 //creating a new job post
 const createJob = async (req, res) => {
@@ -361,6 +362,144 @@ const rejectOffer = async (req, res) => {
   }
 };
 
+//gettingJobApplicants
+const getJobApplicants = async (req, res) => {
+  const { jobId } = req.query;
+
+  try {
+    const jobPost = await JobPost.findById(jobId)
+    .populate({
+        path: "applicants.applicant",
+        model: "Dev",
+        select: "userId country experience bio skills languages technologies interestedJobType environmentPreference portfolio gitLink",
+    });
+
+    // Extract applicant IDs and cover letters
+    const applicantsWithCoverLetters = jobPost.applicants.map(applicant => ({
+      applicantId: applicant.applicant._id.toString(),
+      coverLetter: applicant.coverLetter,
+    }));
+
+
+    if (!jobPost) {
+      return res.status(404).json({ success: false, message: "Job post not found" });
+    }
+
+    // const allApplicants = await Promise.all(jobPost.applicants.map(async (applicant) => {
+    //   const devData = await Developer.findById(applicant.applicant._id);
+    //   const user = await User.findById(devData.userId);
+    //   return { ...applicant.toObject(),  username: user.firstName + " " + user.lastName };
+    // }));
+    
+    const shortlisted = await Promise.all(jobPost.shortlisted.map(async (applicantId) => {
+      const devData = await Developer.findById(applicantId);
+      const user = await User.findById(devData.userId);
+      const coverLetter = applicantsWithCoverLetters.find(applicant => applicant.applicantId === applicantId.toString())?.coverLetter;
+      return { applicant: devData, username: user.firstName + " " + user.lastName , coverLetter: coverLetter };
+    }));
+
+    const rejected = await Promise.all(jobPost.rejectedApplicants.map(async (applicantId) => {
+      const devData = await Developer.findById(applicantId);
+      const user = await User.findById(devData.userId);
+      const coverLetter = applicantsWithCoverLetters.find(applicant => applicant.applicantId === applicantId.toString())?.coverLetter;
+      return { applicant: devData, username: user.firstName + " " + user.lastName, coverLetter: coverLetter ,  status: "Rejected" };
+    }));
+
+    const accepted = await Promise.all(jobPost.acceptedApplicants.map(async (applicantId) => {
+      const devData = await Developer.findById(applicantId);
+      const user = await User.findById(devData.userId);
+      const coverLetter = applicantsWithCoverLetters.find(applicant => applicant.applicantId === applicantId.toString())?.coverLetter;
+      return { applicant: devData, username: user.firstName + " " + user.lastName, coverLetter: coverLetter , status: "Offer Accepted" };
+    }));
+
+    const offered = await Promise.all(shortlisted.filter(dev => dev.isOffer).map(async (applicant) => {
+      const devData = await Developer.findById(applicant.applicantId); // Assuming you have an applicantId property
+      console.log("DevData: ",devData)
+      const user = await User.findById(applicant.userId);
+      const coverLetter = applicantsWithCoverLetters.find(applicant => applicant.applicantId === applicantId.toString())?.coverLetter;
+      return { applicant: devData,  username: user.firstName + " " + user.lastName , coverLetter: coverLetter , status: "Offer Sent" };
+    }));
+
+    const allApplicants = [...accepted, ...shortlisted, ...rejected, ...offered];
+
+    return res.status(200).json({
+      success: true,
+      allApplicants,
+      shortlisted,
+      rejected,
+      accepted,
+      offered,
+    });
+  } catch (error) {
+    console.error("Error fetching applicants:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+//Send Job Offer
+const sendJobOffer = async (req, res) => {
+  const { jobId, devId } = req.body;
+  console.log("Job Id: ", jobId);
+  console.log("Dev ID: ", devId);
+
+  try {
+      // Update the Developer's isOffered field to true
+      const dev = await Developer.findById(devId);
+      console.log("Developer: ", dev);
+
+      // Find the job in the developer's myJobs array
+      const jobIndex = dev.myJobs.findIndex(job => job.job.toString() === jobId);
+
+      if (jobIndex === -1) {
+          return res.status(404).json({ message: "Job not found" });
+      }
+
+      // Update the isOffer field for the found job
+      dev.myJobs[jobIndex].isOffer = true;
+      await dev.save();
+
+      res.status(200).json({ message: "Offer sent successfully" });
+  } catch (error) {
+      console.error("Error sending offer:", error);
+      res.status(500).json({ message: "Error sending offer" });
+  }
+};
+
+const shortlistToggle = async (req, res) => {
+  const { jobId, devId, shortlisted } = req.body;
+
+  try {
+    const jobPost = await JobPost.findById(jobId);
+    if (!jobPost) {
+      return res.status(404).json({ success: false, message: "Job post not found" });
+    }
+
+    // Check if the applicant is already in the accepted or rejected applicants list
+    if (
+      jobPost.acceptedApplicants.includes(devId) ||
+      jobPost.rejectedApplicants.includes(devId)
+    ) {
+      return res.status(400).json({ success: false, message: "Applicant already accepted or rejected" });
+    }
+
+    // Update the shortlisted array based on the toggle
+    if (shortlisted) {
+      if (!jobPost.shortlisted.includes(devId)) {
+        jobPost.shortlisted.push(devId);
+      }
+    } else {
+      jobPost.shortlisted = jobPost.shortlisted.filter(id => id.toString() !== devId);
+    }
+
+    await jobPost.save();
+
+    return res.status(200).json({ success: true, message: "Shortlist status updated successfully" });
+  } catch (error) {
+    console.error("Failed to update shortlist status:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 
 const editJob = async (req, res) => {
   // TODO: update Job info with job_id in req
@@ -432,4 +571,4 @@ const deleteApplicants = async (req, res) => {
   }
 }
 
-module.exports = { createJob, getAllJobs, editJob, closeJob, deleteJob,updateBookmarks, individualBookmarks, getRelatedJobs, deleteApplicants,acceptOffer ,rejectOffer};
+module.exports = { createJob, getAllJobs, editJob, closeJob, deleteJob,updateBookmarks, individualBookmarks, getRelatedJobs, deleteApplicants,acceptOffer ,rejectOffer , getJobApplicants, sendJobOffer , shortlistToggle};

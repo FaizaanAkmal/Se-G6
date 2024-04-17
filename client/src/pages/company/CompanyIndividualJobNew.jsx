@@ -56,7 +56,7 @@ export default function CompanyIndividualJobNew() {
             const response = await axios.get(apiRoutes.company.getApplicants, {
                 params: { jobId },
             }); // Make a request to your backend API
-            console.log("Data that I am getting: ", response.data);
+            // console.log("Data that I am  ", response);
             setJobpost(response.data.jobPost); // Update the state with the fetched applicants
         } catch (error) {
             console.error("Error fetching applicants:", error);

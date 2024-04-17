@@ -27,31 +27,65 @@ export default function JobApplications({ job }) {
     const [activeTab, setActiveTab] = useState("All");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [applicants, setApplicants] = useState({
+        all: [],
+        rejected: [],
+        shortlisted: [],
+        offers: [],
+        hired: [],
+    });
 
-    // console.log("Job applications: ",job)
+    // console.log("Job applications: ",job._id)
 
-    // useEffect(() => {
-    //     const fetchApplicants = async () => {
-    //         try {
-    //             setLoading(true);
-    //             const response = await axios.get(apiRoutes.job.getAllApplicants, {
-    //                 params: { jobId: job._id },
-    //             });
+    useEffect(() => {
+        const fetchApplicants = async () => {
+            // console.log("IN Fetch Applicants Function")
+            try {
+                setLoading(true);
+                const response = await axios.get(apiRoutes.job.getJobApplicants, {
+                    params: { jobId: job._id },
+                });
+                setApplicants({
+                    all: response.data.allApplicants,
+                    rejected: response.data.rejected,
+                    shortlisted: response.data.shortlisted,
+                    offers: response.data.offered,
+                    hired: response.data.accepted,
+                });
 
-    //             setApplicants(response.data.applications);
-    //             setLoading(false);
-    //         } catch (error) {
-    //             console.error("Error fetching applicants:", error);
-    //             setError("Error fetching applicants. Please try again.");
-    //             setLoading(false);
-    //         }
-    //     };
+                console.log("Applicants: ",response.data)
 
-    //     fetchApplicants();
-    // }, [job._id]);
+                // setApplicants(response.data.applications);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching applicants:", error);
+                setError("Error fetching applicants. Please try again.");
+                setLoading(false);
+            }
+        };
+
+        fetchApplicants();
+    }, [job._id]);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
+    };
+
+    const getApplicantsByTab = () => {
+        switch (activeTab) {
+            case "All":
+                return applicants.all;
+            case "Rejected":
+                return applicants.rejected;
+            case "Shortlisted":
+                return applicants.shortlisted;
+            case "Offers":
+                return applicants.offers;
+            case "Hired":
+                return applicants.hired;
+            default:
+                return [];
+        }
     };
 
     return (
@@ -78,102 +112,28 @@ export default function JobApplications({ job }) {
                             }}
                         >
                             {/* Tabs with active state handling */}
-                            {/* All */}
-                            <Button
-                                variant={
-                                    activeTab === "All" ? "outlined" : "plain"
-                                }
-                                color="neutral"
-                                size="lg"
-                                sx={{
-                                    borderRadius: 6,
-                                    bgcolor: activeTab === "All" ? "white" : "",
-                                }}
-                                onClick={() => handleTabChange("All")}
-                            >
-                                All
-                            </Button>
-                            {/* Rejected */}
-                            <Button
-                                variant={
-                                    activeTab === "Rejected"
-                                        ? "outlined"
-                                        : "plain"
-                                }
-                                size="lg"
-                                color="neutral"
-                                onClick={() => handleTabChange("Rejected")}
-                                sx={{
-                                    borderRadius: 6,
-                                    bgcolor:
-                                        activeTab === "Rejected" ? "white" : "",
-                                }}
-                            >
-                                Rejected
-                            </Button>
-                            {/* Shortlisted */}
-                            <Button
-                                variant={
-                                    activeTab === "Shortlisted"
-                                        ? "outlined"
-                                        : "plain"
-                                }
-                                size="lg"
-                                color="neutral"
-                                onClick={() => handleTabChange("Shortlisted")}
-                                sx={{
-                                    borderRadius: 6,
-                                    bgcolor:
-                                        activeTab === "Shortlisted"
-                                            ? "white"
-                                            : "",
-                                }}
-                            >
-                                Shortlisted
-                            </Button>
-                            {/* Offers */}
-                            <Button
-                                variant={
-                                    activeTab === "Offers"
-                                        ? "outlined"
-                                        : "plain"
-                                }
-                                size="lg"
-                                color="neutral"
-                                onClick={() => handleTabChange("Offers")}
-                                sx={{
-                                    borderRadius: 6,
-                                    bgcolor:
-                                        activeTab === "Offers" ? "white" : "",
-                                }}
-                            >
-                                Offers
-                            </Button>
-                            {/* Hired */}
-                            <Button
-                                variant={
-                                    activeTab === "Hired" ? "outlined" : "plain"
-                                }
-                                size="lg"
-                                color="neutral"
-                                onClick={() => handleTabChange("Hired")}
-                                sx={{
-                                    borderRadius: 6,
-                                    bgcolor:
-                                        activeTab === "Hired" ? "white" : "",
-                                }}
-                            >
-                                Hired
-                            </Button>
+                            {["All", "Rejected", "Shortlisted", "Offers", "Hired"].map(tab => (
+                                <Button
+                                    key={tab}
+                                    variant={activeTab === tab ? "outlined" : "plain"}
+                                    size="lg"
+                                    color="neutral"
+                                    onClick={() => handleTabChange(tab)}
+                                    sx={{
+                                        borderRadius: 6,
+                                        bgcolor: activeTab === tab ? "white" : "",
+                                    }}
+                                >
+                                    {tab}
+                                </Button>
+                            ))}
                         </Stack>
-                        {/* All */}
-                        {activeTab === "All" && (
-                            <Stack spacing={2}>
-                                <ApplicantCardNew />
-                                <ApplicantCardNew />
-                                <ApplicantCardNew />
-                            </Stack>
-                        )}
+                        {/* Render applicants based on active tab */}
+                        <Stack spacing={2}>
+                            {getApplicantsByTab().map(applicant => (
+                                <ApplicantCardNew key={applicant._id} applicant={applicant} jobId = {job._id} />
+                            ))}
+                        </Stack>
                     </Stack>
                 </Stack>
             </Grid>

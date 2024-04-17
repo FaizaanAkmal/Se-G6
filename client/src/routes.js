@@ -23,7 +23,10 @@ const apiRoutes = {
     updateBookmarks: "/job/updateBookmarks",
     individualBookmarks:"/job/individualBookmarks",
     acceptOffer:"/job/acceptOffer",
-    rejectOffer: "/job/rejectOffer"
+    rejectOffer: "/job/rejectOffer",
+    getJobApplicants: "/job/getJobApplicants",
+    sendJobOffer:"/job/sendJobOffer",
+    updateToggleStatus:"/job/toggleStatus"
   },
 
   // Developer Routes
@@ -43,7 +46,7 @@ const apiRoutes = {
     updateBookmark: "/company/bookmark",
     getProfile: "/company/getProfile",
     delete: "/company/deleteCompany",
-    getApplicants: "/company/getApplicants"
+    getApplicants: "/company/getApplicants",
   },
 };
 
