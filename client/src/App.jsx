@@ -14,7 +14,6 @@ import SearchJobs from "./pages/SearchJobs.jsx";
 import DevIndividualJob from "./pages/dev/DevIndividualJob.jsx";
 import DevSettings from "./pages/dev/DevSettings.jsx";
 import CompanySettings from "./pages/company/CompanySettings.jsx";
-import JobPostPage from "./pages/company/CompanyIndividualJob.jsx";
 import CompanyIndividualJobNew from "./pages/company/CompanyIndividualJobNew.jsx";
 import { useAuthContext } from "./components/useAuthContext.jsx";
 
