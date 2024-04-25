@@ -5,12 +5,12 @@ import generateIcon from "../../assets/generateIcon.svg";
 
 // Global constants
 import {
-    jobTypeOptions,
-    environmentOptions,
-    experienceOptions,
-    skillOptions,
-    languageOptions,
-    technologyOptions,
+  jobTypeOptions,
+  environmentOptions,
+  experienceOptions,
+  skillOptions,
+  languageOptions,
+  technologyOptions,
 } from "../../globalConstants.js";
 
 // Custom components
@@ -39,42 +39,35 @@ import {
 import { apiRoutes, clientRoutes } from "../../routes.js";
 
 export default function PostAJob() {
-    // form fields state
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [requirement, setRequirement] = useState("");
-    const [preferredSkills, setPreferredSkills] = useState([]);
-    const [preferredLanguages, setPreferredLanguages] = useState([]);
-    const [preferredTechnologies, setPreferredTechnologies] = useState([]);
-    const [experience, setExperience] = useState("");
-    const [jobType, setJobType] = useState("");
-    const [environment, setEnvironment] = useState("");
-    const [compensation, setCompensation] = useState("");
-
-  const [validCompensation, setValidCompensation] = useState(true);
+  // form fields state
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [requirement, setRequirement] = useState("");
+  const [preferredSkills, setPreferredSkills] = useState([]);
+  const [preferredLanguages, setPreferredLanguages] = useState([]);
+  const [preferredTechnologies, setPreferredTechnologies] = useState([]);
+  const [experience, setExperience] = useState("");
+  const [jobType, setJobType] = useState("");
+  const [environment, setEnvironment] = useState("");
+  const [compensation, setCompensation] = useState("");
 
   // state received
-  const location = useLocation()
-  const user = JSON.parse(localStorage.getItem("user"))
-  const userId = user.userId
+  const location = useLocation();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user.userId;
   // console.log(userId)
-
 
   const [generateLoading, setGenerateLoading] = useState(false);
 
-
-    // form validation
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-
+  // form validation
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // navigation
   const navigate = useNavigate();
 
-    // step state
-    const [currentStep, setStep] = useState(1);
-
-
+  // step state
+  const [currentStep, setStep] = useState(1);
 
   // handle form field changes
   const handleTitleChange = (e) => {
@@ -86,28 +79,27 @@ export default function PostAJob() {
   const handleRequirementChange = (e) => {
     setRequirement(e.target.value);
   };
-  const handleSkillsChange = (e, value) => {
-    setPreferredSkills(value);
+  const handleSkillsChange = (e) => {
+    setPreferredSkills(e.target.value);
   };
-  const handleLanguagesChange = (e, value) => {
-    setPreferredLanguages(value);
+  const handleLanguagesChange = (e) => {
+    setPreferredLanguages(e.target.value);
   };
-  const handleTechnologiesChange = (e, value) => {
-    setPreferredTechnologies(value);
+  const handleTechnologiesChange = (e) => {
+    setPreferredTechnologies(e.target.value);
   };
-  const handleExperienceChange = (e, value) => {
-    setExperience(value);
+  const handleExperienceChange = (e) => {
+    setExperience(e.target.value);
   };
-  const handleJobTypeChange = (e, value) => {
-    setJobType(value);
+  const handleJobTypeChange = (e) => {
+    setJobType(e.target.value);
   };
-  const handleEnvironmentChange = (e, value) => {
-    setEnvironment(value);
+  const handleEnvironmentChange = (e) => {
+    setEnvironment(e.target.value);
   };
   const handleCompensationChange = (e) => {
     setCompensation(e.target.value);
   };
-
 
   const handleGenerateDescription = async () => {
     // // TODO: Implement cover letter generation
@@ -115,45 +107,53 @@ export default function PostAJob() {
     // implementation:
     setGenerateLoading(true);
     try {
-        const jobProfile = { title, requirement, preferredSkills, preferredLanguages, preferredTechnologies, experience, jobType, environment, compensation}
-        console.log(jobProfile)
-        const response = await axios.post('/ai/generate-job-description', {
-            jobInfo: JSON.stringify(jobProfile)
-        });
+      const jobProfile = {
+        title,
+        requirement,
+        preferredSkills,
+        preferredLanguages,
+        preferredTechnologies,
+        experience,
+        jobType,
+        environment,
+        compensation,
+      };
+      const response = await axios.post("/ai/generate-job-description", {
+        jobInfo: JSON.stringify(jobProfile),
+      });
 
-        const generated_description = response.data.jobDescription
+      const generated_description = response.data.jobDescription;
 
-        console.log(generated_description)
-
-        setDescription(generated_description);
+      setDescription(generated_description);
     } catch (error) {
-        console.error('Error generating cover letter:', error);
-        setDescription("AI service down at the moment, please try later. (Or maybe show your own creativity ;)");
+      console.error("Error generating cover letter:", error);
+      setError(
+        "AI service down at the moment, please try later. (Or maybe show your own creativity ;)"
+      );
     } finally {
-        setGenerateLoading(false);
+      setGenerateLoading(false);
     }
-};
+  };
 
   // go to next step
   const handleNext = () => {
     // validate required form fields
     if (currentStep === 1) {
-      if (!title || !requirement) {
+      if (
+        !title ||
+        !requirement ||
+        !preferredSkills.length ||
+        !preferredLanguages.length
+      ) {
         setError("Please fill in all required fields.");
         return;
       }
     } else if (currentStep === 2) {
-      if (!experience) {
-        setError("Please select a preferred experience level.");
-        return;
-      }
-    } else if (currentStep === 3) {
-      if (!jobType || !environment || !description) {
+      if (!experience || !preferredTechnologies.length) {
         setError("Please fill in all required fields.");
         return;
       }
     }
-
     setError("");
 
     // scroll to top of the page
@@ -165,59 +165,62 @@ export default function PostAJob() {
 
   // go to previous step
   const handleBack = () => {
-    if (currentStep > 1) setStep(currentStep - 1);
+    if (currentStep > 1) {
+      setStep(currentStep - 1);
+      setError("");
+    }
   };
 
   // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
+
+    if (!jobType || !environment || !description || !compensation) {
+      setError("Please fill in all required fields.");
+      return;
+    }
 
     // validate compensation if it is not empty
     if (compensation) {
-        if (compensation < 1000 || compensation > 1000000) {
-            setValidCompensation(false);
-            setLoading(false);
-            return;
-        }
+      if (compensation < 1000 || compensation > 1000000) {
+        setError("Please enter a valid compensation amount.");
+        return;
+      }
     }
+    setLoading(true);
 
     // create a data object to send in the request
     const requestData = {
-        title,
-        description,
-        requirement,
-        preferredSkills,
-        preferredLanguages,
-        preferredTechnologies,
-        experience,
-        jobType,
-        environment,
-        compensation,
-        userId,
+      title,
+      description,
+      requirement,
+      preferredSkills,
+      preferredLanguages,
+      preferredTechnologies,
+      experience,
+      jobType,
+      environment,
+      compensation,
+      userId,
     };
 
     console.log("Request data before sending:", requestData);
     try {
-        // Send a POST request to the server
-        const response = await axios.post(
-            apiRoutes.job.create,
-            requestData
-        );
+      // Send a POST request to the server
+      const response = await axios.post(apiRoutes.job.create, requestData);
 
-        console.log("Response:", response.data);
+      console.log("Response:", response.data);
 
-        // Navigate to the dashboard or handle the response accordingly
-        window.scrollTo(0, 0);
-        navigate(clientRoutes.companyDashboard, { userId: userId });
+      // Navigate to the dashboard or handle the response accordingly
+      window.scrollTo(0, 0);
+      navigate(clientRoutes.companyDashboard, { userId: userId });
     } catch (error) {
-        console.error("Error submitting form:", error);
-        // Handle error state or display error message
+      console.error("Error submitting form:", error);
+      // Handle error state or display error message
     }
 
     setLoading(false);
-};
+  };
 
   return (
     <>
@@ -282,7 +285,7 @@ export default function PostAJob() {
                       />
                     </FormControl>
                     {/* Preferred Skills */}
-                    <FormControl>
+                    <FormControl required>
                       <FormLabel>
                         Preferred skills (select all that apply)
                       </FormLabel>
@@ -295,7 +298,7 @@ export default function PostAJob() {
                       />
                     </FormControl>
                     {/* Preferred Programming Languages */}
-                    <FormControl>
+                    <FormControl required>
                       <FormLabel>
                         Preferred programming languages (select all that apply)
                       </FormLabel>
@@ -328,11 +331,9 @@ export default function PostAJob() {
                 {/* Step 2 */}
                 {currentStep === 2 && (
                   <>
-                    <Typography level="h3">
-                      Step 2 of 3: Preferences
-                    </Typography>
+                    <Typography level="h3">Step 2 of 3: Preferences</Typography>
                     {/* Preferred Technologies */}
-                    <FormControl>
+                    <FormControl required>
                       <FormLabel>
                         Preferred technologies (select all that apply)
                       </FormLabel>
@@ -437,7 +438,7 @@ export default function PostAJob() {
                       </Select>
                     </FormControl>
                     {/* Compensation */}
-                    <FormControl>
+                    <FormControl required>
                       <FormLabel>Annual Compensation (in USD)</FormLabel>
                       <Input
                         type="number"
@@ -445,7 +446,6 @@ export default function PostAJob() {
                         onChange={handleCompensationChange}
                         value={compensation}
                         startDecorator="$"
-                        error={!validCompensation}
                       />
                       <FormHelperText>
                         Please enter a number between 1,000 and 1,000,000
@@ -456,22 +456,22 @@ export default function PostAJob() {
                       <FormLabel>Job description</FormLabel>
                       <Textarea
                         startDecorator={
-                            <Button
-                                size="sm"
-                                variant="soft"
-                                loading={generateLoading}
-                                startDecorator={
-                                    <img
-                                        src={generateIcon}
-                                        alt="Generate"
-                                        width={"16px"}
-                                    />
-                                }
-                                sx={{ "--Button-gap": "4px" }}
-                                onClick={handleGenerateDescription}
-                            >
-                                Generate with AI
-                            </Button>
+                          <Button
+                            size="sm"
+                            variant="soft"
+                            loading={generateLoading}
+                            startDecorator={
+                              <img
+                                src={generateIcon}
+                                alt="Generate"
+                                width={"16px"}
+                              />
+                            }
+                            sx={{ "--Button-gap": "4px" }}
+                            onClick={handleGenerateDescription}
+                          >
+                            Generate with AI
+                          </Button>
                         }
                         placeholder="Write your job descrption... If you are using `Generate with AI`, you are can try multiple times to get the desired response."
                         value={description}
