@@ -310,7 +310,7 @@ const CompanyJobCard = ({ userId, myJob, setMyJobs }) => {
                 <Grid container justifyContent="flex-start" alignItems="center">
                   {/* Close Job Button */}
                   {myJob.job.status === "open" && (
-                    <Grid item xs={2}>
+                    <Grid xs={2}>
                       <Button
                         variant="outlined"
                         fullWidth
@@ -332,7 +332,7 @@ const CompanyJobCard = ({ userId, myJob, setMyJobs }) => {
                   )}
                   {/* Open Job Button */}
                   {myJob.job.status === "closed" && (
-                    <Grid item xs={2}>
+                    <Grid xs={2}>
                       <Button
                         variant="soft"
                         fullWidth

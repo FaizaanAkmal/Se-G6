@@ -123,7 +123,6 @@ export default function DevJobRecs() {
                 backgroundColor={"#F8F9FA"}
             >
                 <Grid
-                    item
                     md={10}
                     p={6}
                     display={"flex"}
@@ -156,7 +155,7 @@ export default function DevJobRecs() {
                         {/* Job Recommendations - Only 3 Recs */}
                         <Grid container spacing={2}>
                             {jobs.map((job) => (
-                                <Grid item md={4} key={job._id} >
+                                <Grid md={4} key={job._id} >
                                     <Card
                                         variant="outlined"
                                         size="lg"

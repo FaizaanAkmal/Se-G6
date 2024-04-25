@@ -379,7 +379,7 @@ export default function ApplicantCardNew({ applicant , jobId }) {
                                         gap={2}
                                     >
                                         {/* Reject Button */}
-                                        <Grid item xs={2.5}>
+                                        <Grid xs={2.5}>
                                             <Button
                                                 variant="outlined"
                                                 fullWidth
@@ -400,7 +400,7 @@ export default function ApplicantCardNew({ applicant , jobId }) {
                                             </Button>
                                         </Grid>
                                         {/* Send Offer Button */}
-                                        <Grid item xs={2.5}>
+                                        <Grid xs={2.5}>
                                             <Button
                                                 variant="soft"
                                                 fullWidth

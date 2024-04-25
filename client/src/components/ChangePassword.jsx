@@ -24,10 +24,7 @@ export default function ChangePassword() {
     const [newPassword, setNewPassword] = useState("");
     const [currentPassword, setCurrentPassword] = useState("")
     const location = useLocation()
-    const userId = location.state.userId
-    console.log("Location in password: ",location)
-    console.log("UserId: ",userId)
-   
+    const userId = location.state.userId   
 
     // form status
     const [loading, setLoading] = useState(false);
@@ -38,7 +35,6 @@ export default function ChangePassword() {
         //TODO: Get Using Actual User Id 
         const response2 = await axios.get(apiRoutes.user.getUser,
             {params: {userId: userId}});
-        console.log("Password: ",)
         setCurrentPassword(response2.data.password)
         } catch (error) {
         console.error("Error getting data:", error);

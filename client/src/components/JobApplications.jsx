@@ -98,7 +98,7 @@ export default function JobApplications({ job }) {
             justifyContent={"center"}
             backgroundColor={"#F8F9FA"}
         >
-            <Grid item md={10} p={6} display={"flex"} flexDirection={"column"}>
+            <Grid md={10} p={6} display={"flex"} flexDirection={"column"}>
                 <Stack spacing={4}>
                     <Stack spacing={3}>
                         <Typography level="h1">Applications</Typography>

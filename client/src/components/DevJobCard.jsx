@@ -426,7 +426,7 @@ const DevJobCard = ({
                                         gap={2}
                                     >
                                         {/* Reject Button */}
-                                        <Grid item xs={2.5}>
+                                        <Grid xs={2.5}>
                                             <Button
                                                 variant="outlined"
                                                 fullWidth
@@ -447,7 +447,7 @@ const DevJobCard = ({
                                             </Button>
                                         </Grid>
                                         {/* Accept Button */}
-                                        <Grid item xs={2.5}>
+                                        <Grid xs={2.5}>
                                             <Button
                                                 variant="soft"
                                                 fullWidth

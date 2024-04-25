@@ -16,122 +16,101 @@ import Footer from "../../components/Footer.jsx";
 import { Typography, Button, Stack, Grid } from "@mui/joy";
 
 export default function DevSettings() {
-    const [activeTab, setActiveTab] = useState("Profile");
-    const location = useLocation()
-    const userId = location.state
+  const [activeTab, setActiveTab] = useState("Profile");
+  const location = useLocation();
+  const userId = location.state;
 
-    const handleTabChange = (tab) => {
-        setActiveTab(tab);
-    };
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
-    return (
-        <>
-            <DevNavbar currentPage={"settings"} />
-            <Grid
-                container
-                xs={12}
+  return (
+    <>
+      <DevNavbar currentPage={"settings"} />
+      <Grid
+        container
+        xs={12}
+        sx={{
+          flexGrow: 1,
+          justifyContent: "center",
+        }}
+        p={4}
+        minHeight="82vh"
+      >
+        {/* Sidebar */}
+        <Grid md={3} paddingRight={12}>
+          <Stack
+            spacing={2}
+            p={2}
+            bgcolor={"#F9F9FB"}
+            sx={{
+              borderRadius: 8,
+              border: "1px solid #F2F4F7",
+            }}
+          >
+            <Typography level="h3">Settings</Typography>
+            <Stack spacing={1}>
+              {/* Profile */}
+              <Button
+                variant={activeTab === "Profile" ? "outlined" : "plain"}
+                color="neutral"
+                size="lg"
                 sx={{
-                    flexGrow: 1,
-                    justifyContent: "center",
+                  borderRadius: 6,
+                  bgcolor: activeTab === "Profile" ? "white" : "",
+                  justifyContent: "flex-start",
+                  paddingLeft: 2,
+                  paddingRight: 2,
                 }}
-                p={4}
-                minHeight="82vh"
-            >
-                {/* Sidebar */}
-                <Grid item md={3} paddingRight={12}>
-                    <Stack
-                        spacing={2}
-                        p={2}
-                        bgcolor={"#F9F9FB"}
-                        sx={{
-                            borderRadius: 8,
-                            border: "1px solid #F2F4F7",
-                        }}
-                    >
-                        <Typography level="h3">Settings</Typography>
-                        <Stack spacing={1}>
-                            {/* Profile */}
-                            <Button
-                                variant={
-                                    activeTab === "Profile"
-                                        ? "outlined"
-                                        : "plain"
-                                }
-                                color="neutral"
-                                size="lg"
-                                sx={{
-                                    borderRadius: 6,
-                                    bgcolor:
-                                        activeTab === "Profile" ? "white" : "",
-                                    justifyContent: "flex-start",
-                                    paddingLeft: 2,
-                                    paddingRight: 2,
-                                }}
-                                onClick={() => handleTabChange("Profile")}
-                            >
-                                Profile
-                            </Button>
-                            {/* Change Password */}
-                            <Button
-                                variant={
-                                    activeTab === "Change Password"
-                                        ? "outlined"
-                                        : "plain"
-                                }
-                                color="neutral"
-                                size="lg"
-                                sx={{
-                                    borderRadius: 6,
-                                    bgcolor:
-                                        activeTab === "Change Password"
-                                            ? "white"
-                                            : "",
-                                    justifyContent: "flex-start",
-                                    paddingLeft: 2,
-                                    paddingRight: 2,
-                                }}
-                                onClick={() =>
-                                    handleTabChange("Change Password")
-                                }
-                            >
-                                Change Password
-                            </Button>
-                            {/* Delete Account */}
-                            <Button
-                                variant={
-                                    activeTab === "Delete Account"
-                                        ? "outlined"
-                                        : "plain"
-                                }
-                                color="neutral"
-                                size="lg"
-                                sx={{
-                                    borderRadius: 6,
-                                    bgcolor:
-                                        activeTab === "Delete Account"
-                                            ? "white"
-                                            : "",
-                                    justifyContent: "flex-start",
-                                    paddingLeft: 2,
-                                    paddingRight: 2,
-                                }}
-                                onClick={() =>
-                                    handleTabChange("Delete Account")
-                                }
-                            >
-                                Delete Account
-                            </Button>
-                        </Stack>
-                    </Stack>
-                </Grid>
-                {/* Main Content */}
-                <Grid item md={6}>
-                    {activeTab === "Profile" && <DevProfileSettings userId = {userId}/>}
-                    {activeTab === "Change Password" && <ChangePassword userId = {userId}/>}
-                    {activeTab === "Delete Account" && <DeleteAccount userId = {userId}/>}
-                </Grid>
-            </Grid>
-            <Footer />
-        </>
-    );
+                onClick={() => handleTabChange("Profile")}
+              >
+                Profile
+              </Button>
+              {/* Change Password */}
+              <Button
+                variant={activeTab === "Change Password" ? "outlined" : "plain"}
+                color="neutral"
+                size="lg"
+                sx={{
+                  borderRadius: 6,
+                  bgcolor: activeTab === "Change Password" ? "white" : "",
+                  justifyContent: "flex-start",
+                  paddingLeft: 2,
+                  paddingRight: 2,
+                }}
+                onClick={() => handleTabChange("Change Password")}
+              >
+                Change Password
+              </Button>
+              {/* Delete Account */}
+              <Button
+                variant={activeTab === "Delete Account" ? "outlined" : "plain"}
+                color="neutral"
+                size="lg"
+                sx={{
+                  borderRadius: 6,
+                  bgcolor: activeTab === "Delete Account" ? "white" : "",
+                  justifyContent: "flex-start",
+                  paddingLeft: 2,
+                  paddingRight: 2,
+                }}
+                onClick={() => handleTabChange("Delete Account")}
+              >
+                Delete Account
+              </Button>
+            </Stack>
+          </Stack>
+        </Grid>
+        {/* Main Content */}
+        <Grid md={6}>
+          {activeTab === "Profile" && <DevProfileSettings userId={userId} />}
+          {activeTab === "Change Password" && (
+            <ChangePassword userId={userId} />
+          )}
+          {activeTab === "Delete Account" && <DeleteAccount userId={userId} />}
+        </Grid>
+      </Grid>
+      <Footer />
+    </>
+  );
 }
