@@ -169,7 +169,7 @@ export default function Login() {
                   <Divider></Divider>
                   <Typography>
                     Don't have an account? &nbsp;
-                    <Link href="/" sx={{ color: "#7F56D9" }}>
+                    <Link href={clientRoutes.signup} sx={{ color: "#7F56D9" }}>
                       Sign up to create an account.
                     </Link>
                   </Typography>

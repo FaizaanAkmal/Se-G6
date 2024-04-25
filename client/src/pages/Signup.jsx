@@ -380,7 +380,7 @@ const Signup = () => {
                   <Typography>
                     Already have an account? &nbsp;
                     <Link
-                      href="/login"
+                      href={clientRoutes.login}
                       sx={{
                         textDecoration: "none",
                         color: "#a636e7",

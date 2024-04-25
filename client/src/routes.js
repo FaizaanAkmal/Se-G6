@@ -50,8 +50,8 @@ const apiRoutes = {
 
 // Client-Side Navigation (React Router Routes)
 const clientRoutes = {
-  signup: "/",
-  login: "/login",
+  login: "/",
+  signup: "/signup",
   companyProfileSetup: "/company/profileSetup",
   devProfileSetup: "/dev/profileSetup",
   companyDashboard: "/company/dashboard",
