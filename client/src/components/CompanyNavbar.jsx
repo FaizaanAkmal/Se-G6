@@ -92,6 +92,7 @@ export default function CompanyNavbar({ currentPage }) {
           variant="plain"
           color={getButtonColor("dashboard")}
           onClick={() => handleTabChange("dashboard")}
+          disabled={currentPage === "profileSetup"}
         >
           Dashboard
         </Button>
@@ -99,6 +100,7 @@ export default function CompanyNavbar({ currentPage }) {
           variant="plain"
           color={getButtonColor("postJob")}
           onClick={() => handleTabChange("postJob")}
+          disabled={currentPage === "profileSetup"}
         >
           Post a Job
         </Button>
@@ -106,6 +108,7 @@ export default function CompanyNavbar({ currentPage }) {
           variant="plain"
           color={getButtonColor("settings")}
           onClick={() => handleTabChange("settings")}
+          disabled={currentPage === "profileSetup"}
         >
           Settings
         </Button>

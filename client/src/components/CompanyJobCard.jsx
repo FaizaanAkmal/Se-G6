@@ -43,7 +43,7 @@ const CompanyJobCard = ({ userId, myJob, setMyJobs }) => {
 
   // Handler function for card click
   const handleCardClick = () => {
-    console.log("TESTING", myJob);
+    // console.log("TESTING", myJob);
     if (myJob.job.status === "closed") return;
     window.scrollTo(0, 0);
     navigate(clientRoutes.companyIndividualJob, { state: myJob.job });

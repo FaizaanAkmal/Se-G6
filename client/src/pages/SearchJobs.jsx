@@ -79,7 +79,7 @@ export default function SearchJobs() {
         params: { userId },
       });
 
-      console.log("Response: ", response);
+      // console.log("Response: ", response);
 
       // Destructure the response data
       const { allJobs, bookmarkedJobs, appliedJobs, offeredJobs } =
@@ -149,7 +149,7 @@ export default function SearchJobs() {
         );
       }
 
-      console.log("Sorty By: ", sortBy);
+      // console.log("Sorty By: ", sortBy);
       if (sortBy === "newest") {
         filteredJobs.sort(
           (a, b) => new Date(b.datePosted) - new Date(a.datePosted)
@@ -357,7 +357,7 @@ export default function SearchJobs() {
                       size="lg"
                       options={skillOptions}
                       onChange={handleSkillsChange}
-                      value={skills}
+                      value={skills || null}
                     />
                   </Grid>
                   <Grid xs={12} sm={4} md={4}>
@@ -369,7 +369,7 @@ export default function SearchJobs() {
                       size="lg"
                       options={languageOptions}
                       onChange={handleLanguagesChange}
-                      value={languages}
+                      value={languages || null}
                     />
                   </Grid>
                   <Grid xs={12} sm={4} md={4}>
@@ -381,7 +381,7 @@ export default function SearchJobs() {
                       size="lg"
                       options={technologyOptions}
                       onChange={handleTechnologiesChange}
-                      value={technologies}
+                      value={technologies || null}
                     />
                   </Grid>
                 </Grid>
@@ -393,7 +393,7 @@ export default function SearchJobs() {
                       placeholder="Job Type"
                       sx={{ backgroundColor: "white" }}
                       options={jobTypeOptions}
-                      value={jobType}
+                      value={jobType || null}
                       size="lg"
                       limitTags={1}
                       onChange={handleJobTypeChange}
@@ -405,7 +405,7 @@ export default function SearchJobs() {
                       placeholder="Experience"
                       options={experienceOptions}
                       sx={{ backgroundColor: "white" }}
-                      value={experience}
+                      value={experience || null}
                       size="lg"
                       limitTags={1}
                       onChange={handleExperienceChange}
@@ -417,7 +417,7 @@ export default function SearchJobs() {
                       placeholder="Environment"
                       sx={{ backgroundColor: "white" }}
                       options={environmentOptions}
-                      value={environment}
+                      value={environment || null}
                       size="lg"
                       limitTags={1}
                       onChange={handleEnvironmentChange}
@@ -476,9 +476,9 @@ export default function SearchJobs() {
 
             {/* Job Cards */}
             <Stack spacing={2}>
-              {jobs.map((job) => (
+              {jobs.map((job, index) => (
                 <DevJobCard
-                  key={job.id}
+                  key={index}
                   job={job}
                   userId={userId}
                   setBookmarkedJobs={setBookmarkedJobs}

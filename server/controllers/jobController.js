@@ -1,7 +1,7 @@
+const User = require("../models/user");
 const JobPost = require("../models/jobpost");
 const Company = require("../models/company");
 const Developer = require("../models/dev");
-const User = require("../models/user");
 
 //creating a new job post
 const createJob = async (req, res) => {

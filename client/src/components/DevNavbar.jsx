@@ -86,6 +86,7 @@ export default function DevNavbar({ currentPage }) {
                     variant="plain"
                     color={getButtonColor("dashboard")}
                     onClick={() => handleTabChange("dashboard")}
+                    disabled={currentPage === "profileSetup"}
                 >
                     Dashboard
                 </Button>
@@ -93,6 +94,7 @@ export default function DevNavbar({ currentPage }) {
                     variant="plain"
                     color={getButtonColor("search")}
                     onClick={() => handleTabChange("search")}
+                    disabled={currentPage === "profileSetup"}
                 >
                     Search
                 </Button>
@@ -100,6 +102,7 @@ export default function DevNavbar({ currentPage }) {
                     variant="plain"
                     color={getButtonColor("settings")}
                     onClick={() => handleTabChange("settings")}
+                    disabled={currentPage === "profileSetup"}
                 >
                     Settings
                 </Button>

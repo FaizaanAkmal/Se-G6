@@ -377,7 +377,6 @@ const Signup = () => {
                       {successMessage}
                     </Typography>
                   )}
-                  <Divider></Divider>
                   <Typography>
                     Already have an account? &nbsp;
                     <Link
@@ -405,6 +404,7 @@ const Signup = () => {
             src={signupBackground}
             alt="signupBackground"
             style={{
+              width: "100%",
               objectFit: "cover",
             }}
           />

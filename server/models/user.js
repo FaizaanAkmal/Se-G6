@@ -31,11 +31,6 @@ const userSchema = new Schema({
   },
 });
 
-let UserModel;
-if (mongoose.models.User) {
-  UserModel = mongoose.model('User');
-} else {
-  UserModel = mongoose.model('User', userSchema);
-}
+const userModel = mongoose.model("User", userSchema);
 
-module.exports = UserModel;
+module.exports = userModel;

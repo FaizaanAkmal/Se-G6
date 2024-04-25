@@ -2,14 +2,14 @@ const express = require("express");
 const testRouter = express.Router();
 
 // models
-const User = require("../models/User");
+const User = require("../models/user");
 const Dev = require("../models/dev");
 const Company = require("../models/company");
 const Job = require("../models/jobpost");
 
 // CAUTION !!!
 
-testRouter.get("/123", async (req, res) => {
+testRouter.get("/1", async (req, res) => {
   try {
     // Fetch all jobs
     const jobs = await Job.find();
@@ -30,6 +30,17 @@ testRouter.get("/123", async (req, res) => {
   } catch (error) {
     console.error("Error updating jobs:", error);
     res.status(500).json({ message: "An error occurred while updating jobs" });
+  }
+});
+
+testRouter.get("/2", async (req, res) => {
+  // set profileCompleted to true for all users
+  try {
+    await User.updateMany({}, { profileCompleted: true });
+    res.status(200).json({ message: "Users updated successfully" });
+  } catch (error) {
+    console.error("Error updating users:", error);
+    res.status(500).json({ message: "An error occurred while updating users" });
   }
 });
 

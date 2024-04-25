@@ -1,5 +1,5 @@
-const bcrypt = require("bcrypt");
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 // Registering a New User
@@ -56,24 +56,20 @@ const registerUser = async (req, res) => {
 
     // Regular expression for password validation
     const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_^])[A-Za-z\d@$!%*#?&_^]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).{8,}$/;
 
     // Validate password
     if (!passwordRegex.test(password)) {
       let errorMessage = "Password must ";
       if (password.length < 8) {
         errorMessage += "be at least 8 characters long ";
-      }
-      else if (!/(?=.*[a-z])/.test(password)) {
+      } else if (!/(?=.*[a-z])/.test(password)) {
         errorMessage += "contain at least one lowercase letter ";
-      }
-      else if (!/(?=.*[A-Z])/.test(password)) {
+      } else if (!/(?=.*[A-Z])/.test(password)) {
         errorMessage += "contain at least one uppercase letter ";
-      }
-      else if (!/(?=.*\d)/.test(password)) {
+      } else if (!/(?=.*\d)/.test(password)) {
         errorMessage += "contain at least one number ";
-      }
-      else if (!/(?=.*[@$!%*#?&_^])/.test(password)) {
+      } else if (!/(?=.*[^a-zA-Z\d\s])/.test(password)) {
         errorMessage += "contain at least one special character ";
       }
       return res.status(400).json({
@@ -119,10 +115,12 @@ const registerUser = async (req, res) => {
       expiresIn: "1h",
     });
 
-
-    res
-      .status(201)
-      .json({ success: true, message: "User registered successfully." , user: newUser , user: {userId: newUser._id , token : token} });
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully.",
+      user: newUser,
+      user: { userId: newUser._id, token: token },
+    });
   } catch (error) {
     console.log("Here");
     console.error("Error registering user:", error);
@@ -153,7 +151,13 @@ const loginUser = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.status(200).json({ success: true, userType: user.userType, userId: user._id , user: {userId: user._id , token : token} });
+    res.status(200).json({
+      success: true,
+      userType: user.userType,
+      userId: user._id,
+      profileCompleted: user.profileCompleted,
+      user: { userId: user._id, token: token },
+    });
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ success: false, message: "Internal server error." });
@@ -161,26 +165,22 @@ const loginUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  const {userId} = req.query;
+  const { userId } = req.query;
   try {
     const user = await User.findById(userId);
-    console.log
+    console.log;
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
-// update user info 
+// update user info
 const editUser = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email
-  } = req.body;
+  const { firstName, lastName, email } = req.body;
 
   const { id } = req.params;
   try {
@@ -189,7 +189,7 @@ const editUser = async (req, res) => {
       {
         firstName,
         lastName,
-        email
+        email,
       }, // Update
       { new: true } // Options: Return the updated document
     );
@@ -206,15 +206,15 @@ const editUser = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-  console.log("In here")
-  const {passwordCheck, currentPassword, newPassword , userId} = req.body;
-  console.log("UserId: ",userId)
-  console.log("Current Password: ",currentPassword)
-  console.log("new  Password: ",newPassword)
+  console.log("In here");
+  const { passwordCheck, currentPassword, newPassword, userId } = req.body;
+  console.log("UserId: ", userId);
+  console.log("Current Password: ", currentPassword);
+  console.log("new  Password: ", newPassword);
   // Function to compare passwords
   const comparePasswords = (passwordCheck, currentPassword) => {
     return new Promise((resolve, reject) => {
-      bcrypt.compare(passwordCheck, currentPassword, function(err, result) {
+      bcrypt.compare(passwordCheck, currentPassword, function (err, result) {
         if (err) {
           // Handle error
           reject(err);
@@ -231,53 +231,49 @@ const changePassword = async (req, res) => {
     });
   };
   const passwordsMatch = await comparePasswords(passwordCheck, currentPassword);
-  if(passwordsMatch===false) {
+  if (passwordsMatch === false) {
     return res.json({
       success: false,
       field: "password",
       message: "Entered password does not match current password",
     });
   }
-  if (newPassword===passwordCheck) {
+  if (newPassword === passwordCheck) {
     return res.json({
       success: false,
       field: "password",
-      message: "New password must be different from old password"
+      message: "New password must be different from old password",
     });
   }
   // Regular expression for password validation
   const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_^])[A-Za-z\d@$!%*#?&_^]{8,}$/;
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_^])[A-Za-z\d@$!%*#?&_^]{8,}$/;
   // Validate password
   if (!passwordRegex.test(newPassword)) {
-  let errorMessage = "Password must ";
-  if (newPassword.length < 8) {
-    errorMessage += "be at least 8 characters long ";
-  }
-  else if (!/(?=.*[a-z])/.test(newPassword)) {
-    errorMessage += "contain at least one lowercase letter ";
-  }
-  else if (!/(?=.*[A-Z])/.test(newPassword)) {
-    errorMessage += "contain at least one uppercase letter ";
-  }
-  else if (!/(?=.*\d)/.test(newPassword)) {
-    errorMessage += "contain at least one number ";
-  }
-  else if (!/(?=.*[@$!%*#?&_^])/.test(newPassword)) {
-    errorMessage += "contain at least one special character ";
-  }
-  return res.json({
-    success: false,
-    field: "password",
-    message: errorMessage.trim(),
-  });
+    let errorMessage = "Password must ";
+    if (newPassword.length < 8) {
+      errorMessage += "be at least 8 characters long ";
+    } else if (!/(?=.*[a-z])/.test(newPassword)) {
+      errorMessage += "contain at least one lowercase letter ";
+    } else if (!/(?=.*[A-Z])/.test(newPassword)) {
+      errorMessage += "contain at least one uppercase letter ";
+    } else if (!/(?=.*\d)/.test(newPassword)) {
+      errorMessage += "contain at least one number ";
+    } else if (!/(?=.*[@$!%*#?&_^])/.test(newPassword)) {
+      errorMessage += "contain at least one special character ";
+    }
+    return res.json({
+      success: false,
+      field: "password",
+      message: errorMessage.trim(),
+    });
   }
   //Hashing and Bycrypting the password
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   try {
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId }, // Filter: Find the user by its ID
-      {password: hashedPassword}, // Update
+      { password: hashedPassword }, // Update
       { new: true } // Options: Return the updated document
     );
 
@@ -290,25 +286,32 @@ const changePassword = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-}
+};
 
 const deleteUser = async (req, res) => {
-  const {userId} = req.query;
+  const { userId } = req.query;
   try {
     // Use findByIdAndDelete to find and delete the user by id
     const deletedUser = await User.findByIdAndDelete(userId);
-    
+
     if (!deletedUser) {
       // If no user found with the given id, return appropriate message or handle accordingly
       return res.status(404).json({ error: "User not found" });
     }
-    
+
     // Return success message or any relevant data
-    return res.status(200).json({ message: 'User deleted successfully.' });
+    return res.status(200).json({ message: "User deleted successfully." });
   } catch (error) {
     // Handle errors
     return res.status(400).json({ error: error.message });
   }
-}
+};
 
-module.exports = { registerUser, loginUser, getUser, editUser, changePassword, deleteUser };
+module.exports = {
+  registerUser,
+  loginUser,
+  getUser,
+  editUser,
+  changePassword,
+  deleteUser,
+};

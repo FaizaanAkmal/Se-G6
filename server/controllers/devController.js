@@ -1,5 +1,6 @@
+const User = require("../models/user");
 const Dev = require("../models/dev");
-const JobPost = require("../models/jobpost")
+const JobPost = require("../models/jobpost");
 
 // TODO
 const devRegister = async (req, res) => {
@@ -18,14 +19,31 @@ const devRegister = async (req, res) => {
   } = req.body;
 
   // Check if any of the required fields are missing
-  if (!userId || !country || !experience || !bio || !skills || !languages || !technologies || !interestedJobType || !environmentPreference || !portfolioLink || !githubLink) {
-    return res.status(400).json({ success: false, message: "All fields are required." });
+  if (
+    !userId ||
+    !country ||
+    !experience ||
+    !bio ||
+    !skills ||
+    !languages ||
+    !technologies ||
+    !interestedJobType ||
+    !environmentPreference ||
+    !portfolioLink ||
+    !githubLink
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, message: "All fields are required." });
   }
 
   try {
     // Validate that portfolioLink and githubLink are provided
     if (!portfolioLink || !githubLink) {
-      return res.status(400).json({ success: false, message: "Portfolio link and Github link are required." });
+      return res.status(400).json({
+        success: false,
+        message: "Portfolio link and Github link are required.",
+      });
     }
 
     const newUser = new Dev({
@@ -41,13 +59,24 @@ const devRegister = async (req, res) => {
       portfolio: portfolioLink,
       gitLink: githubLink,
     });
-    
+
     await newUser.save();
-  
-    res.status(201).json({ success: true, message: "User registered successfully.", newUser });
+
+    // set User's profileCompleted to true
+    const user = await User.findById(userId);
+    user.profileCompleted = true;
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully.",
+      newUser,
+    });
   } catch (error) {
     console.error("Error registering user:", error);
-    res.status(500).json({ success: false, message: "Error registering user." });
+    res
+      .status(500)
+      .json({ success: false, message: "Error registering user." });
   }
 };
 
@@ -64,7 +93,7 @@ const devEdit = async (req, res) => {
     environmentPreference,
     portfolioLink,
     githubLink,
-    userId
+    userId,
   } = req.body;
 
   try {
@@ -95,20 +124,23 @@ const devEdit = async (req, res) => {
   }
 };
 
-
 //Handling The Developer Application
 const devApplication = async (req, res) => {
   const { userId, jobId, coverLetter } = req.body;
-  console.log("In here")
-  console.log("JobId recieved: ",jobId)
+  console.log("In here");
+  console.log("JobId recieved: ", jobId);
 
   try {
     const dev = await Dev.findOne({ userId });
     if (!dev) {
-      return res.status(404).json({ success: false, message: "Developer not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Developer not found." });
     }
 
-    const jobIndex = dev.myJobs.findIndex(job => job.job.toString() === jobId);
+    const jobIndex = dev.myJobs.findIndex(
+      (job) => job.job.toString() === jobId
+    );
     if (jobIndex === -1) {
       // Job not found in developer's list, add it
       dev.myJobs.push({
@@ -120,24 +152,28 @@ const devApplication = async (req, res) => {
         isApplied: true,
         coverLetter: coverLetter,
       });
-    } 
-    else 
-    {
+    } else {
       // Job found in developer's list, handle according to status
-      console.log("This particular job: ",dev.myJobs[jobIndex])
-      console.log("This particular job status: ",dev.myJobs[jobIndex].isApplied)
+      console.log("This particular job: ", dev.myJobs[jobIndex]);
+      console.log(
+        "This particular job status: ",
+        dev.myJobs[jobIndex].isApplied
+      );
       if (dev.myJobs[jobIndex].isAcceptedOffer) {
-        return res.status(400).json({ success: false, message: "Application already accepted." });
-      } 
-      else if (dev.myJobs[jobIndex].isRejectedOffer) {
-        return res.status(400).json({ success: false, message: "Your application is rejected." });
-      }
-      else if (dev.myJobs[jobIndex].isApplied) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Application already accepted." });
+      } else if (dev.myJobs[jobIndex].isRejectedOffer) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Your application is rejected." });
+      } else if (dev.myJobs[jobIndex].isApplied) {
         // Applicant has already applied, cannot apply again
-        return res.status(400).json({ success: false, message: "You have already applied for this job." });
-      } 
-      else 
-      {
+        return res.status(400).json({
+          success: false,
+          message: "You have already applied for this job.",
+        });
+      } else {
         dev.myJobs[jobIndex].isApplied = true;
         dev.myJobs[jobIndex].coverLetter = coverLetter;
       }
@@ -146,60 +182,66 @@ const devApplication = async (req, res) => {
     await dev.save();
 
     // Update the JobPost model with the application
-    console.log("JobId here: ",jobId)
+    console.log("JobId here: ", jobId);
     const job = await JobPost.findById(jobId);
     if (!job) {
-      return res.status(404).json({ success: false, message: "Job not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Job not found." });
     }
 
-    console.log("job: ",job)
-    
+    console.log("job: ", job);
+
     job.applicants.push({
       applicant: dev._id,
       coverLetter: coverLetter,
     });
-    console.log("Pushed Job")
+    console.log("Pushed Job");
     await job.save();
-    console.log("Ornot")
+    console.log("Ornot");
 
-    res.status(200).json({ success: true, message: "Application submitted successfully." });
+    res
+      .status(200)
+      .json({ success: true, message: "Application submitted successfully." });
   } catch (error) {
     console.error("Error submitting application:", error);
-    res.status(500).json({ success: false, message: "Error submitting application." });
+    res
+      .status(500)
+      .json({ success: false, message: "Error submitting application." });
   }
 };
 
 const getDev = async (req, res) => {
-  const {userId} = req.query;
+  const { userId } = req.query;
   try {
     //const company = await Company.findById(companyId);
     const dev = await Dev.findOne({ userId: userId });
     if (!dev) {
-      return res.status(404).json({ message: 'Dev not found' });
+      return res.status(404).json({ message: "Dev not found" });
     }
     res.status(200).json(dev);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 const deleteDev = async (req, res) => {
-  const {userId} = req.query;
+  const { userId } = req.query;
   try {
     // Use findByIdAndDelete to find and delete the user by id
-    const deletedDev = await Dev.findOneAndDelete({userId: userId});
-    
+    const deletedDev = await Dev.findOneAndDelete({ userId: userId });
+
     if (!deletedDev) {
       // If no user found with the given id, return appropriate message or handle accordingly
       return res.status(404).json({ error: "User not found" });
     }
-    
+
     // Return success message or any relevant data
-    return res.status(200).json({ message: 'User deleted successfully.' });
+    return res.status(200).json({ message: "User deleted successfully." });
   } catch (error) {
     // Handle errors
     return res.status(400).json({ error: error.message });
   }
-}
+};
 
 module.exports = { devRegister, devEdit, devApplication, getDev, deleteDev };

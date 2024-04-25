@@ -28,7 +28,6 @@ const industryTypes = [
 ];
 
 const countryNames = [
-  "", // empty string to avoid Autocomplete warning
   "Afghanistan",
   "Albania",
   "Algeria",

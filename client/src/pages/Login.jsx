@@ -47,22 +47,32 @@ export default function Login() {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         const userType = response.data.userType;
         const userId = response.data.userId;
-        console.log("UserType: ", response.data);
+        const profileCompleted = response.data.profileCompleted;
 
         dispatch({ type: "LOGIN", payload: { user: response.data.user } });
 
         if (userType === "Developer") {
-          console.log("Developer");
           window.scrollTo(0, 0);
-          navigate(clientRoutes.devDashboard, {
-            state: { userId: userId },
-          });
+          if (profileCompleted) {
+            navigate(clientRoutes.devDashboard, {
+              state: { userId: userId },
+            });
+          } else {
+            navigate(clientRoutes.devProfileSetup, {
+              state: { userId: userId },
+            });
+          }
         } else if (userType === "Company") {
-          console.log("Company");
           window.scrollTo(0, 0);
-          navigate(clientRoutes.companyDashboard, {
-            state: { userId: userId },
-          });
+          if (profileCompleted) {
+            navigate(clientRoutes.companyDashboard, {
+              state: { userId: userId },
+            });
+          } else {
+            navigate(clientRoutes.companyProfileSetup, {
+              state: { userId: userId },
+            });
+          }
         } else {
           // Handle unknown userType
           console.log("Unknown userType:", userType);
@@ -71,7 +81,6 @@ export default function Login() {
       // TODO (handle unsuccessful login)
       else {
         setError(response.data.message);
-        console.log(response.data);
       }
     } catch (error) {
       // Handle registration error
@@ -169,7 +178,7 @@ export default function Login() {
             </Box>
           </Grid>
         </Grid>
-        <Grid xs={6} sx={{ backgroundColor: "#f5f5f5", maxHeight: "100%" }}>
+        <Grid xs={6} sx={{ p: 0 }} margin={0}>
           {/*Background column, set to loginBackgroun  of available height and width, crop the rest*/}
           <img
             src={loginBackground}

@@ -1,6 +1,6 @@
+const User = require("../models/user");
 const Company = require("../models/company");
 const JobPost = require("../models/jobpost");
-const user_applicant = require("../models/user");
 
 const companyRegister = async (req, res) => {
   try {
@@ -34,6 +34,11 @@ const companyRegister = async (req, res) => {
 
     // Save the new company to the database
     const savedCompany = await newCompany.save();
+
+    // set User's profileCompleted to true
+    const user = await User.findById(userId);
+    user.profileCompleted = true;
+    await user.save();
 
     // Send a success response with the ObjectId of the created company
     res.status(201).json({
@@ -166,7 +171,7 @@ const deleteCompany = async (req, res) => {
 const getApplicants = async (req, res) => {
   try {
     const { jobId } = req.query; // Custom job ID
-    console.log("Here: ", jobId);
+    // console.log("Here: ", jobId);
     const jobPost = await JobPost.findById(jobId).populate({
       path: "applicants.applicant",
       model: "Dev",
@@ -177,15 +182,15 @@ const getApplicants = async (req, res) => {
       coverLetter: applicant.coverLetter,
     }));
 
-    console.log("Applicants: ", applicants);
+    // console.log("Applicants: ", applicants);
 
     const developers = [];
 
     for (const applicant of applicants) {
       developers.push(applicant.dev);
+      const userPromises = users.map((userId) => User.findById(userId));
     }
     const users = developers.map((dev) => dev.userId);
-    const userPromises = users.map((userId) => user_applicant.findById(userId));
     const userDocs = await Promise.all(userPromises);
     const userNames = userDocs.map(
       (userDoc) => `${userDoc.firstName} ${userDoc.lastName}`

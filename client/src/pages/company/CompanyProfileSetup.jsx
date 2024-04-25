@@ -5,6 +5,7 @@ import axios from "axios";
 // Icons
 import profileSetupIcon from "../../assets/profileSetupIcon.svg";
 import Footer from "../../components/Footer.jsx";
+import Navbar from "../../components/CompanyNavbar.jsx";
 
 // UI Imports
 import {
@@ -55,7 +56,6 @@ export default function CompanyProfileSetup() {
   const location = useLocation()
   const user = JSON.parse(localStorage.getItem("user"))
   const userId = user.userId
-  console.log(userId)
 
   // Error handling state
   const [error, setError] = useState(null);
@@ -64,25 +64,16 @@ export default function CompanyProfileSetup() {
   const handleNext = () => {
     if (currentStep === 1) {
       if (!companyName || !website || !companyType || !country) {
-        console.log(`companyName: ${companyName}`);
-        console.log(`website: ${website}`);
-        console.log(`companyType: ${companyType}`);
-        console.log(`country: ${country}`);
         setError("Please fill in all the required fields");
         return;
       }
     } else if (currentStep === 2) {
       if (!industry || !companySize) {
-        console.log(`companySize: ${companySize}`);
-        console.log(`industry: ${industry}`);
         setError("Please fill in all the required fields");
         return;
       }
     } else if (currentStep === 3) {
       if (!companyOverview || !companyWorkCulture || !companyBenefits) {
-        console.log(`companyOverview: ${companyOverview}`);
-        console.log(`companyWorkCulture: ${companyWorkCulture}`);
-        console.log(`companyBenefits: ${companyBenefits}`);
         setError("Please fill in all the required fields");
         return;
       }
@@ -133,6 +124,7 @@ export default function CompanyProfileSetup() {
 
   return (
     <>
+      <Navbar currentPage={"profileSetup"} />
       <Grid
         container
         sx={{
@@ -211,7 +203,7 @@ export default function CompanyProfileSetup() {
                         options={countryNames}
                         placeholder="Select country"
                         onChange={(e, value) => setCountry(value)}
-                        value={country}
+                        value={country || null}
                       />
                     </FormControl>
                     {/* // Only show the Next button if not on the

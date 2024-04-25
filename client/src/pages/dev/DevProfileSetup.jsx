@@ -110,12 +110,21 @@ export default function DevProfileSetup() {
         setError("Please fill all the required fields.");
         return;
       }
-    } else if (currentStep === 3) {
+    }
+    else if (currentStep === 2) {
+      if (!skills.length || !languages.length || !technologies.length) {
+        setError("Please fill all the required fields.");
+        return;
+      }
+    }
+    else if (currentStep === 3) {
       if (!interestedJobType || !environmentPreference) {
         setError("Please fill all the required fields.");
         return;
       }
     }
+
+    // Make github and portfolio links optional or not??
 
     setError("");
 
@@ -165,7 +174,7 @@ export default function DevProfileSetup() {
 
   return (
     <>
-      <Navbar currentPage={"dashboard"} />
+      <Navbar currentPage={"profileSetup"} />
       <Grid
         container
         sx={{
@@ -209,7 +218,7 @@ export default function DevProfileSetup() {
                         options={countryNames}
                         placeholder="Select country"
                         onChange={handleCountryChange}
-                        value={country}
+                        value={country || null}
                       />
                     </FormControl>
                     {/* Experience */}
@@ -248,7 +257,7 @@ export default function DevProfileSetup() {
                 {currentStep === 2 && (
                   <>
                     {/* Skills */}
-                    <FormControl>
+                    <FormControl required>
                       <FormLabel>Skills (select all that apply)</FormLabel>
                       <Autocomplete
                         name="skills"
@@ -260,7 +269,7 @@ export default function DevProfileSetup() {
                       />
                     </FormControl>
                     {/* Programming Languages */}
-                    <FormControl>
+                    <FormControl required>
                       <FormLabel>
                         Programming Languages (select all that apply)
                       </FormLabel>
@@ -274,7 +283,7 @@ export default function DevProfileSetup() {
                       />
                     </FormControl>
                     {/* Technologies */}
-                    <FormControl>
+                    <FormControl required>
                       <FormLabel>
                         Technologies (select all that apply)
                       </FormLabel>
