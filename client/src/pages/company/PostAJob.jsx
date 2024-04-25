@@ -79,23 +79,23 @@ export default function PostAJob() {
   const handleRequirementChange = (e) => {
     setRequirement(e.target.value);
   };
-  const handleSkillsChange = (e) => {
-    setPreferredSkills(e.target.value);
+  const handleSkillsChange = (e, newValue) => {
+    setPreferredSkills(newValue);
   };
-  const handleLanguagesChange = (e) => {
-    setPreferredLanguages(e.target.value);
+  const handleLanguagesChange = (e, newValue) => {
+    setPreferredLanguages(newValue);
   };
-  const handleTechnologiesChange = (e) => {
-    setPreferredTechnologies(e.target.value);
+  const handleTechnologiesChange = (e, newValue) => {
+    setPreferredTechnologies(newValue);
   };
-  const handleExperienceChange = (e) => {
-    setExperience(e.target.value);
+  const handleExperienceChange = (e, newValue) => {
+    setExperience(newValue);
   };
-  const handleJobTypeChange = (e) => {
-    setJobType(e.target.value);
+  const handleJobTypeChange = (e, newValue) => {
+    setJobType(newValue);
   };
-  const handleEnvironmentChange = (e) => {
-    setEnvironment(e.target.value);
+  const handleEnvironmentChange = (e, newValue) => {
+    setEnvironment(newValue);
   };
   const handleCompensationChange = (e) => {
     setCompensation(e.target.value);
@@ -292,7 +292,7 @@ export default function PostAJob() {
                         placeholder="e.g. Web Development"
                         multiple
                         options={skillOptions}
-                        value={preferredSkills}
+                        value={preferredSkills || null}
                         onChange={handleSkillsChange}
                       />
                     </FormControl>
@@ -305,7 +305,7 @@ export default function PostAJob() {
                         placeholder="e.g. JavaScript"
                         multiple
                         options={languageOptions}
-                        value={preferredLanguages}
+                        value={preferredLanguages || null}
                         onChange={handleLanguagesChange}
                       />
                     </FormControl>
@@ -340,7 +340,7 @@ export default function PostAJob() {
                         placeholder="e.g. React"
                         multiple
                         options={technologyOptions}
-                        value={preferredTechnologies}
+                        value={preferredTechnologies || null}
                         onChange={handleTechnologiesChange}
                       />
                     </FormControl>

@@ -96,22 +96,21 @@ const CompanyJobCard = ({ userId, myJob, setMyJobs }) => {
         myJobId: myJob._id,
         jobId: myJob.job._id,
       });
-      if (myJob.isPinned) {
-        setOpenPinnedJobs((prevJobs) =>
-          prevJobs.filter((j) => j.job._id !== myJob.job._id)
-        );
-      } else {
-        setOpenJobs((prevJobs) =>
-          prevJobs.filter((j) => j.job._id !== myJob.job._id)
-        );
-      }
-      myJob.isPinned = false;
-      myJob.pinnedAt = null;
-      setClosedJobs((prevJobs) =>
-        [myJob, ...prevJobs].sort(
-          (a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted)
-        )
-      );
+      // update this job in the myJobs array
+      setMyJobs((prevMyJobs) => {
+        return prevMyJobs.map((job) => {
+          if (job._id === myJob._id) {
+            return {
+              ...job,
+              job: {
+                ...job.job,
+                status: "closed",
+              },
+            };
+          }
+          return job;
+        });
+      });
       console.log(response.data.message);
       setSuccess("Job closed successfully!");
     } catch (error) {

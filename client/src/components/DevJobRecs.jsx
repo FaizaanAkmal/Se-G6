@@ -57,7 +57,6 @@ export default function DevJobRecs() {
         // Redirect to job details page
         window.scrollTo(0, 0);
         navigate(`/dev/job`, { state: { userId, job, applied, pendingOffer, offerAccepted, offerRejected , isBookmarked } });
-       
     };
 
     //Fetching Related Jobs

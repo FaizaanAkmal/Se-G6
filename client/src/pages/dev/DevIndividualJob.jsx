@@ -40,7 +40,7 @@ export default function DevIndividualJob() {
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user.userId;
   const job = location.state.job;
-  console.log("Location State: ", location.state);
+  // console.log("Location State: ", location.state.job);
 
   // Job Application Status
   const [applied, setApplied] = useState(location.state.applied || false);

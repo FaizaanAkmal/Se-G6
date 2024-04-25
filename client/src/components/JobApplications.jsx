@@ -115,9 +115,9 @@ export default function JobApplications({ job }) {
                             }}
                         >
                             {/* Tabs with active state handling */}
-                            {["All", "Rejected", "Shortlisted", "Offers", "Hired"].map(tab => (
+                            {["All", "Rejected", "Shortlisted", "Offers", "Hired"].map((tab, index) => (
                                 <Button
-                                    key={tab}
+                                    key={index}
                                     variant={activeTab === tab ? "outlined" : "plain"}
                                     size="lg"
                                     color="neutral"
@@ -133,8 +133,8 @@ export default function JobApplications({ job }) {
                         </Stack>
                         {/* Render applicants based on active tab */}
                         <Stack spacing={2}>
-                            {getApplicantsByTab().map(applicant => (
-                                <ApplicantCardNew key={applicant._id} applicant={applicant} jobId = {job._id} />
+                            {getApplicantsByTab().map((applicant, index) => (
+                                <ApplicantCardNew key={index} applicant={applicant} jobId = {job._id} />
                             ))}
                         </Stack>
                     </Stack>
