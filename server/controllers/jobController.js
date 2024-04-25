@@ -7,7 +7,7 @@ const User = require("../models/user");
 const createJob = async (req, res) => {
   try {
     // Destructure the required fields from the request body
-    console.log("Response From creating JobPost: ", req.body);
+    // console.log("Response From creating JobPost: ", req.body);
     const {
       title,
       description,
@@ -22,11 +22,11 @@ const createJob = async (req, res) => {
       userId,
     } = req.body;
 
-    console.log("UserId: ",userId)
+    // console.log("UserId: ",userId)
 
     // Find the company based on the userId
     const company = await Company.findOne({ userId });
-    console.log("Company: ",company)
+    // console.log("Company: ",company)
     // Create a new job post instance
     const newJobPost = new JobPost({
       title,
@@ -95,7 +95,7 @@ const getAllJobs = async (req, res) => {
         _id: { $in: [...offeredJobIds, ...acceptedJobIds, ...rejectedJobIds] }
       }).populate('postedBy');
 
-      console.log("Offered Jobs: ",offeredJobs)
+      // console.log("Offered Jobs: ",offeredJobs)
 
       // Fetch all jobs
       const allJobs = await JobPost.find({ status: "open" }).populate('postedBy');
@@ -414,7 +414,7 @@ const getJobApplicants = async (req, res) => {
 
     const offered = await Promise.all(shortlisted.filter(dev => dev.isOffer).map(async (applicant) => {
       const devData = await Developer.findById(applicant.applicantId); // Assuming you have an applicantId property
-      console.log("DevData: ",devData)
+      // console.log("DevData: ",devData)
       const user = await User.findById(applicant.userId);
       const coverLetter = applicantsWithCoverLetters.find(applicant => applicant.applicantId === applicantId.toString())?.coverLetter;
       return { applicant: devData,  username: user.firstName + " " + user.lastName , coverLetter: coverLetter , status: "Offer Sent" };
@@ -423,7 +423,7 @@ const getJobApplicants = async (req, res) => {
     // const allApplicants = [...accepted, ...shortlisted, ...rejected, ...offered].filter(applicant => applicant !== null);
 
     // console.log(" All Applicants: ",allApplicants)
-    console.log("Shorlitst Jobs: ",shortlisted)
+    // console.log("Shorlitst Jobs: ",shortlisted)
 
     return res.status(200).json({
       success: true,
@@ -442,13 +442,13 @@ const getJobApplicants = async (req, res) => {
 //Send Job Offer
 const sendJobOffer = async (req, res) => {
   const { jobId, devId } = req.body;
-  console.log("Job Id: ", jobId);
-  console.log("Dev ID: ", devId);
+  // console.log("Job Id: ", jobId);
+  // console.log("Dev ID: ", devId);
 
   try {
       // Update the Developer's isOffered field to true
       const dev = await Developer.findById(devId);
-      console.log("Developer: ", dev);
+      // console.log("Developer: ", dev);
 
       // Find the job in the developer's myJobs array
       const jobIndex = dev.myJobs.findIndex(job => job.job.toString() === jobId);

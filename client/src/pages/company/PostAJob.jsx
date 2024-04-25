@@ -57,7 +57,7 @@ export default function PostAJob() {
   const location = useLocation()
   const user = JSON.parse(localStorage.getItem("user"))
   const userId = user.userId
-  console.log(userId)
+  // console.log(userId)
 
 
   const [generateLoading, setGenerateLoading] = useState(false);

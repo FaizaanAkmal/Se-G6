@@ -49,7 +49,7 @@ const JobPostSchema = new Schema({
   },
   datePosted: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   postedBy: {
     type: Schema.Types.ObjectId,

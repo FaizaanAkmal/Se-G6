@@ -1,8 +1,6 @@
 const Company = require("../models/company");
 const JobPost = require("../models/jobpost");
-const user_applicant = require("../models/user")
-
-
+const user_applicant = require("../models/user");
 
 const companyRegister = async (req, res) => {
   try {
@@ -17,7 +15,7 @@ const companyRegister = async (req, res) => {
       companyOverview,
       companyWorkCulture,
       companyBenefits,
-      userId
+      userId,
     } = req.body;
 
     // Create a new company instance
@@ -61,7 +59,7 @@ const companyEdit = async (req, res) => {
     companyOverview,
     companyWorkCulture,
     companyBenefits,
-    userId
+    userId,
   } = req.body;
   try {
     const updatedCompany = await Company.findOneAndUpdate(
@@ -75,7 +73,7 @@ const companyEdit = async (req, res) => {
         size: companySize,
         overview: companyOverview,
         workCulture: companyWorkCulture,
-        benefits: companyBenefits
+        benefits: companyBenefits,
       }, // Update
       { new: true } // Options: Return the updated document
     );
@@ -96,21 +94,13 @@ const getMyJobs = async (req, res) => {
   const { userId } = req.params;
   try {
     const company = await Company.findOne({ userId: userId }).populate({
-      path: 'myJobs.job',
-      populate: { path: 'postedBy' }
+      path: "myJobs.job",
+      populate: { path: "postedBy" },
     });
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
-    const openPinnedJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && myJob.job.isPinned);
-    const openJobs = company.myJobs.filter(myJob => myJob.job.status === 'open' && !myJob.job.isPinned);
-    const closedJobs = company.myJobs.filter(myJob => myJob.job.status === 'closed' && !myJob.job.isPinned);
-
-    openJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
-    openPinnedJobs.sort((a, b) => new Date(b.job.pinnedAt) - new Date(a.job.pinnedAt));
-    closedJobs.sort((a, b) => new Date(b.job.datePosted) - new Date(a.job.datePosted));
-
-    res.status(200).json({ openPinnedJobs, openJobs, closedJobs });
+    res.status(200).json({ myJobs: company.myJobs });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -124,7 +114,7 @@ const updateBookmark = async (req, res) => {
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
-    const myJob = company.myJobs.find(job => job._id.toString() === myJobId);
+    const myJob = company.myJobs.find((myJob) => myJob._id.toString() === myJobId);
     if (!myJob) {
       return res.status(404).json({ error: "Job not found" });
     }
@@ -139,74 +129,74 @@ const updateBookmark = async (req, res) => {
 };
 
 const getCompany = async (req, res) => {
-  const {userId} = req.query;
+  const { userId } = req.query;
   try {
     //const company = await Company.findById(companyId);
     const company = await Company.findOne({ userId: userId });
     if (!company) {
-      return res.status(404).json({ message: 'Company not found' });
+      return res.status(404).json({ message: "Company not found" });
     }
     res.status(200).json(company);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 const deleteCompany = async (req, res) => {
-    const {userId} = req.query;
-    
-    try{
-      // Use findByIdAndDelete to find and delete the user by id
-      const deletedCompany = await Company.findOneAndDelete({userId: userId});
-      
-      if (!deletedCompany) {
-        // If no user found with the given id, return appropriate message or handle accordingly
-        return res.json({ success: "false", error: "User not found" });
-      }
-      
-      // Return success message or any relevant data
-      return res.json({ success: "true", message: 'User deleted successfully.' });
-    } catch (error) {
-      // Handle errors
-      return res.json({ success: "false", error: error.message });
+  const { userId } = req.query;
+
+  try {
+    // Use findByIdAndDelete to find and delete the user by id
+    const deletedCompany = await Company.findOneAndDelete({ userId: userId });
+
+    if (!deletedCompany) {
+      // If no user found with the given id, return appropriate message or handle accordingly
+      return res.json({ success: "false", error: "User not found" });
     }
 
+    // Return success message or any relevant data
+    return res.json({ success: "true", message: "User deleted successfully." });
+  } catch (error) {
+    // Handle errors
+    return res.json({ success: "false", error: error.message });
+  }
 };
 
 //Get Applicants of an Individual Job
 const getApplicants = async (req, res) => {
   try {
-    const {jobId} = req.query; // Custom job ID
-    console.log("Here: ",jobId)
+    const { jobId } = req.query; // Custom job ID
+    console.log("Here: ", jobId);
     const jobPost = await JobPost.findById(jobId).populate({
       path: "applicants.applicant",
-      model: "Dev"
+      model: "Dev",
     });
 
-    const applicants = jobPost.applicants.map(applicant => ({
+    const applicants = jobPost.applicants.map((applicant) => ({
       dev: applicant.applicant,
-      coverLetter: applicant.coverLetter
+      coverLetter: applicant.coverLetter,
     }));
 
-    console.log("Applicants: ",applicants)
+    console.log("Applicants: ", applicants);
 
     const developers = [];
-   
+
     for (const applicant of applicants) {
       developers.push(applicant.dev);
-      
     }
-    const users = developers.map(dev => dev.userId);
-    const userPromises = users.map(userId => user_applicant.findById(userId));
+    const users = developers.map((dev) => dev.userId);
+    const userPromises = users.map((userId) => user_applicant.findById(userId));
     const userDocs = await Promise.all(userPromises);
-    const userNames = userDocs.map(userDoc => `${userDoc.firstName} ${userDoc.lastName}`);
+    const userNames = userDocs.map(
+      (userDoc) => `${userDoc.firstName} ${userDoc.lastName}`
+    );
 
     if (!jobPost) {
       return res.status(404).json({ message: "Job post not found" });
     }
 
-   // Modify the response structure
-   const responseData = {
+    // Modify the response structure
+    const responseData = {
       jobPost: {
         title: jobPost.title,
         datePosted: jobPost.datePosted,
@@ -217,10 +207,10 @@ const getApplicants = async (req, res) => {
         applicants: applicants.map((applicant, index) => ({
           name: userNames[index],
           experience: developers[index].experience,
-        }))
-      }
+        })),
+      },
     };
-    
+
     res.status(200).json(responseData);
   } catch (error) {
     console.error("Error fetching job post:", error);
@@ -228,8 +218,12 @@ const getApplicants = async (req, res) => {
   }
 };
 
-
-
-
-module.exports = { companyRegister, companyEdit, getMyJobs, updateBookmark, getCompany, deleteCompany,getApplicants };
-
+module.exports = {
+  companyRegister,
+  companyEdit,
+  getMyJobs,
+  updateBookmark,
+  getCompany,
+  deleteCompany,
+  getApplicants,
+};
