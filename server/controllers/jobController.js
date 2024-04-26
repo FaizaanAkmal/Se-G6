@@ -409,6 +409,8 @@ const getJobApplicants = async (req, res) => {
 
     // Update each applicant with username
 
+    console.log("Job Applicants: ",jobPost)
+
     const applicants = await Promise.all(
       jobPost.applicants.map(async (applicant) => {
         const user = await User.findOne({ _id: applicant.userId });
