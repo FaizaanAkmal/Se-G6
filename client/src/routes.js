@@ -23,7 +23,8 @@ const apiRoutes = {
     acceptOffer:"/job/acceptOffer",
     rejectOffer: "/job/rejectOffer",
     getJobApplicants: "/job/getJobApplicants",
-    sendJobOffer:"/job/sendJobOffer",
+    sendJobOffer: "/job/sendJobOffer",
+    rejectJobOffer: "/job/rejectJobOffer",
     updateToggleStatus:"/job/toggleStatus"
   },
 
@@ -44,7 +45,6 @@ const apiRoutes = {
     updateBookmark: "/company/bookmark",
     getProfile: "/company/getProfile",
     delete: "/company/deleteCompany",
-    getApplicants: "/company/getApplicants",
   },
 };
 

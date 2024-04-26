@@ -127,8 +127,6 @@ const devEdit = async (req, res) => {
 //Handling The Developer Application
 const devApplication = async (req, res) => {
   const { userId, jobId, coverLetter } = req.body;
-  console.log("In here");
-  console.log("JobId recieved: ", jobId);
 
   try {
     const dev = await Dev.findOne({ userId });
@@ -152,37 +150,11 @@ const devApplication = async (req, res) => {
         isApplied: true,
         coverLetter: coverLetter,
       });
-    } else {
-      // Job found in developer's list, handle according to status
-      console.log("This particular job: ", dev.myJobs[jobIndex]);
-      console.log(
-        "This particular job status: ",
-        dev.myJobs[jobIndex].isApplied
-      );
-      if (dev.myJobs[jobIndex].isAcceptedOffer) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Application already accepted." });
-      } else if (dev.myJobs[jobIndex].isRejectedOffer) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Your application is rejected." });
-      } else if (dev.myJobs[jobIndex].isApplied) {
-        // Applicant has already applied, cannot apply again
-        return res.status(400).json({
-          success: false,
-          message: "You have already applied for this job.",
-        });
-      } else {
-        dev.myJobs[jobIndex].isApplied = true;
-        dev.myJobs[jobIndex].coverLetter = coverLetter;
-      }
     }
 
     await dev.save();
 
     // Update the JobPost model with the application
-    console.log("JobId here: ", jobId);
     const job = await JobPost.findById(jobId);
     if (!job) {
       return res
@@ -190,15 +162,9 @@ const devApplication = async (req, res) => {
         .json({ success: false, message: "Job not found." });
     }
 
-    console.log("job: ", job);
+    job.applicants.push(dev._id);
 
-    job.applicants.push({
-      applicant: dev._id,
-      coverLetter: coverLetter,
-    });
-    console.log("Pushed Job");
     await job.save();
-    console.log("Ornot");
 
     res
       .status(200)

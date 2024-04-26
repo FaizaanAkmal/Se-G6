@@ -39,13 +39,12 @@ import {
   DialogContent,
 } from "@mui/joy";
 
-export default function ApplicantCardNew({ applicant, jobId }) {
-  const [status, setStatus] = useState(applicant.status || "Applied");
-  const [shortlisted, setShortlisted] = useState(applicant.status || false);
-  const [bestMatch, setBestMatch] = useState(false);
-
-  // console.log("Applicant in applicant card: ",applicant)
-
+export default function ApplicantCardNew({
+  applicant,
+  jobId,
+  tab,
+  handleTabChange,
+}) {
   const [openRejectModal, setOpenRejectModal] = useState(false);
   const [openAcceptModal, setOpenAcceptModal] = useState(false);
 
@@ -54,53 +53,46 @@ export default function ApplicantCardNew({ applicant, jobId }) {
 
   const handleApplicantNameClick = () => {
     // TODO: open application cover letter popup
-    alert(applicant.coverLetter);
+    // alert(applicant.coverLetter);
   };
   const handlePortfolioClick = () => {
     // TODO: open portfolio link in new tab
-    window.open(applicant.applicant.portfolio, "_blank");
+    window.open(applicant.portfolio, "_blank");
   };
   const handleGithubClick = () => {
     // TODO: open github link in new tab
-    window.open(applicant.applicant.gitLink, "_blank");
+    window.open(applicant.gitLink, "_blank");
   };
+
   const handleShortlistToggle = async () => {
     try {
-      // Toggle the shortlist status locally
-      console.log("Shortlist");
-      setShortlisted((prevShortlisted) => !prevShortlisted);
-
       // Make the API call to update the shortlist status
+      const shortlisted = !(tab === "Shortlisted");
       const response = await axios.put(apiRoutes.job.updateToggleStatus, {
         jobId,
-        devId: applicant.applicant._id,
-        shortlisted: !shortlisted,
+        devId: applicant._id,
+        shortlisted: shortlisted,
       });
-
-      console.log("Response: ", response);
+      shortlisted ? handleTabChange("Shortlisted") : handleTabChange("Pending");
     } catch (error) {
       // If the API call fails, revert the local state to the previous value
-      setShortlisted((prevShortlisted) => !prevShortlisted);
       console.error("Failed to update shortlist status:", error);
       setError("Failed to update shortlist status");
     }
   };
 
-  const handleAcceptOffer = async () => {
-    console.log("In Send OFfer");
+  const handleSendOffer = async () => {
     setLoading(true);
     try {
       // Send API call to send offer
-      console.log("Dev ID: ", applicant.applicant._id);
       const response = await axios.post(apiRoutes.job.sendJobOffer, {
         jobId,
-        devId: applicant.applicant._id,
+        devId: applicant._id,
       });
-      console.log("Response: ", response);
       // Update status and close modal on successful offer
-      setStatus("Offer Sent");
       setLoading(false);
       closeAcceptModal();
+      handleTabChange("Offered");
     } catch (error) {
       console.error("Error sending offer:", error);
       setLoading(false);
@@ -115,14 +107,22 @@ export default function ApplicantCardNew({ applicant, jobId }) {
   };
   const handleRejectOffer = async () => {
     setLoading(true);
-    // TODP: API call to reject offer
-
-    // Simulate API call (remove when API is integrated)
-    setTimeout(() => {
-      setStatus("Rejected");
+    try {
+      // Send API call to send offer
+      const response = await axios.post(apiRoutes.job.rejectJobOffer, {
+        jobId,
+        devId: applicant._id,
+      });
+      // Update status and close modal on successful rejection
       setLoading(false);
       closeRejectModal();
-    }, 2000);
+      handleTabChange("Rejected");
+    } catch (error) {
+      console.error("Error rejecting offer:", error);
+      setLoading(false);
+      // Handle error as needed
+      setError(error);
+    }
   };
   const closeRejectModal = () => {
     if (!loading) {
@@ -174,7 +174,7 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                     {/* Key Facts */}
                     <Stack direction="row" spacing={2} alignItems={"center"}>
                       {/* Offer Sent */}
-                      {status === "Offer Sent" && (
+                      {tab === "Offered" && (
                         <Typography
                           level="body-md"
                           sx={{ color: "#F79009" }}
@@ -190,7 +190,7 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                         </Typography>
                       )}
                       {/* Offer Rejected */}
-                      {status === "Offer Rejected" && (
+                      {/* {tab === "Offer Rejected" && (
                         <Typography
                           level="body-md"
                           sx={{ color: "#D32F2F" }}
@@ -204,9 +204,9 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                         >
                           Offer Rejected
                         </Typography>
-                      )}
+                      )} */}
                       {/* Rejected */}
-                      {status === "Rejected" && (
+                      {tab === "Rejected" && (
                         <Typography
                           level="body-md"
                           sx={{ color: "#D32F2F" }}
@@ -218,7 +218,7 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                         </Typography>
                       )}
                       {/* Offer Accepted */}
-                      {status === "Offer Accepted" && (
+                      {tab === "Hired" && (
                         <Typography
                           level="body-md"
                           sx={{ color: "#027A48" }}
@@ -240,7 +240,7 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                           />
                         }
                       >
-                        {applicant.applicant.country}
+                        {applicant.country}
                       </Typography>
                       {/* Portfolio Link */}
                       <Typography
@@ -271,41 +271,33 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                     </Stack>
                   </Stack>
                   {/* Shortlist Button */}
-                  <Tooltip
-                    color="primary"
-                    placement="top"
-                    variant="soft"
-                    title={shortlisted ? "Remove from Shortlist" : "Shortlist"}
-                  >
-                    <IconButton onClick={handleShortlistToggle}>
-                      <img
-                        src={
-                          shortlisted
-                            ? shortlistIconActive
-                            : shortlistIconInactive
-                        }
-                        width={"24px"}
-                        alt="Shortlist"
-                      />
-                    </IconButton>
-                  </Tooltip>
+                  {(tab === "Pending" || tab === "Shortlisted") && (
+                    <Tooltip
+                      color="primary"
+                      placement="top"
+                      variant="soft"
+                      title={
+                        tab === "Shortlisted"
+                          ? "Remove from Shortlist"
+                          : "Shortlist"
+                      }
+                    >
+                      <IconButton onClick={handleShortlistToggle}>
+                        <img
+                          src={
+                            tab === "Shortlisted"
+                              ? shortlistIconActive
+                              : shortlistIconInactive
+                          }
+                          width={"24px"}
+                          alt="Shortlist"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </Stack>
                 {/* Applicant Tags */}
                 <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                  {/* display if best match (A job can have only 1 best match) */}
-                  {bestMatch && (
-                    <Chip
-                      sx={{
-                        "--Chip-radius": "6px",
-
-                        border: "1px solid #B19BE3",
-                      }}
-                      variant="soft"
-                      color="primary"
-                    >
-                      Best Match
-                    </Chip>
-                  )}
                   {/* Convert all Skills + Technologies + Prog. Languages into 1 list and map over chips */}
                   <Chip
                     sx={{
@@ -314,7 +306,7 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                     }}
                     variant="outlined"
                   >
-                    {applicant.applicant.skills[0]}
+                    {applicant.skills[0]}
                   </Chip>
                   <Chip
                     sx={{
@@ -323,7 +315,7 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                     }}
                     variant="outlined"
                   >
-                    {applicant.applicant.technologies[0]}
+                    {applicant.technologies[0]}
                   </Chip>
                   <Chip
                     sx={{
@@ -332,11 +324,11 @@ export default function ApplicantCardNew({ applicant, jobId }) {
                     }}
                     variant="outlined"
                   >
-                    {applicant.applicant.languages[0]}
+                    {applicant.languages[0]}
                   </Chip>
                 </Stack>
                 {/* Send Offer / Reject Buttons */}
-                {status === "Applied" && (
+                {tab === "Pending" && (
                   <Grid
                     container
                     direction="row"
@@ -407,7 +399,7 @@ export default function ApplicantCardNew({ applicant, jobId }) {
             </Button>
             <Button
               variant="soft"
-              onClick={handleAcceptOffer}
+              onClick={handleSendOffer}
               color="success"
               loading={loading}
             >

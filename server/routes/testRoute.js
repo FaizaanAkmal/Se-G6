@@ -44,5 +44,24 @@ testRouter.get("/2", async (req, res) => {
   }
 });
 
-module.exports = testRouter;
+testRouter.get("/3", async (req, res) => {
+  // insert applicants, acceptedApplicants, rejectedApplicants, shortlisted, offered in jobpost as empty arrays
+  try {
+    await Job.updateMany(
+      {},
+      {
+        applicants: [],
+        acceptedApplicants: [],
+        rejectedApplicants: [],
+        shortlisted: [],
+        offered: [],
+      }
+    );
+    res.status(200).json({ message: "Jobs updated successfully" });
+  } catch (error) {
+    console.error("Error updating jobs:", error);
+    res.status(500).json({ message: "An error occurred while updating jobs" });
+  }
+});
 
+module.exports = testRouter;

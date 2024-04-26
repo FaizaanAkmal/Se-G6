@@ -247,7 +247,7 @@ const changePassword = async (req, res) => {
   }
   // Regular expression for password validation
   const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&_^])[A-Za-z\d@$!%*#?&_^]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).{8,}$/;
   // Validate password
   if (!passwordRegex.test(newPassword)) {
     let errorMessage = "Password must ";
@@ -259,7 +259,7 @@ const changePassword = async (req, res) => {
       errorMessage += "contain at least one uppercase letter ";
     } else if (!/(?=.*\d)/.test(newPassword)) {
       errorMessage += "contain at least one number ";
-    } else if (!/(?=.*[@$!%*#?&_^])/.test(newPassword)) {
+    } else if (!/(?=.*[^a-zA-Z\d\s])/.test(newPassword)) {
       errorMessage += "contain at least one special character ";
     }
     return res.json({

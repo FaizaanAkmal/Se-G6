@@ -15,7 +15,8 @@ const {
   rejectOffer,
   getJobApplicants,
   sendJobOffer,
-  shortlistToggle
+  shortlistToggle,
+  rejectJobOffer
   
 } = require("../controllers/jobController");
 
@@ -32,6 +33,7 @@ jobRouter.put("/individualBookmarks",individualBookmarks)
 jobRouter.post("/acceptOffer",acceptOffer)
 jobRouter.post("/rejectOffer",rejectOffer)
 jobRouter.get("/getJobApplicants",getJobApplicants)
-jobRouter.post("/sendJobOffer",sendJobOffer)
+jobRouter.post("/sendJobOffer", sendJobOffer)
+jobRouter.post("/rejectJobOffer", rejectJobOffer)
 
 module.exports = jobRouter;

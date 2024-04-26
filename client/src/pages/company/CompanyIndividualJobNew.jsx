@@ -35,39 +35,12 @@ export default function CompanyIndividualJobNew() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [jobPost, setJobpost] = useState([]);
-  const location = useLocation();
-  const job = location.state;
-  const jobId = job._id;
+  const job = useLocation().state;
 
-  // console.log("Job: ",job)
-
-  const datePosted = new Date(jobPost.datePosted);
+  const datePosted = new Date(job.datePosted);
   const currentDate = new Date();
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   const daysAgo = Math.round(Math.abs((currentDate - datePosted) / oneDay));
-
-  // console.log("JobId: ", jobId);
-
-  const fetchApplicants = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(apiRoutes.company.getApplicants, {
-        params: { jobId },
-      }); // Make a request to your backend API
-      // console.log("Data that I am getting for the applicants  ", response);
-      setJobpost(response.data.jobPost); // Update the state with the fetched applicants
-    } catch (error) {
-      console.error("Error fetching applicants:", error);
-      setError("Error fetching applicants. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchApplicants();
-  }, []);
 
   const handleCloseJob = async () => {
     setLoading(true);
@@ -98,7 +71,7 @@ export default function CompanyIndividualJobNew() {
             <Stack spacing={"20px"}>
               {/* Job Title */}
               <Typography level="h1" sx={{ width: "100%" }}>
-                {jobPost.title}
+                {job.title}
               </Typography>
               {/* Key Facts */}
               <Stack direction="row" spacing={2.5} alignItems={"center"}>
@@ -114,7 +87,7 @@ export default function CompanyIndividualJobNew() {
                     ></img>
                   }
                 >
-                  {jobPost.applicants ? jobPost.applicants.length : 0}
+                  {job.accepted ? job.accepted.length : 0}
                 </Typography>
                 {/* Time Posted */}
                 <Typography
@@ -153,8 +126,8 @@ export default function CompanyIndividualJobNew() {
               <Stack spacing={2}>
                 <Typography level="h2">Description</Typography>
                 <Typography level="body-lg" color="neutral">
-                  {jobPost.description &&
-                    jobPost.description.split("\n").map((line, index) => (
+                  {job.description &&
+                    job.description.split("\n").map((line, index) => (
                       <React.Fragment key={index}>
                         - {line}
                         <br />
@@ -166,8 +139,8 @@ export default function CompanyIndividualJobNew() {
               <Stack spacing={2}>
                 <Typography level="h2">Requirements</Typography>
                 <Typography level="body-lg" color="neutral">
-                  {jobPost.requirements &&
-                    jobPost.requirements.split("\n").map((line, index) => (
+                  {job.requirement &&
+                    job.requirement.split("\n").map((line, index) => (
                       <React.Fragment key={index}>
                         - {line}
                         <br />
