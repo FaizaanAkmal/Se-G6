@@ -5,7 +5,7 @@ const companyDB = require("../models/company")
 const OpenAI = require("openai");
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: "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"
+  apiKey: "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"
 })
 
 const generateCoverLetter = async (req, res) => {
@@ -46,7 +46,7 @@ const generateCoverLetter = async (req, res) => {
         const prompt = `Please give a cover letter for applying to following job posting: ${job_post_details} for the applicant: ${applicant_details}. Start with: Hello, `
   
         const answer = await openai.chat.completions.create({
-          model: "mistralai/mixtral-8x22b:free",
+          model: "openai/gpt-3.5-turbo-0125",
           messages: [
             { role: "user", content: prompt }
           ],
@@ -75,11 +75,11 @@ const generateDevBio = async (req, res) => {
         const languagesStr = languages.join(', ');
         const technologiesStr = technologies.join(', ');
 
-        const userProfile = `Country: ${country} ; Experience: ${experience} years; Skills: ${skillsStr}; Languages: ${languagesStr}; Technologies: ${technologiesStr}; interestedJobType: ${interestedJobType}; environmentPreference: ${environmentPreference}`;
-        const prompt = `Give a bio to write on a freelancing platform for a user with profile : ${userProfile}`
+        const userProfile = Country: ${country} ; Experience: ${experience} years; Skills: ${skillsStr}; Languages: ${languagesStr}; Technologies: ${technologiesStr}; interestedJobType: ${interestedJobType}; environmentPreference: ${environmentPreference};
+        const prompt = Give a bio to write on a freelancing platform for a user with profile : ${userProfile}
 
         const answer = await openai.chat.completions.create({
-            model: "mistralai/mixtral-8x22b:free",
+            model: "openai/gpt-3.5-turbo-0125",
             messages: [
               { role: "user", content: prompt }
             ],
@@ -105,11 +105,11 @@ const generateComapnyOverview = async (req, res) => {
 
       const { name, website, type, country, industry, size, overview, workCulture, benefits } = company;
 
-      const companyProfile = `The company is based in Country: ${country}. Its name: ${name}. It is part of industry: ${industry}. Company type: ${type}. Number of employees: ${size}. WorkCulture: ${workCulture}. Benefits it offers to its employyes: ${benefits}`;
-      const prompt = `Write a brief overview of a company using the information:- ${companyProfile}`
+      const companyProfile = The company is based in Country: ${country}. Its name: ${name}. It is part of industry: ${industry}. Company type: ${type}. Number of employees: ${size}. WorkCulture: ${workCulture}. Benefits it offers to its employyes: ${benefits};
+      const prompt = Write a brief overview of a company using the information:- ${companyProfile}
 
       const answer = await openai.chat.completions.create({
-          model: "mistralai/mixtral-8x22b:free",
+          model: "openai/gpt-3.5-turbo-0125",
           messages: [
             { role: "user", content: prompt }
           ],
@@ -131,10 +131,10 @@ const generateJobDescription = async (req, res) => {
   {
       const jobProfile = req.body.jobInfo;
 
-      const prompt = `Write a job Posting description for a job using the information:- ${jobProfile}`
+      const prompt = Write a job Posting description for a job using the information:- ${jobProfile}
 
       const answer = await openai.chat.completions.create({
-          model: "mistralai/mixtral-8x22b:free",
+          model: "openai/gpt-3.5-turbo-0125",
           messages: [
             { role: "user", content: prompt }
           ],
@@ -151,6 +151,4 @@ const generateJobDescription = async (req, res) => {
   }
 };
 
-module.exports = { generateCoverLetter, generateDevBio, generateComapnyOverview, generateJobDescription };
-
-
+module.exports = { generateCoverLetter, generateDevBio, generateComapnyOverview, generateJobDescription };
