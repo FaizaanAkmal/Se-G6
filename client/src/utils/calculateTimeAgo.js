@@ -2,7 +2,7 @@ const calculateTimeAgo = (date) => {
   const currentDate = new Date();
   const pastDate = new Date(date);
 
-  const years = currentDate.getFullYear() - pastDate.getFullYear();
+  let years = currentDate.getFullYear() - pastDate.getFullYear();
   let months = currentDate.getMonth() - pastDate.getMonth();
   let days = currentDate.getDate() - pastDate.getDate();
 
