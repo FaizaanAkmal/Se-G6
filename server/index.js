@@ -13,25 +13,24 @@ require("dotenv").config(); // Load environment variables
 const app = express();
 const port = process.env.PORT || 8000;
 
-// Middleware
-// Using Middlewares
+// CORS Configuration
 const corsConfig = {
+  origin: process.env.FRONTEND_URL, // e.g. https://your-frontend.onrender.com
   credentials: true,
-  origin: true,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
 };
+
 app.use(cors(corsConfig));
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
 
 
 // Defining Routes
+
+// Health Check Route
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
 
 //User Registering Route
 app.use("/user", userRouter);
