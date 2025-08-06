@@ -23,7 +23,12 @@ dist-ssr
 *.sw?
 
 package-lock.json
-# Node modules
+
 node_modules
+
+# Client
 client/node_modules
+client/.env.local
+
+# Server
 server/node_modules
