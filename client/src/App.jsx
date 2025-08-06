@@ -56,8 +56,9 @@ const newTheme = extendTheme({
   },
 });
 
-axios.defaults.baseURL = " http://localhost:8000";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 axios.defaults.withCredentials = true;
+
 function App() {
   const { user } = useAuthContext();
   return (
