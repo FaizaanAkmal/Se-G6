@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 import loginBackground from "../assets/loginBackground.png";
 import {
@@ -12,7 +12,7 @@ import {
   Divider,
   FormControl,
   FormLabel,
-  Link,
+  Link as MuiLink,
   Input,
   Stack,
 } from "@mui/joy";
@@ -169,9 +169,9 @@ export default function Login() {
                   <Divider></Divider>
                   <Typography>
                     Don't have an account? &nbsp;
-                    <Link href={clientRoutes.signup} sx={{ color: "#7F56D9" }}>
+                    <MuiLink component={RouterLink} to={clientRoutes.signup} sx={{ color: "#7F56D9" }}>
                       Sign up to create an account.
-                    </Link>
+                    </MuiLink>
                   </Typography>
                 </Stack>
               </form>

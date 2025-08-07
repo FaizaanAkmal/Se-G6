@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { GlobalStyles, border, display } from "@mui/system";
 import PropTypes from "prop-types";
@@ -21,7 +21,7 @@ import {
   Divider,
   FormControl,
   FormLabel,
-  Link,
+  Link as MuiLink,
   List,
   ListItem,
   ListItemDecorator,
@@ -379,8 +379,9 @@ const Signup = () => {
                   )}
                   <Typography>
                     Already have an account? &nbsp;
-                    <Link
-                      href={clientRoutes.login}
+                    <MuiLink
+                      component={RouterLink}
+                      to={clientRoutes.login}
                       sx={{
                         textDecoration: "none",
                         color: "#a636e7",
@@ -390,7 +391,7 @@ const Signup = () => {
                       }}
                     >
                       Log in to your account.{" "}
-                    </Link>
+                    </MuiLink>
                   </Typography>
                 </Stack>
               </form>
